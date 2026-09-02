@@ -1,0 +1,3 @@
+Model,Weighted F1,Weighted Precision,Weighted Recall
+Rule-Based Baseline,0.0332,0.0333,0.1243
+XGBoost (AISecOpt),0.9357,0.9372,0.936
