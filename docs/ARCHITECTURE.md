@@ -108,6 +108,8 @@ Coercion also handles a genuine data-quality issue in the source dataset: severa
 
 Each module maps to a specific research objective. Panels not backed by real system output are labelled as illustrative rather than presented as functional.
 
+**A note on the hosted version.** The six dashboard files are additionally published via GitHub Pages for direct access without local setup. That hosted copy demonstrates the interface, navigation and design correctly, but its live-data panels do not populate — every module queries `http://localhost:9200`, an address that only resolves on a machine running the project's own Docker stack. This is a deliberate scope boundary consistent with the honest-labelling principle applied throughout the artefact, not an oversight: the hosted link is evidence of the interface design (Chapter 3 of the dissertation); live operation is demonstrated by running the system locally per `docs/SETUP.md`, or by the saved output already committed in the notebooks.
+
 | Module | Objective served | Data source |
 |---|---|---|
 | SOC Dashboard | Unified monitoring; correlating security and infrastructure views | Live: `ai-secopt-threats-*`, `metricbeat-*` |

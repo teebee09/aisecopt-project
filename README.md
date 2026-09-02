@@ -2,7 +2,7 @@
 
 **MSc Dissertation Artefact**
 Author: Tijani Tobiloba
-Submission: August 2026
+Submission: September 2026
 
 ---
 
@@ -22,64 +22,36 @@ All outputs are indexed into a single Elasticsearch instance and surfaced throug
 
 ---
 
-## 2. Quick evaluation guide for examiners
+## 2. Live links
 
-If you have limited time, these three artefacts demonstrate the core contribution:
+| What | Link | Notes |
+|---|---|---|
+| Repository | `https://github.com/teebee09/aisecopt-project` | Full code, notebooks (with saved output), models, documentation |
+| Hosted dashboard | `https://teebee09.github.io/aisecopt-project/dashboard/index.html` | Structure, navigation and design only — see §2.1 |
+
+### 2.1 Important: the hosted dashboard shows no live data
+
+The dashboard modules query a local Elasticsearch instance (`http://localhost:9200`) directly from the browser. This works when the dashboard is served from the same machine running the project's Docker stack (see §4), but a visitor's browser on the hosted GitHub Pages link has no such instance to reach, so live panels appear empty or static.
+
+**This is a stated scope boundary, not a fault.** The hosted link demonstrates the interface design, navigation model, and six-module architecture described in Chapter 3 of the dissertation. To see the system operating on live data, either run it locally (§4) or refer to the notebooks below, which contain real, saved results from actual runs.
+
+---
+
+## 3. Quick evaluation guide for examiners
+
+If you have limited time, these artefacts demonstrate the core contribution without requiring any setup — all output cells are saved and viewable directly on GitHub:
 
 | What to look at | Where | What it shows |
 |---|---|---|
-| Model training and evaluation | `notebooks/02_ml_training.ipynb` | XGBoost training, 0.936 weighted F1, per-class confusion analysis, SHAP explainability |
+| Data cleaning, ML training, SHAP, MITRE mapping, Elasticsearch ingestion | `notebooks/01_eda_and_cleaning.ipynb` | Full pipeline from raw data through XGBoost training (0.936 weighted F1), SHAP explainability, and MITRE ATT&CK mapping — all in one notebook |
+| LSTM forecasting | `notebooks/02_lstm_forecasting.ipynb` | Metricbeat extraction, LSTM training, forecast evaluation |
 | Baseline comparison | `notebooks/03_baseline_comparison.ipynb` | Rule-based SIEM baseline (0.033 F1) vs. AI model (0.936 F1) on identical test data |
-| Working dashboard | `dashboard/index.html` (see §4 to run) | Six linked modules reading live data from Elasticsearch |
-| Correlation evidence | `dashboard/ai_secopt_incident_correlation_console.html` | Live timestamp-overlap check between detections and telemetry |
-
-The system does not require a full rebuild to inspect. All notebooks contain saved output cells showing the results as originally executed.
+| Performance analysis | `notebooks/04_performance_analysis.ipynb` | Ingestion throughput and host resource utilisation |
+| Working dashboard | `dashboard/index.html` (see §4 to run locally with live data) | Six linked modules |
 
 ---
 
-## 3. Repository structure
-
-```
-aisecopt-project/
-├── notebooks/
-│   ├── 01_eda_and_cleaning.ipynb      Data acquisition, cleaning, stratified sampling
-│   ├── 02_ml_training.ipynb           XGBoost training, SHAP, MITRE mapping, ES ingestion
-│   ├── 02_lstm_forecasting.ipynb      Metricbeat extraction, LSTM training, forecasting
-│   ├── 03_baseline_comparison.ipynb   Rule-based baseline vs. AI model
-│   └── 04_performance_analysis.ipynb  Throughput and resource utilisation measurement
-├── dashboard/
-│   ├── index.html                     Landing page and navigation hub
-│   ├── ai_secopt_framework_dashboard.html      SOC operations dashboard
-│   ├── ai_secopt_threat_intelligence_console.html   MITRE ATT&CK and SHAP feed
-│   ├── ai_secopt_lstm_forecasting_engine.html  Infrastructure forecasting
-│   ├── ai_secopt_ml_training_lab.html          Model evaluation interface
-│   ├── ai_secopt_data_pipeline_engineer.html   Pipeline and index monitoring
-│   └── ai_secopt_incident_correlation_console.html  Cross-signal correlation
-├── models/
-│   ├── xgb_model.pkl                  Trained XGBoost classifier
-│   ├── scaler.pkl                     MinMaxScaler fitted on training partition only
-│   ├── label_encoder.pkl              Class label mapping (15 classes)
-│   ├── metricbeat_scaler.pkl          Scaler for infrastructure telemetry
-│   └── lstm_model_v1_preliminary.keras  Trained LSTM forecaster
-├── outputs/
-│   ├── confusion_matrix.png
-│   ├── shap_summary_global.png
-│   ├── lstm_training_history.png
-│   ├── baseline_vs_xgboost.csv
-│   └── performance_analysis.csv
-├── docs/
-│   ├── SETUP.md                       Full reproduction instructions
-│   ├── ARCHITECTURE.md                System design and component rationale
-│   └── aisecopt_architecture.png      Architecture diagram
-├── docker-compose.yml                 Elasticsearch and Kibana deployment
-└── README.md                          This file
-```
-
-**Note on data files:** the `data/` directory is excluded from version control via `.gitignore`. The CSE-CIC-IDS2018 dataset is approximately 6 GB and is publicly available from the source cited in §6; `docs/SETUP.md` includes the exact download command.
-
----
-
-## 4. Running the system
+## 4. Running the system locally (for live data)
 
 Full instructions are in `docs/SETUP.md`. The abbreviated path:
 
@@ -98,35 +70,77 @@ python -m http.server 8080
 http://localhost:8080/index.html
 ```
 
-The dashboards query Elasticsearch directly from the browser. This requires CORS to be enabled, which is pre-configured in `docker-compose.yml`. Serving the files over HTTP rather than opening them from the filesystem is necessary — browsers block cross-origin requests from `file://` origins regardless of server configuration.
+The dashboards query Elasticsearch directly from the browser, which requires CORS enabled (pre-configured in `docker-compose.yml`) and the files served over HTTP rather than opened directly from the filesystem.
 
-**If Elasticsearch contains no data**, the dashboards will render with empty panels. Running `notebooks/02_ml_training.ipynb` through to the ingestion cells populates the security indices.
+**If Elasticsearch contains no data**, the dashboards will render with empty panels. Running `notebooks/01_eda_and_cleaning.ipynb` through to its ingestion cells populates the security indices; `notebooks/02_lstm_forecasting.ipynb` populates the infrastructure indices.
 
 ---
 
-## 5. Known limitations
+## 5. Repository structure
 
-These are stated plainly rather than concealed; each is discussed in more depth in the dissertation.
+```
+aisecopt-project/
+├── notebooks/
+│   ├── 01_eda_and_cleaning.ipynb      Data acquisition, cleaning, sampling, XGBoost training,
+│   │                                   SHAP explainability, MITRE mapping, Elasticsearch ingestion
+│   ├── 02_lstm_forecasting.ipynb      Metricbeat extraction, LSTM training, forecasting
+│   ├── 03_baseline_comparison.ipynb   Rule-based baseline vs. AI model
+│   └── 04_performance_analysis.ipynb  Throughput and resource utilisation measurement
+├── dashboard/
+│   ├── index.html                     Landing page and navigation hub
+│   ├── ai_secopt_framework_dashboard.html          SOC operations dashboard
+│   ├── ai_secopt_threat_intelligence_console.html  MITRE ATT&CK and SHAP feed
+│   ├── ai_secopt_lstm_forecasting_engine.html      Infrastructure forecasting
+│   ├── ai_secopt_ml_training_lab.html              Model evaluation interface
+│   ├── ai_secopt_data_pipeline_engineer.html       Pipeline and index monitoring
+│   └── ai_secopt_incident_correlation_console.html Cross-signal correlation
+├── models/
+│   ├── xgb_model.pkl                  Trained XGBoost classifier
+│   ├── scaler.pkl                     MinMaxScaler fitted on training partition only
+│   ├── label_encoder.pkl              Class label mapping (15 classes)
+│   ├── metricbeat_scaler.pkl          Scaler for infrastructure telemetry
+│   └── lstm_model_v1_preliminary.keras  Trained LSTM forecaster
+├── outputs/
+│   ├── shap_summary_global.png        Global SHAP feature importance
+│   ├── baseline_vs_xgboost.csv        Baseline comparison results
+│   └── performance_analysis.csv       Throughput and resource utilisation results
+├── docs/
+│   ├── SETUP.md                       Full reproduction instructions
+│   ├── ARCHITECTURE.md                System design and component rationale
+│   └── aisecopt_architecture.png      Architecture diagram
+├── docker-compose.yml                 Elasticsearch and Kibana deployment
+└── README.md                          This file
+```
 
-**The system is not deployed in the cloud.** Elasticsearch, Kibana, and the dashboards run locally via Docker. Cloud capability was validated separately by deploying Metricbeat on an AWS EC2 instance streaming to a managed Elastic Cloud deployment, but the AISecOpt platform itself is not cloud-hosted.
+**Note on data files:** the `data/` directory is excluded from version control via `.gitignore`. The CSE-CIC-IDS2018 dataset is approximately 6 GB and is publicly available from the source cited in §7; `docs/SETUP.md` includes the exact download command.
 
-**Security and infrastructure data are temporally disjoint.** The security dataset was captured in 2018; infrastructure telemetry was collected in 2026 from a different machine. The correlation mechanism is implemented and verifiably operational — the Incident Correlation Console computes the actual time delta between the most recent detection and the most recent telemetry reading — but it correctly reports no overlap, because none exists between these particular datasets. The limitation lies in the data pairing, not the mechanism.
+---
+
+## 6. Known limitations
+
+Stated plainly rather than concealed; each is discussed in more depth in the dissertation.
+
+**The system is not deployed in the cloud.** Elasticsearch, Kibana, and the dashboards run locally via Docker. Cloud capability was validated separately by deploying Metricbeat on an AWS EC2 instance streaming to a managed Elastic Cloud deployment, but the AISecOpt platform itself is not cloud-hosted. The GitHub Pages link (§2) hosts the static dashboard files only.
+
+**Security and infrastructure data are temporally disjoint.** The security dataset was captured in 2018; infrastructure telemetry was collected in 2026 from a different machine. The correlation mechanism is implemented and operational — it computes the real time delta between the most recent detection and telemetry reading — but correctly reports no overlap, because none exists between these particular datasets.
 
 **Infrastructure monitoring covers one host, not a datacentre.** Telemetry comes from a single development machine and, separately, one EC2 instance. Multi-node panels in the dashboards are explicitly labelled as illustrative.
 
 **Detection operates on recorded flows, not live traffic.** There is no packet capture or live flow extraction. The classifier is evaluated against a benchmark dataset.
 
-**Network throughput forecasting is unreliable.** The LSTM achieves approximately 1% error on memory forecasting but performs poorly on network throughput due to a documented distribution shift between the training and test periods.
+**Network throughput forecasting is unreliable.** The LSTM achieves approximately 1% error on memory forecasting but performs poorly on network throughput due to a documented distribution shift.
 
 **Power and thermal metrics were not collected.** These are not exposed by Metricbeat, nor accessible to a cloud tenant.
 
-**Isolation Forest was not implemented.** Considered during design, scoped out to preserve focus on the two-model architecture. The dashboard tab is labelled accordingly.
+**Isolation Forest was not implemented.** Considered during design, scoped out to preserve focus on the two-model architecture.
+
+**"Optimisation" denotes forecast-informed visibility, not an autonomous decision mechanism.** The LSTM's forecasts support a human decision; the system does not currently act on them.
 
 ---
 
-## 6. Data sources and attribution
+## 7. Data sources and attribution
 
-**CSE-CIC-IDS2018** — a joint project of the Communications Security Establishment (CSE) and the Canadian Institute for Cybersecurity (CIC), University of New Brunswick. Processed CSV flow records were obtained from the AWS Open Data Registry. Publicly available under the terms stated at:
+**CSE-CIC-IDS2018** — a joint project of the Communications Security Establishment (CSE) and the Canadian Institute for Cybersecurity (CIC), University of New Brunswick. Processed CSV flow records were obtained from the AWS Open Data Registry.
 https://www.unb.ca/cic/datasets/ids-2018.html
 
 Citation: Sharafaldin, I., Habibi Lashkari, A. and Ghorbani, A.A. (2018) 'Toward generating a new intrusion detection dataset and intrusion traffic characterization', *4th International Conference on Information Systems Security and Privacy (ICISSP)*, Portugal.
@@ -135,7 +149,7 @@ Citation: Sharafaldin, I., Habibi Lashkari, A. and Ghorbani, A.A. (2018) 'Toward
 
 ---
 
-## 7. Environment
+## 8. Environment
 
 - Python 3.11 (Anaconda)
 - Elasticsearch 8.13.0, Kibana 8.13.0 (Docker)

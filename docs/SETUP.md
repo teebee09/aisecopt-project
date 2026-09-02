@@ -95,27 +95,23 @@ conda activate aisecopt
 jupyter notebook
 ```
 
-Execute the notebooks in order:
+Execute the notebooks in order. There are **four** notebooks — the data cleaning and ML training stages are combined in the first, not split across two separate files.
 
-**`01_eda_and_cleaning.ipynb`** — Cleans all ten daily files and produces the stratified sample.
+**`01_eda_and_cleaning.ipynb`** — Cleans all ten daily CSV files, produces the stratified sample, and continues in the same notebook through XGBoost training, SHAP explainability, MITRE ATT&CK mapping, and Elasticsearch ingestion of the resulting security events.
 
-Expected runtime: 15–30 minutes. The cleaning function processes files in 200,000-row chunks and writes each output to a temporary file that is renamed only on successful completion. This design is not incidental: earlier non-chunked versions exhausted available memory partway through the largest file, leaving a partially-written Parquet file that subsequent runs incorrectly treated as complete. The temporary-file pattern makes the "already processed, skip" check trustworthy.
+Expected runtime: 30–45 minutes for the full notebook (cleaning is the slower portion, at 15–30 minutes; training and ingestion add roughly 15 minutes more). The cleaning function processes files in 200,000-row chunks and writes each output to a temporary file that is renamed only on successful completion. This design is not incidental: earlier non-chunked versions exhausted available memory partway through the largest file, leaving a partially-written Parquet file that subsequent runs incorrectly treated as complete. The temporary-file pattern makes the "already processed, skip" check trustworthy.
 
-Output: `data/cic2018_clean/cic2018_final_sampled.parquet` — 1,041,092 rows, 15 classes.
+Output: `data/cic2018_clean/cic2018_final_sampled.parquet` (1,041,092 rows, 15 classes), plus model artefacts in `models/` and security events in the `ai-secopt-threats-*` Elasticsearch indices.
 
-**`02_ml_training.ipynb`** — Trains the classifier and populates Elasticsearch.
+**`02_lstm_forecasting.ipynb`** — Requires collected Metricbeat telemetry (see §5). Extracts telemetry from Elasticsearch, trains the LSTM forecaster, and writes forecast and actual values back to Elasticsearch.
 
-Expected runtime: 10–15 minutes for training. Requires Elasticsearch to be running for the final ingestion cells.
+Expected runtime: 10–15 minutes.
 
-Outputs: model artefacts in `models/`, figures in `outputs/`, security events in the `ai-secopt-threats-*` indices.
+**`03_baseline_comparison.ipynb`** — Reproduces the rule-based baseline comparison against the XGBoost classifier on the identical held-out test partition. Runs in approximately 3 minutes.
 
-**`02_lstm_forecasting.ipynb`** — Requires collected Metricbeat telemetry (see §5). Trains the forecasting model and writes forecast and actual values to Elasticsearch.
+**`04_performance_analysis.ipynb`** — Measures ingestion throughput and host resource utilisation during a batch prediction run. Runs in approximately 2 minutes.
 
-**`03_baseline_comparison.ipynb`** — Reproduces the rule-based baseline comparison. Runs in approximately 3 minutes.
-
-**`04_performance_analysis.ipynb`** — Measures ingestion throughput and resource utilisation.
-
-**Ordering constraint.** The train/test split in notebooks 02 and 03 uses `random_state=42` with stratification, which guarantees an identical partition across runs. This is what makes the baseline comparison valid — both models must be evaluated on precisely the same held-out rows. If the sampled dataset is regenerated, both notebooks must be re-run.
+**Ordering constraint.** The train/test split in `01_eda_and_cleaning.ipynb` and `03_baseline_comparison.ipynb` uses `random_state=42` with stratification, which guarantees an identical partition across runs. This is what makes the baseline comparison valid — both models must be evaluated on precisely the same held-out rows. If the sampled dataset is regenerated, both notebooks must be re-run in sequence.
 
 ---
 
@@ -164,9 +160,11 @@ cd dashboard
 python -m http.server 8080
 ```
 
-Open `http://localhost:8080/index.html`. All six modules share a common navigation bar and a light/dark theme toggle whose preference persists via `localStorage`.
+Open `http://localhost:8080/index.html`.
 
 The dashboards must be served over HTTP. Opening the HTML files directly produces a `file://` origin, which browsers block from making cross-origin requests irrespective of server-side CORS configuration.
+
+**Note on the hosted GitHub Pages version.** A copy of this dashboard is also published via GitHub Pages for direct access without any local setup. That hosted version shows the interface, navigation and design correctly, but its live-data panels will not populate, because it queries `http://localhost:9200` — an address that only resolves on a machine actually running the Docker stack described above. This is a stated scope boundary: to see the dashboard operating on live data, it must be run locally following this section.
 
 ---
 
@@ -191,7 +189,8 @@ For the Kibana dashboards, create data views under **Stack Management → Data V
 |---|---|---|
 | `MemoryError` during cleaning | Insufficient free RAM | Restart the Jupyter kernel; stop Docker during cleaning; close other applications |
 | Elasticsearch client 400 error | Client/server version mismatch | `pip install "elasticsearch==8.13.0"` |
-| Dashboard panels empty | Kibana time range too narrow | Widen to cover the data generation period |
+| Dashboard panels empty (local) | Kibana/Elasticsearch not running, or time range too narrow | Confirm `docker compose up -d` is running; widen Kibana's time range |
+| Dashboard panels empty (GitHub Pages link) | Expected — see §6 | Run locally per §6 to see live data |
 | Dashboard fetch errors in console | Serving from `file://` | Use `python -m http.server` |
 | Zero Metricbeat results | Wrong index pattern | Use `*metricbeat*`, not `metricbeat-*` |
 | Metricbeat service stuck "StopPending" | Hung process | `Get-Process metricbeat \| Stop-Process -Force`, then restart the service |
