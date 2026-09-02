@@ -27,13 +27,13 @@ All outputs are indexed into a single Elasticsearch instance and surfaced throug
 | What | Link | Notes |
 |---|---|---|
 | Repository | `https://github.com/teebee09/aisecopt-project` | Full code, notebooks (with saved output), models, documentation |
-| Hosted dashboard | `https://teebee09.github.io/aisecopt-project/dashboard/index.html` | Structure, navigation and design only — see §2.1 |
+| Hosted dashboard | `https://teebee09.github.io/aisecopt-project/dashboard/index.html` | Structure, navigation and design only — see Section 2.1 |
 
 ### 2.1 Important: the hosted dashboard shows no live data
 
-The dashboard modules query a local Elasticsearch instance (`http://localhost:9200`) directly from the browser. This works when the dashboard is served from the same machine running the project's Docker stack (see §4), but a visitor's browser on the hosted GitHub Pages link has no such instance to reach, so live panels appear empty or static.
+The dashboard modules query a local Elasticsearch instance (`http://localhost:9200`) directly from the browser. This works when the dashboard is served from the same machine running the project's Docker stack (see Section 4), but a visitor's browser on the hosted GitHub Pages link has no such instance to reach, so live panels appear empty or static.
 
-**This is a stated scope boundary, not a fault.** The hosted link demonstrates the interface design, navigation model, and six-module architecture described in Chapter 3 of the dissertation. To see the system operating on live data, either run it locally (§4) or refer to the notebooks below, which contain real, saved results from actual runs.
+**This is a stated scope boundary, not a fault.** The hosted link demonstrates the interface design, navigation model, and six-module architecture described in Chapter 3 of the dissertation. To see the system operating on live data, either run it locally (Section 4) or refer to the notebooks below, which contain real, saved results from actual runs.
 
 ---
 
@@ -47,7 +47,7 @@ If you have limited time, these artefacts demonstrate the core contribution with
 | LSTM forecasting | `notebooks/02_lstm_forecasting.ipynb` | Metricbeat extraction, LSTM training, forecast evaluation |
 | Baseline comparison | `notebooks/03_baseline_comparison.ipynb` | Rule-based SIEM baseline (0.033 F1) vs. AI model (0.936 F1) on identical test data |
 | Performance analysis | `notebooks/04_performance_analysis.ipynb` | Ingestion throughput and host resource utilisation |
-| Working dashboard | `dashboard/index.html` (see §4 to run locally with live data) | Six linked modules |
+| Working dashboard | `dashboard/index.html` (see Section 4 to run locally with live data) | Six linked modules |
 
 ---
 
@@ -112,7 +112,7 @@ aisecopt-project/
 └── README.md                          This file
 ```
 
-**Note on data files:** the `data/` directory is excluded from version control via `.gitignore`. The CSE-CIC-IDS2018 dataset is approximately 6 GB and is publicly available from the source cited in §7; `docs/SETUP.md` includes the exact download command.
+**Note on data files:** the `data/` directory is excluded from version control via `.gitignore`. The CSE-CIC-IDS2018 dataset is approximately 6 GB and is publicly available from the source cited in Section 7; `docs/SETUP.md` includes the exact download command.
 
 ---
 
@@ -120,7 +120,7 @@ aisecopt-project/
 
 Stated plainly rather than concealed; each is discussed in more depth in the dissertation.
 
-**The system is not deployed in the cloud.** Elasticsearch, Kibana, and the dashboards run locally via Docker. Cloud capability was validated separately by deploying Metricbeat on an AWS EC2 instance streaming to a managed Elastic Cloud deployment, but the AISecOpt platform itself is not cloud-hosted. The GitHub Pages link (§2) hosts the static dashboard files only.
+**The system is not deployed in the cloud.** Elasticsearch, Kibana, and the dashboards run locally via Docker. Cloud capability was validated separately by deploying Metricbeat on an AWS EC2 instance streaming to a managed Elastic Cloud deployment, but the AISecOpt platform itself is not cloud-hosted. The GitHub Pages link (Section 2) hosts the static dashboard files only.
 
 **Security and infrastructure data are temporally disjoint.** The security dataset was captured in 2018; infrastructure telemetry was collected in 2026 from a different machine. The correlation mechanism is implemented and operational — it computes the real time delta between the most recent detection and telemetry reading — but correctly reports no overlap, because none exists between these particular datasets.
 
