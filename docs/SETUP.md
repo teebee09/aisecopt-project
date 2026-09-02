@@ -14,7 +14,7 @@ This document allows an examiner to reproduce the system from a clean machine. E
 | AWS CLI | v2 | Only for dataset download | Retrieves CSE-CIC-IDS2018 from public S3 |
 | Metricbeat | 8.13.0 | Only for live telemetry | Infrastructure metric collection |
 
-**Hardware note.** Development was carried out on a Windows 11 machine with 16 GB RAM. This proved to be a binding constraint: the full dataset could not be loaded into memory in a single pass, which directly shaped the chunked processing approach described in §3. A machine with 32 GB would remove several workarounds but is not required to run the system.
+**Hardware note.** Development was carried out on a Windows 11 machine with 16 GB RAM. This proved to be a binding constraint: the full dataset could not be loaded into memory in a single pass, which directly shaped the chunked processing approach described in Section 3. A machine with 32 GB would remove several workarounds but is not required to run the system.
 
 ---
 
@@ -103,7 +103,7 @@ Expected runtime: 30–45 minutes for the full notebook (cleaning is the slower 
 
 Output: `data/cic2018_clean/cic2018_final_sampled.parquet` (1,041,092 rows, 15 classes), plus model artefacts in `models/` and security events in the `ai-secopt-threats-*` Elasticsearch indices.
 
-**`02_lstm_forecasting.ipynb`** — Requires collected Metricbeat telemetry (see §5). Extracts telemetry from Elasticsearch, trains the LSTM forecaster, and writes forecast and actual values back to Elasticsearch.
+**`02_lstm_forecasting.ipynb`** — Requires collected Metricbeat telemetry (see Section 5). Extracts telemetry from Elasticsearch, trains the LSTM forecaster, and writes forecast and actual values back to Elasticsearch.
 
 Expected runtime: 10–15 minutes.
 
@@ -190,7 +190,7 @@ For the Kibana dashboards, create data views under **Stack Management → Data V
 | `MemoryError` during cleaning | Insufficient free RAM | Restart the Jupyter kernel; stop Docker during cleaning; close other applications |
 | Elasticsearch client 400 error | Client/server version mismatch | `pip install "elasticsearch==8.13.0"` |
 | Dashboard panels empty (local) | Kibana/Elasticsearch not running, or time range too narrow | Confirm `docker compose up -d` is running; widen Kibana's time range |
-| Dashboard panels empty (GitHub Pages link) | Expected — see §6 | Run locally per §6 to see live data |
+| Dashboard panels empty (GitHub Pages link) | Expected — see Section 6 | Run locally per Section 6 to see live data |
 | Dashboard fetch errors in console | Serving from `file://` | Use `python -m http.server` |
 | Zero Metricbeat results | Wrong index pattern | Use `*metricbeat*`, not `metricbeat-*` |
 | Metricbeat service stuck "StopPending" | Hung process | `Get-Process metricbeat \| Stop-Process -Force`, then restart the service |
