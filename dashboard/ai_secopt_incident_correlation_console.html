@@ -1,0 +1,795 @@
+<script>(function(){try{var t=localStorage.getItem('aisecopt-theme')||'dark';document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();</script>
+<head>
+  <meta charset="UTF-8">
+</head>
+<style id="ai-secopt-nav-css">
+#ai-secopt-nav{
+  font-family:system-ui,sans-serif;
+  background:#0d1224;
+  border-bottom:1px solid #1e2f4a;
+  padding:0 16px;
+  display:flex;
+  align-items:center;
+  position:sticky;
+  top:0;
+  z-index:999;
+  height:42px;
+  overflow-x:auto;
+}
+#ai-secopt-nav .nav-brand{
+  font-size:12px;font-weight:700;
+  color:#3b82f6;
+  letter-spacing:.5px;
+  margin-right:18px;
+  white-space:nowrap;
+  flex-shrink:0;
+}
+#ai-secopt-nav .nav-brand span{color:#e2e8f5;}
+#ai-secopt-nav a.nav-link{
+  display:inline-flex;align-items:center;
+  padding:0 12px;
+  height:42px;
+  font-size:11px;font-weight:600;
+  color:#8b9cc4;
+  text-decoration:none;
+  white-space:nowrap;
+  transition:color .15s,background .15s;
+  border-bottom:2px solid transparent;
+  box-sizing:border-box;
+  flex-shrink:0;
+}
+#ai-secopt-nav a.nav-link:hover{color:#e2e8f5;background:rgba(255,255,255,.04);}
+#ai-secopt-nav a.nav-link.active{color:#3b82f6;border-bottom-color:#3b82f6;}
+#ai-secopt-nav .theme-toggle{
+  margin-left:auto;flex-shrink:0;display:inline-flex;align-items:center;gap:6px;
+  background:transparent;border:1px solid #263550;color:#8b9cc4;
+  border-radius:6px;padding:5px 10px;font-size:11px;font-weight:600;
+  cursor:pointer;font-family:inherit;height:28px;
+}
+#ai-secopt-nav .theme-toggle:hover{color:#e2e8f5;border-color:#3b82f6}
+#ai-secopt-nav .theme-toggle:focus-visible{outline:2px solid #3b82f6;outline-offset:2px}
+
+</style>
+<nav id="ai-secopt-nav">
+  <div class="nav-brand">AI&#8209;<span>SecOpt</span></div>
+  <a href="index.html" class="nav-link">🏠 Home</a><a href="ai_secopt_framework_dashboard.html" class="nav-link">🛡️ SOC Dashboard</a><a href="ai_secopt_threat_intelligence_console.html" class="nav-link">🔍 Threat Intel</a><a href="ai_secopt_lstm_forecasting_engine.html" class="nav-link">📈 LSTM Forecast</a><a href="ai_secopt_ml_training_lab.html" class="nav-link">🧪 ML Training Lab</a><a href="ai_secopt_data_pipeline_engineer.html" class="nav-link">⚙️ Data Pipeline</a><a href="ai_secopt_incident_correlation_console.html" class="nav-link active">🧩 Incident Correlation</a>
+  <button type="button" class="theme-toggle" id="aisecopt-theme-toggle" aria-pressed="false" aria-label="Switch to light mode"><span class="theme-toggle-icon" aria-hidden="true">🌙</span><span class="theme-toggle-label">Dark</span></button>
+</nav>
+<script>
+(function(){
+  var btn = document.getElementById('aisecopt-theme-toggle');
+  if(!btn) return;
+  function currentTheme(){ return document.documentElement.getAttribute('data-theme') || 'dark'; }
+  function paint(){
+    var isLight = currentTheme() === 'light';
+    btn.setAttribute('aria-pressed', String(isLight));
+    btn.setAttribute('aria-label', 'Switch to ' + (isLight ? 'dark' : 'light') + ' mode');
+    btn.querySelector('.theme-toggle-icon').textContent = isLight ? '☀️' : '🌙';
+    btn.querySelector('.theme-toggle-label').textContent = isLight ? 'Light' : 'Dark';
+  }
+  btn.addEventListener('click', function(){
+    var next = currentTheme() === 'light' ? 'dark' : 'light';
+    try{ localStorage.setItem('aisecopt-theme', next); }catch(e){}
+    document.documentElement.setAttribute('data-theme', next);
+    location.reload();
+  });
+  paint();
+})();
+</script>
+
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg0:#0a0e1a;--bg1:#0d1224;--bg2:#111827;--bg3:#1a2035;
+  --border:#1e2f4a;--border2:#263550;
+  --text1:#e2e8f5;--text2:#8b9cc4;--text3:#4a5b80;
+  --blue:#3b82f6;--teal:#06b6d4;--green:#22c55e;
+  --amber:#f59e0b;--red:#ef4444;--purple:#a855f7;
+}
+  /* Light theme: applied when data-theme="light" is set on <html> (see the theme toggle in the nav). Values chosen for WCAG AA contrast against the light surfaces below. */
+  :root[data-theme="light"]{
+    --bg0: #eef1f7;
+    --bg1: #ffffff;
+    --bg2: #f4f6fb;
+    --bg3: #e7ebf4;
+    --border: #d7deeb;
+    --border2: #c2cce1;
+    --text1: #141b2e;
+    --text2: #48546f;
+    --text3: #76829f;
+    --blue: #1d4ed8;
+    --teal: #0e7490;
+    --green: #15803d;
+    --amber: #b45309;
+    --red: #b91c1c;
+    --purple: #7e22ce;
+  }
+
+body{font-family:system-ui,sans-serif;background:var(--bg0);color:var(--text1);font-size:13px;padding:16px}
+h2.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+.panel{background:var(--bg1);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:12px}
+.panel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:10px;flex-wrap:wrap}
+.panel-title{font-size:13px;font-weight:600;color:var(--text1)}
+.panel-sub{font-size:10px;color:var(--text3)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.row2{display:grid;grid-template-columns:1fr 340px;gap:12px}
+@media (max-width:900px){.grid2,.row2{grid-template-columns:1fr}}
+.btn{background:var(--blue);color:#fff;border:none;border-radius:6px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s}
+.btn:hover{opacity:.85}
+.btn.secondary{background:var(--bg3);color:var(--text2);border:1px solid var(--border)}
+.btn:disabled{opacity:.4;cursor:default}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600}
+.badge.green{background:color-mix(in srgb, var(--green) 15%, transparent);color:var(--green)}
+.badge.blue{background:color-mix(in srgb, var(--blue) 15%, transparent);color:var(--blue)}
+.badge.amber{background:color-mix(in srgb, var(--amber) 15%, transparent);color:var(--amber)}
+.badge.red{background:color-mix(in srgb, var(--red) 15%, transparent);color:var(--red)}
+.badge.purple{background:color-mix(in srgb, var(--purple) 15%, transparent);color:var(--purple)}
+.badge.grey{background:rgba(74,91,128,.2);color:var(--text2)}
+.badge .dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+
+.note{font-size:11px;color:var(--amber);background:color-mix(in srgb, var(--amber) 8%, transparent);padding:8px 10px;border-radius:6px;margin-top:10px;border-left:2px solid var(--amber);line-height:1.6}
+.note.info{color:var(--teal);background:color-mix(in srgb, var(--teal) 8%, transparent);border-left-color:var(--teal)}
+
+.metric-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:4px}
+.metric-chip{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center}
+.chip-val{font-size:20px;font-weight:700;font-family:monospace;line-height:1}
+.chip-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.4px;margin-top:3px}
+
+.real-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+@media (max-width:700px){.real-strip{grid-template-columns:1fr 1fr}}
+.real-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px}
+.real-card .rc-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px}
+.real-card .rc-val{font-family:monospace;font-size:17px;font-weight:700}
+.real-card .rc-sub{font-size:10px;color:var(--text3);margin-top:3px}
+
+.equip-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
+.equip-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px}
+.equip-card[data-state="warning"]{border-color:color-mix(in srgb, var(--amber) 45%, transparent)}
+.equip-card[data-state="critical"]{border-color:color-mix(in srgb, var(--red) 50%, transparent)}
+.equip-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px}
+.equip-name{font-size:11px;font-weight:600}
+.equip-type{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.4px}
+.state-dot{width:8px;height:8px;border-radius:50%;margin-top:2px}
+.state-dot.normal{background:var(--green)}
+.state-dot.warning{background:var(--amber)}
+.state-dot.critical{background:var(--red);box-shadow:0 0 0 3px color-mix(in srgb, var(--red) 20%, transparent)}
+.metric-row{display:grid;grid-template-columns:44px 1fr 40px;align-items:center;gap:6px;margin-top:4px}
+.metric-row .m-label{font-size:9px;color:var(--text3)}
+.metric-row .m-val{font-family:monospace;font-size:10px;text-align:right;font-weight:600}
+.metric-row .m-val.warning{color:var(--amber)}
+.metric-row .m-val.critical{color:var(--red)}
+canvas.spark{display:block;width:100%;height:18px}
+
+.event-log{overflow-y:auto;height:230px}
+.event-row{display:grid;grid-template-columns:auto 1fr;gap:2px 8px;padding:6px 4px;font-size:11px;border-top:1px solid var(--border)}
+.event-row:first-child{border-top:none}
+.event-time{font-family:monospace;color:var(--text3);font-size:10px;grid-row:1/3;padding-top:1px}
+.event-main{display:flex;align-items:center;gap:6px}
+.event-meta{color:var(--text3);font-size:10px;font-family:monospace}
+
+.alert-queue{overflow-y:auto;height:230px;display:flex;flex-direction:column;gap:6px}
+.alert-btn{width:100%;text-align:left;background:var(--bg2);border:1px solid var(--border);border-left:3px solid var(--blue);border-radius:7px;padding:8px 9px;cursor:pointer;color:var(--text1);font-family:system-ui,sans-serif}
+.alert-btn[data-severity="critical"]{border-left-color:var(--red)}
+.alert-btn[data-severity="warning"]{border-left-color:var(--amber)}
+.alert-btn[aria-pressed="true"]{box-shadow:0 0 0 2px var(--blue) inset}
+.alert-top{display:flex;justify-content:space-between;font-size:10px;color:var(--text3);font-family:monospace}
+.alert-title{font-size:11px;font-weight:600;margin-top:2px;display:block}
+.alert-devices{font-size:10px;color:var(--text2);font-family:monospace}
+.empty-note{padding:20px 10px;color:var(--text3);font-size:11px;text-align:center}
+
+.report-empty{padding:24px 10px;text-align:center;color:var(--text3);font-size:12px}
+.report-id{font-family:monospace;font-size:10px;color:var(--text3)}
+.report-title{font-size:14px;font-weight:700;margin:3px 0 10px}
+.report-section h4{font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--text3);margin-bottom:5px}
+.report-narrative{font-size:11.5px;line-height:1.6;color:var(--text2)}
+.affected-item{display:flex;justify-content:space-between;background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:6px 9px;font-size:11px;margin-bottom:5px}
+.method-note{font-size:10px;color:var(--text3);border-top:1px dashed var(--border);padding-top:8px;margin-top:10px}
+
+.timeline-wrap{margin-top:8px}
+.timeline-frame{display:grid;grid-template-columns:56px 1fr;gap:6px}
+.timeline-lanes{display:flex;flex-direction:column;justify-content:space-between;padding:4px 0}
+.timeline-lanes span{font-size:9px;color:var(--text3)}
+#timelineCanvas{width:100%;height:50px;display:block}
+.timeline-axis{display:flex;justify-content:space-between;font-size:9px;color:var(--text3);font-family:monospace;margin-top:2px;padding-left:62px}
+</style>
+
+<h2 class="sr-only">AI-SecOpt Incident Correlation Console — fuses real Elasticsearch security detections and datacentre telemetry where reachable, and demonstrates the full anomaly-detection, correlation, and AI incident-report engine on a simulated multi-node scenario.</h2>
+
+<div class="panel">
+  <div class="panel-header">
+    <span class="panel-title">AI-SecOpt — Incident Correlation Console</span>
+    <div style="display:flex;gap:6px;align-items:center">
+      <span class="badge blue" id="alerts-open-badge">0 open incidents</span>
+      <span class="badge red" id="correlated-badge">0 correlated</span>
+    </div>
+  </div>
+  <div class="note">
+    ⚠ This module closes the gap between the security pipeline and the infrastructure pipeline: it correlates attack detections with equipment telemetry and auto-generates an incident report (cause, affected equipment, recommended action). The "Live Signals" strip below reads your real Elasticsearch instance when reachable. The correlation, alerting, and report-generation engine underneath it runs on a simulated eight-node datacentre scenario — the same target architecture pattern used elsewhere in this suite — because CSE-CIC-IDS2018 is a historical, single-host dataset with no live multi-node telemetry to correlate against yet.
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel-header">
+    <span class="panel-title">Live Signals — This Host (Real)</span>
+    <span class="badge" id="live-fetch-badge">checking…</span>
+  </div>
+  <div class="real-strip" id="realStrip">
+    <div class="real-card"><div class="rc-label">CPU (Metricbeat)</div><div class="rc-val" id="real-cpu">—</div><div class="rc-sub">this machine, live</div></div>
+    <div class="real-card"><div class="rc-label">Memory (Metricbeat)</div><div class="rc-val" id="real-mem">—</div><div class="rc-sub">this machine, live</div></div>
+    <div class="real-card"><div class="rc-label">Most recent detection</div><div class="rc-val" id="real-detection" style="font-size:12px">—</div><div class="rc-sub" id="real-detection-sub">ai-secopt-threats-*</div></div>
+    <div class="real-card"><div class="rc-label">Correlation check</div><div class="rc-val" id="real-corr" style="font-size:12px">—</div><div class="rc-sub" id="real-corr-sub">real data, real timestamps</div></div>
+  </div>
+  <div id="real-fallback-note"></div>
+</div>
+
+<div class="panel">
+  <div class="panel-header">
+    <span class="panel-title">Correlation &amp; Alerting Engine — Simulated Multi-Node Scenario</span>
+    <span class="panel-sub">z-score + rate-based detection, time-window correlation, generated incident reports</span>
+  </div>
+
+  <div class="metric-grid">
+    <div class="metric-chip"><div class="chip-val" style="color:var(--blue)" id="m-open">0</div><div class="chip-label">Open incidents</div></div>
+    <div class="metric-chip"><div class="chip-val" style="color:var(--red)" id="m-critical">0</div><div class="chip-label">Critical</div></div>
+    <div class="metric-chip"><div class="chip-val" style="color:var(--purple)" id="m-corr">0</div><div class="chip-label">Correlated (sec+infra)</div></div>
+    <div class="metric-chip"><div class="chip-val" style="color:var(--green)" id="m-devices">8</div><div class="chip-label">Nodes monitored</div></div>
+  </div>
+
+  <div class="grid2" style="margin-top:12px">
+    <div>
+      <div class="panel-header" style="margin-bottom:6px"><span style="font-size:11px;font-weight:600;color:var(--text2)">Security event stream (simulated, CIC-IDS2018-style)</span></div>
+      <div class="event-log" id="eventLog"></div>
+    </div>
+    <div>
+      <div class="panel-header" style="margin-bottom:6px"><span style="font-size:11px;font-weight:600;color:var(--text2)">Datacentre equipment health (simulated)</span></div>
+      <div class="equip-grid" id="equipGrid"></div>
+    </div>
+  </div>
+
+  <div class="timeline-wrap">
+    <div style="font-size:11px;font-weight:600;color:var(--text2);margin-bottom:4px">Correlated activity timeline</div>
+    <div class="timeline-frame">
+      <div class="timeline-lanes" aria-hidden="true"><span>Anomalies</span><span>Events</span><span>Alerts</span></div>
+      <canvas id="timelineCanvas" role="img" aria-label="Timeline of simulated security events and infrastructure anomalies over the last 60 seconds"></canvas>
+    </div>
+    <div class="timeline-axis" aria-hidden="true"><span>60s ago</span><span>30s ago</span><span>now</span></div>
+  </div>
+</div>
+
+<div class="row2">
+  <div class="panel">
+    <div class="panel-header">
+      <span class="panel-title">AI-generated incident report</span>
+      <span class="panel-sub">cause · affected equipment · recommended action</span>
+    </div>
+    <div id="reportBody"><p class="report-empty">Select an alert from the queue to open its incident report.</p></div>
+  </div>
+  <div class="panel">
+    <div class="panel-header">
+      <span class="panel-title">Active alerts</span>
+      <span class="panel-sub" id="alertsSub">0 open</span>
+    </div>
+    <div aria-live="polite" class="sr-only" id="alertAnnouncer" style="position:absolute;width:1px;height:1px;overflow:hidden"></div>
+    <ul class="alert-queue" id="alertQueue" style="list-style:none;padding:0;margin:0">
+      <li class="empty-note">No alerts yet — the detection engine is watching incoming telemetry.</li>
+    </ul>
+  </div>
+</div>
+
+<div style="display:flex;gap:8px;justify-content:flex-end;margin-top:4px">
+  <button class="btn secondary" onclick="sendPrompt('Explain why real-time correlation between CSE-CIC-IDS2018 detections and live Metricbeat telemetry is not yet possible in AI-SecOpt, and what would be needed to close that gap (e.g. live packet capture feeding the trained XGBoost model)')">Explain the real-data gap ↗</button>
+  <button class="btn secondary" onclick="sendPrompt('Generate the Python code for a correlation service that joins AI-SecOpt security detections (ai-secopt-threats-*) with Metricbeat infrastructure metrics (metricbeat-*) in Elasticsearch by time window and host, and writes correlated incidents to a new ai-secopt-incidents-* index')">Correlation service code ↗</button>
+  <button class="btn" onclick="sendPrompt('Generate a full incident response playbook template for AI-SecOpt correlated security + infrastructure incidents, covering triage, containment, and reporting steps')">IR Playbook Template ↗</button>
+</div>
+
+<script>
+if (typeof sendPrompt !== 'function') {
+  window.sendPrompt = function (msg) { console.log('[AI-SecOpt] sendPrompt (no host bridge):', msg); };
+}
+
+/* =========================================================
+   PART 1 — REAL DATA STRIP (reads your actual Elasticsearch
+   instance when this page is opened while your local
+   AI-SecOpt stack is running; fails gracefully otherwise)
+========================================================= */
+(function () {
+  "use strict";
+
+  function fmtPct(v) { return (Math.round(v * 100) / 100).toFixed(1) + '%'; }
+
+  async function fetchRealHostMetrics() {
+    const [cpuResp, memResp] = await Promise.all([
+      fetch('http://localhost:9200/metricbeat-*/_search', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ size: 1, query: { exists: { field: 'system.cpu.total.pct' } }, sort: [{ '@timestamp': { order: 'desc' } }] })
+      }),
+      fetch('http://localhost:9200/metricbeat-*/_search', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ size: 1, query: { exists: { field: 'system.memory.actual.used.pct' } }, sort: [{ '@timestamp': { order: 'desc' } }] })
+      })
+    ]);
+    const cpuData = await cpuResp.json();
+    const memData = await memResp.json();
+    const cpuDoc = cpuData.hits.hits[0];
+    const memDoc = memData.hits.hits[0];
+    return {
+      cpu: cpuDoc ? cpuDoc._source.system.cpu.total.pct * 100 : null,
+      cpuTime: cpuDoc ? cpuDoc._source['@timestamp'] : null,
+      mem: memDoc ? memDoc._source.system.memory.actual.used.pct * 100 : null,
+      memTime: memDoc ? memDoc._source['@timestamp'] : null
+    };
+  }
+
+  async function fetchRealDetection() {
+    const resp = await fetch('http://localhost:9200/ai-secopt-threats-*/_search', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        size: 1,
+        query: { bool: { must: [{ term: { is_attack: true } }] } },
+        sort: [{ '@timestamp': { order: 'desc' } }]
+      })
+    });
+    const data = await resp.json();
+    const hit = data.hits.hits[0];
+    if (!hit) return null;
+    return {
+      label: hit._source.predicted_label,
+      confidence: hit._source.confidence_score,
+      technique: hit._source.mitre_technique_id || null,
+      time: hit._source['@timestamp']
+    };
+  }
+
+  async function run() {
+    const badge = document.getElementById('live-fetch-badge');
+    try {
+      const [metrics, detection] = await Promise.all([fetchRealHostMetrics(), fetchRealDetection()]);
+
+      if (metrics.cpu != null) {
+        document.getElementById('real-cpu').textContent = fmtPct(metrics.cpu);
+      } else {
+        document.getElementById('real-cpu').textContent = 'n/a';
+      }
+      if (metrics.mem != null) {
+        document.getElementById('real-mem').textContent = fmtPct(metrics.mem);
+      } else {
+        document.getElementById('real-mem').textContent = 'n/a';
+      }
+
+      let correlationNote = 'No real attack detections indexed yet.';
+      if (detection) {
+        document.getElementById('real-detection').textContent = detection.label + ' (' + Math.round(detection.confidence * 100) + '%)';
+        document.getElementById('real-detection-sub').textContent = new Date(detection.time).toLocaleString() + (detection.technique ? ' · ' + detection.technique : '');
+
+        // Real correlation check: is this detection's timestamp within 5 minutes
+        // of the most recent real metric reading we have?
+        const refTime = metrics.cpuTime || metrics.memTime;
+        if (refTime) {
+          const deltaMs = Math.abs(new Date(detection.time) - new Date(refTime));
+          if (deltaMs <= 5 * 60 * 1000) {
+            correlationNote = 'Within 5 min of this host’s telemetry — plausible real correlation (Δ' + Math.round(deltaMs / 1000) + 's).';
+            document.getElementById('real-corr').textContent = 'Overlap found';
+            document.getElementById('real-corr').style.color = 'var(--red)';
+          } else {
+            const deltaH = (deltaMs / 3600000).toFixed(1);
+            correlationNote = 'No overlap: detection timestamp is ' + deltaH + 'h from live telemetry — CSE-CIC-IDS2018 is historical/batch data, not a live capture, so its timestamps don’t line up with this host’s real-time clock.';
+            document.getElementById('real-corr').textContent = 'No overlap';
+            document.getElementById('real-corr').style.color = 'var(--text2)';
+          }
+        }
+      } else {
+        document.getElementById('real-detection').textContent = 'none indexed';
+        document.getElementById('real-corr').textContent = '—';
+      }
+      document.getElementById('real-corr-sub').textContent = correlationNote;
+
+      badge.textContent = 'Elasticsearch reachable';
+      badge.className = 'badge green';
+    } catch (err) {
+      badge.textContent = 'Elasticsearch unreachable';
+      badge.className = 'badge grey';
+      ['real-cpu', 'real-mem', 'real-detection', 'real-corr'].forEach(id => { document.getElementById(id).textContent = '—'; });
+      document.getElementById('real-corr-sub').textContent = 'not checked';
+      document.getElementById('real-fallback-note').innerHTML =
+        '<div class="note info">This page could not reach <code>http://localhost:9200</code> from here, so no real values are shown above. Open this file while your local AI-SecOpt Elastic Stack is running (see the Data Pipeline module) to see genuine CPU/memory readings and the most recent real detection, plus a real timestamp-overlap check against it. The engine below still runs — it is the simulated demonstration described above, not dependent on Elasticsearch.</div>';
+    }
+  }
+  run();
+})();
+
+/* =========================================================
+   PART 2 — SIMULATED CORRELATION & ALERTING ENGINE
+   (adapted from the standalone AI-SecOpt Console prototype)
+========================================================= */
+(function () {
+  "use strict";
+
+  var TICK_MS = 1100, HISTORY = 26, CORR_WINDOW_MS = 60000, RATE_WINDOW_MS = 30000;
+
+  var METRIC_META = {
+    cpu: { label: 'CPU', unit: '%', warn: 80, crit: 93 },
+    mem: { label: 'Memory', unit: '%', warn: 82, crit: 94 },
+    temp: { label: 'Temp', unit: '°C', warn: 60, crit: 72 },
+    throughput: { label: 'Traffic', unit: 'Gb/s', warn: null, crit: null },
+    iops: { label: 'I/O busy', unit: '%', warn: 85, crit: 95 },
+    capacity: { label: 'Capacity', unit: '%', warn: 85, crit: 92 },
+    power: { label: 'Power', unit: 'kW', warn: null, crit: null },
+    load: { label: 'Load', unit: '%', warn: 88, crit: 96 },
+    supplyTemp: { label: 'Supply', unit: '°C', warn: 22, crit: 26 }
+  };
+
+  var DEVICES = [
+    { id: 'edge-r1', name: 'Edge Router R1', type: 'Network', metrics: { throughput: 4.4, cpu: 31, temp: 41 } },
+    { id: 'core-a1', name: 'Core Switch A1', type: 'Network', metrics: { throughput: 7.9, cpu: 27, temp: 39 } },
+    { id: 'app-s1', name: 'App Server S1', type: 'Compute', metrics: { cpu: 46, mem: 60, temp: 52 } },
+    { id: 'app-s2', name: 'App Server S2', type: 'Compute', metrics: { cpu: 38, mem: 54, temp: 49 } },
+    { id: 'db-d1', name: 'Database Server D1', type: 'Compute', metrics: { cpu: 57, mem: 71, temp: 55 } },
+    { id: 'store-1', name: 'Storage Array ST1', type: 'Storage', metrics: { iops: 60, capacity: 74, temp: 45 } },
+    { id: 'crac-1', name: 'CRAC Cooling Unit C1', type: 'Facilities', metrics: { supplyTemp: 18, temp: 24, power: 12 } },
+    { id: 'pdu-1', name: 'PDU Power Unit P1', type: 'Facilities', metrics: { load: 67, power: 34, temp: 37 } }
+  ];
+
+  var CATEGORIES = [
+    { id: 'benign', label: 'Benign', severity: 'info', weight: 66 },
+    { id: 'portscan', label: 'Port Scan', severity: 'warning', weight: 9, targets: ['edge-r1', 'core-a1'], rate: 4 },
+    { id: 'bruteforce', label: 'Brute Force', severity: 'warning', weight: 8, targets: ['app-s1', 'app-s2', 'db-d1'], rate: 3 },
+    { id: 'webattack', label: 'Web Attack', severity: 'warning', weight: 7, targets: ['app-s1', 'app-s2'], rate: 3 },
+    { id: 'ddos', label: 'DDoS', severity: 'critical', weight: 5, targets: ['edge-r1', 'core-a1'] },
+    { id: 'botnet', label: 'Botnet C2', severity: 'critical', weight: 3, targets: ['app-s1', 'db-d1', 'store-1'] },
+    { id: 'infiltration', label: 'Infiltration', severity: 'critical', weight: 2, targets: ['db-d1', 'store-1'] }
+  ];
+
+  var RECOMMENDATIONS = {
+    portscan: 'Restrict inbound scan ranges at the perimeter firewall and review ACLs on the targeted device.',
+    bruteforce: 'Enforce account lockout / rate-limit authentication and confirm MFA is active for the targeted host.',
+    webattack: 'Inspect application logs for the targeted host and deploy a WAF rule for the observed pattern.',
+    ddos: 'Engage upstream traffic scrubbing and rate-limit at the edge; verify BGP/anycast failover readiness.',
+    botnet: 'Isolate the affected host from the network, capture a memory image, and block the C2 indicator.',
+    infiltration: 'Contain the affected host immediately, rotate credentials used on it, and begin forensic capture.',
+    infra_cpu: 'Inspect running processes for a runaway workload; consider horizontal scale-out.',
+    infra_mem: 'Check for a memory leak in recently deployed services; restart or scale the affected instance.',
+    infra_temp: 'Verify cooling airflow around the unit and check for fan or CRAC faults.',
+    infra_capacity: 'Free or migrate data off the array; provision additional storage capacity.',
+    infra_iops: 'Identify the I/O-heavy workload and consider moving it to a less contended volume.',
+    infra_load: 'Redistribute load across PDUs; confirm the circuit is within rated capacity.',
+    infra_generic: 'Review the affected metric against baseline and escalate to the on-call infrastructure engineer.'
+  };
+
+  var state = {
+    devices: DEVICES.map(function (d) {
+      var m = {};
+      Object.keys(d.metrics).forEach(function (k) { m[k] = { history: [d.metrics[k]], baseline: d.metrics[k], drift: 0, anomaly: null, status: 'normal' }; });
+      return { id: d.id, name: d.name, type: d.type, metrics: m, status: 'normal', lastAnomalyAt: 0 };
+    }),
+    events: [], alerts: [], timelineMarks: [], selectedAlertId: null, nextId: 1
+  };
+
+  function uid(p) { return p + '-' + (state.nextId++); }
+  function rand(a, b) { return a + Math.random() * (b - a); }
+  function pick(a) { return a[Math.floor(Math.random() * a.length)]; }
+  function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+  function fmtTime(ts) { return new Date(ts).toLocaleTimeString(undefined, { hour12: false }); }
+  function fmtNum(v) { return (Math.round(v * 10) / 10).toFixed(1); }
+  function deviceById(id) { for (var i = 0; i < state.devices.length; i++) if (state.devices[i].id === id) return state.devices[i]; return null; }
+  function catById(id) { for (var i = 0; i < CATEGORIES.length; i++) if (CATEGORIES[i].id === id) return CATEGORIES[i]; return null; }
+  function weightedCategory() {
+    var total = CATEGORIES.reduce(function (s, c) { return s + c.weight; }, 0), r = Math.random() * total;
+    for (var i = 0; i < CATEGORIES.length; i++) { r -= CATEGORIES[i].weight; if (r <= 0) return CATEGORIES[i]; }
+    return CATEGORIES[0];
+  }
+  function randomIp() { return [rand(1, 223) | 0, rand(0, 255) | 0, rand(0, 255) | 0, rand(1, 254) | 0].join('.'); }
+
+  function stepMetric(dev, key, m) {
+    var meta = METRIC_META[key], base = m.baseline;
+    var noiseStep = (meta.unit === '°C') ? rand(-0.5, 0.5) : (meta.unit === 'kW') ? rand(-0.4, 0.4) : rand(-1.6, 1.6);
+    m.drift = m.drift * 0.93 + noiseStep;
+
+    if (!m.anomaly && Math.random() < 0.006) {
+      var dur = Math.round(rand(16, 30));
+      var mag = meta.crit ? (meta.crit - base) * rand(0.9, 1.35) : base * rand(0.5, 1.1);
+      m.anomaly = { ticksLeft: dur, totalTicks: dur, magnitude: mag, deviceId: dev.id, key: key };
+      dev.lastAnomalyAt = Date.now();
+      maybeCorrelatedEvent(dev, key);
+    }
+    var anomalyOffset = 0;
+    if (m.anomaly) {
+      var a = m.anomaly, progress = 1 - (a.ticksLeft / a.totalTicks);
+      anomalyOffset = a.magnitude * Math.sin(Math.min(progress, 1) * Math.PI);
+      a.ticksLeft--; if (a.ticksLeft <= 0) m.anomaly = null;
+    }
+    var value = base + m.drift + anomalyOffset;
+    if (meta.unit === '%') value = clamp(value, 1, 100);
+    else value = clamp(value, base * 0.15, base * 4 + 5);
+
+    m.history.push(value); if (m.history.length > HISTORY) m.history.shift();
+    var prior = m.history.slice(0, -1), zStatus = 'normal', z = 0;
+    if (prior.length >= 6) {
+      var mean = prior.reduce(function (s, v) { return s + v; }, 0) / prior.length;
+      var variance = prior.reduce(function (s, v) { return s + (v - mean) * (v - mean); }, 0) / prior.length;
+      var sd = Math.sqrt(variance) || 0.0001;
+      z = (value - mean) / sd;
+      if (Math.abs(z) > 3) zStatus = 'critical'; else if (Math.abs(z) > 2) zStatus = 'warning';
+    }
+    var hardStatus = 'normal';
+    if (meta.crit != null && value >= meta.crit) hardStatus = 'critical';
+    else if (meta.warn != null && value >= meta.warn) hardStatus = 'warning';
+    var rank = { normal: 0, warning: 1, critical: 2 };
+    var finalStatus = rank[zStatus] >= rank[hardStatus] ? zStatus : hardStatus;
+    m.status = finalStatus; m.z = z; m.value = value;
+    return finalStatus;
+  }
+
+  function maybeCorrelatedEvent(dev, metricKey) {
+    if (Math.random() > 0.45) return;
+    var candidates = CATEGORIES.filter(function (c) { return c.targets && c.targets.indexOf(dev.id) > -1; });
+    if (!candidates.length) return;
+    var cat = pick(candidates);
+    setTimeout(function () { spawnEvent(cat, dev.id); }, rand(400, 3200));
+  }
+
+  function stepDevices() {
+    state.devices.forEach(function (dev) {
+      var worst = 'normal', rank = { normal: 0, warning: 1, critical: 2 };
+      Object.keys(dev.metrics).forEach(function (key) {
+        var st = stepMetric(dev, key, dev.metrics[key]);
+        if (rank[st] > rank[worst]) worst = st;
+      });
+      var prevStatus = dev.status; dev.status = worst;
+      if (worst !== 'normal') evaluateInfraAlert(dev);
+      if (prevStatus !== 'normal' && worst === 'normal') autoResolveInfraAlerts(dev.id);
+    });
+  }
+
+  function spawnEvent(cat, forcedTarget) {
+    cat = cat || weightedCategory();
+    var target = forcedTarget || (cat.targets ? pick(cat.targets) : null);
+    var ev = { id: uid('ev'), time: Date.now(), category: cat.id, label: cat.label, severity: cat.severity, target: target, ip: randomIp() };
+    state.events.unshift(ev); if (state.events.length > 200) state.events.pop();
+    if (cat.id !== 'benign') { state.timelineMarks.push({ time: ev.time, kind: 'event', severity: cat.severity }); evaluateSecurityAlert(ev, cat); }
+    renderEventLog();
+  }
+  function scheduleNextEvent() { spawnEvent(); setTimeout(scheduleNextEvent, rand(900, 2400)); }
+
+  function findRecentDeviceAnomaly(deviceId, withinMs) {
+    var dev = deviceById(deviceId); if (!dev) return null; var found = null;
+    Object.keys(dev.metrics).forEach(function (key) {
+      var m = dev.metrics[key];
+      if ((m.status === 'warning' || m.status === 'critical') && (Date.now() - dev.lastAnomalyAt) <= withinMs) found = { key: key, m: m };
+    });
+    return found;
+  }
+  function openAlertFor(pred) { for (var i = 0; i < state.alerts.length; i++) if (state.alerts[i].status !== 'resolved' && pred(state.alerts[i])) return state.alerts[i]; return null; }
+
+  function evaluateSecurityAlert(ev, cat) {
+    var shouldAlert = false, evidenceEvents = [ev];
+    if (cat.severity === 'critical') shouldAlert = true;
+    else if (cat.rate) {
+      var windowStart = Date.now() - RATE_WINDOW_MS;
+      evidenceEvents = state.events.filter(function (e) { return e.category === cat.id && e.target === ev.target && e.time >= windowStart; });
+      if (evidenceEvents.length >= cat.rate) shouldAlert = true;
+    }
+    if (!shouldAlert) return;
+    var existing = openAlertFor(function (a) { return a.type !== 'infra' && a.category === cat.id && a.deviceIds.indexOf(ev.target) > -1; });
+    var infraHit = ev.target ? findRecentDeviceAnomaly(ev.target, CORR_WINDOW_MS) : null;
+    if (existing) {
+      existing.evidenceEvents = evidenceEvents; existing.time = Date.now();
+      if (infraHit && existing.type !== 'correlated') upgradeToCorrelated(existing, ev.target, infraHit);
+      renderAlertQueue(); if (state.selectedAlertId === existing.id) renderReport(existing.id);
+      return;
+    }
+    var alert = {
+      id: uid('AL'), time: Date.now(), type: infraHit ? 'correlated' : 'security', severity: infraHit ? 'critical' : cat.severity,
+      category: cat.id, categoryLabel: cat.label, deviceIds: ev.target ? [ev.target] : [], evidenceEvents: evidenceEvents,
+      infraEvidence: infraHit ? { deviceId: ev.target, key: infraHit.key, z: infraHit.m.z, value: infraHit.m.value } : null, status: 'open'
+    };
+    alert.title = buildAlertTitle(alert);
+    state.alerts.unshift(alert);
+    state.timelineMarks.push({ time: alert.time, kind: 'alert', severity: alert.severity });
+    announceAlert(alert); renderAlertQueue(); renderTopBadges();
+  }
+
+  function evaluateInfraAlert(dev) {
+    var worstKey = null, worstStatus = 'normal', rank = { normal: 0, warning: 1, critical: 2 };
+    Object.keys(dev.metrics).forEach(function (key) { var m = dev.metrics[key]; if (rank[m.status] > rank[worstStatus]) { worstStatus = m.status; worstKey = key; } });
+    if (worstStatus === 'normal') return;
+    var secHit = null;
+    for (var i = 0; i < state.events.length; i++) { var e = state.events[i]; if (e.target === dev.id && e.category !== 'benign' && (Date.now() - e.time) <= CORR_WINDOW_MS) { secHit = e; break; } }
+    var existing = openAlertFor(function (a) { return a.deviceIds.indexOf(dev.id) > -1 && a.infraKey === worstKey; });
+    if (existing) {
+      existing.severity = worstStatus === 'critical' ? 'critical' : existing.severity;
+      existing.infraSnapshot = { key: worstKey, value: dev.metrics[worstKey].value, z: dev.metrics[worstKey].z };
+      if (secHit && existing.type !== 'correlated') {
+        existing.type = 'correlated'; existing.category = secHit.category; existing.categoryLabel = catById(secHit.category).label;
+        existing.evidenceEvents = [secHit]; existing.title = buildAlertTitle(existing); existing.severity = 'critical';
+      }
+      if (state.selectedAlertId === existing.id) renderReport(existing.id);
+      return;
+    }
+    if (worstStatus !== 'critical' && !secHit) return;
+    var alert = {
+      id: uid('AL'), time: Date.now(), type: secHit ? 'correlated' : 'infra', severity: secHit ? 'critical' : worstStatus,
+      deviceIds: [dev.id], infraKey: worstKey, infraSnapshot: { key: worstKey, value: dev.metrics[worstKey].value, z: dev.metrics[worstKey].z },
+      category: secHit ? secHit.category : null, categoryLabel: secHit ? catById(secHit.category).label : null,
+      evidenceEvents: secHit ? [secHit] : [], status: 'open'
+    };
+    alert.title = buildAlertTitle(alert);
+    state.alerts.unshift(alert);
+    state.timelineMarks.push({ time: alert.time, kind: secHit ? 'alert' : 'anomaly', severity: alert.severity });
+    announceAlert(alert); renderAlertQueue(); renderTopBadges();
+  }
+
+  function upgradeToCorrelated(alert, deviceId, infraHit) {
+    alert.type = 'correlated'; alert.severity = 'critical';
+    alert.infraEvidence = { deviceId: deviceId, key: infraHit.key, z: infraHit.m.z, value: infraHit.m.value };
+    alert.title = buildAlertTitle(alert);
+  }
+  function autoResolveInfraAlerts(deviceId) {
+    state.alerts.forEach(function (a) { if (a.type === 'infra' && a.status === 'open' && a.deviceIds.indexOf(deviceId) > -1) a.status = 'resolved-auto'; });
+  }
+  function buildAlertTitle(alert) {
+    if (alert.type === 'correlated') { var dev = deviceById(alert.deviceIds[0]); return (alert.categoryLabel || 'Anomaly') + ' correlated with equipment fault — ' + (dev ? dev.name : 'device'); }
+    if (alert.type === 'security') return alert.categoryLabel + ' — ' + (alert.evidenceEvents.length > 1 ? alert.evidenceEvents.length + ' events' : (deviceById(alert.deviceIds[0]) ? deviceById(alert.deviceIds[0]).name : 'target'));
+    var dev2 = deviceById(alert.deviceIds[0]), meta = METRIC_META[alert.infraKey];
+    return (dev2 ? dev2.name : 'Device') + ' — ' + meta.label + ' ' + (alert.severity === 'critical' ? 'critical' : 'anomalous');
+  }
+  function announceAlert(alert) { var el = document.getElementById('alertAnnouncer'); if (el) el.textContent = (alert.severity === 'critical' ? 'Critical alert: ' : 'Warning alert: ') + alert.title; }
+
+  function narrativeFor(alert) {
+    var parts = [];
+    if (alert.type === 'security' || alert.type === 'correlated') {
+      var cat = catById(alert.category), n = alert.evidenceEvents.length;
+      var devNames = alert.deviceIds.map(function (id) { var d = deviceById(id); return d ? d.name : id; }).join(', ');
+      var ips = Array.from(new Set(alert.evidenceEvents.map(function (e) { return e.ip; }))).slice(0, 3).join(', ');
+      if (cat && cat.severity === 'critical' && n <= 1) {
+        parts.push('A single ' + cat.label.toLowerCase() + ' event was observed targeting ' + devNames + ' from source ' + ips + '. This category is treated as inherently high-severity, so the engine raised an alert immediately rather than waiting for a repeat occurrence.');
+      } else {
+        parts.push(n + ' ' + (cat ? cat.label.toLowerCase() : '') + ' event' + (n === 1 ? '' : 's') + ' were observed against ' + devNames + ' within the last ' + Math.round(RATE_WINDOW_MS / 1000) + 's (source IPs: ' + ips + '), exceeding the configured alert threshold for this category.');
+      }
+    }
+    if (alert.type === 'infra' || (alert.type === 'correlated' && alert.infraSnapshot)) {
+      var snap = alert.infraSnapshot || alert.infraEvidence, dev2 = deviceById(alert.deviceIds[0]), meta = METRIC_META[snap.key];
+      var zTxt = isFinite(snap.z) ? Math.abs(snap.z).toFixed(1) + 'σ' : 'n/a';
+      parts.push((dev2 ? dev2.name : 'The device') + '’s ' + meta.label.toLowerCase() + ' reading reached ' + fmtNum(snap.value) + meta.unit + ', ' + zTxt + ' from its rolling baseline' + (meta.crit != null ? ', crossing the defined critical threshold of ' + meta.crit + meta.unit : '') + '.');
+    }
+    if (alert.type === 'correlated') parts.push('Because a security event and an infrastructure anomaly on the same equipment fell inside the ' + Math.round(CORR_WINDOW_MS / 1000) + 's correlation window, the engine merged them into a single incident rather than reporting them separately.');
+    return parts.join(' ');
+  }
+  function methodFor(alert) {
+    if (alert.type === 'security') return 'Rule: ' + (catById(alert.category).severity === 'critical' ? 'immediate flag on rare/high-severity category' : 'event-rate threshold (' + catById(alert.category).rate + ' events / ' + Math.round(RATE_WINDOW_MS / 1000) + 's)') + '.';
+    if (alert.type === 'infra') return 'Rule: rolling z-score (window = ' + HISTORY + ' samples) combined with a fixed safety threshold on ' + METRIC_META[alert.infraKey].label.toLowerCase() + '.';
+    return 'Rule: security detection rule above, fused with infrastructure z-score/threshold rule via ' + Math.round(CORR_WINDOW_MS / 1000) + 's time-window correlation.';
+  }
+  function recommendationFor(alert) {
+    if (alert.type === 'security' || alert.type === 'correlated') return RECOMMENDATIONS[alert.category] || RECOMMENDATIONS.infra_generic;
+    var key = alert.infraKey;
+    if (key === 'cpu') return RECOMMENDATIONS.infra_cpu; if (key === 'mem') return RECOMMENDATIONS.infra_mem;
+    if (key === 'temp' || key === 'supplyTemp') return RECOMMENDATIONS.infra_temp; if (key === 'capacity') return RECOMMENDATIONS.infra_capacity;
+    if (key === 'iops') return RECOMMENDATIONS.infra_iops; if (key === 'load') return RECOMMENDATIONS.infra_load;
+    return RECOMMENDATIONS.infra_generic;
+  }
+
+  function renderEventLog() {
+    var log = document.getElementById('eventLog');
+    var items = state.events.slice(0, 40).map(function (e) {
+      return '<div class="event-row"><span class="event-time">' + fmtTime(e.time) + '</span><div><div class="event-main"><span class="badge ' + (e.severity === 'critical' ? 'red' : e.severity === 'warning' ? 'amber' : 'blue') + '">' + e.severity + '</span><strong style="font-size:11px">' + e.label + '</strong></div><div class="event-meta">' + (e.target ? (deviceById(e.target) ? deviceById(e.target).name : e.target) + ' ← ' : '') + e.ip + '</div></div></div>';
+    }).join('');
+    log.innerHTML = items || '<div class="empty-note">No events yet.</div>';
+  }
+
+  function drawSparkline(canvas, data, status) {
+    if (!canvas) return;
+    var dpr = window.devicePixelRatio || 1, w = canvas.clientWidth || 100, h = canvas.clientHeight || 18;
+    if (canvas.width !== w * dpr || canvas.height !== h * dpr) { canvas.width = w * dpr; canvas.height = h * dpr; }
+    var ctx = canvas.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, w, h);
+    if (data.length < 2) return;
+    var min = Math.min.apply(null, data), max = Math.max.apply(null, data), range = (max - min) || 1;
+    var color = status === 'critical' ? '#ef4444' : status === 'warning' ? '#f59e0b' : '#3b82f6', pad = 2;
+    function pt(i, v) { var x = pad + (i / (data.length - 1)) * (w - pad * 2); var y = h - pad - ((v - min) / range) * (h - pad * 2); return [x, y]; }
+    ctx.beginPath();
+    data.forEach(function (v, i) { var p = pt(i, v); if (i === 0) ctx.moveTo(p[0], p[1]); else ctx.lineTo(p[0], p[1]); });
+    ctx.strokeStyle = color; ctx.lineWidth = 1.4; ctx.stroke();
+    var last = pt(data.length - 1, data[data.length - 1]);
+    ctx.beginPath(); ctx.arc(last[0], last[1], 2, 0, Math.PI * 2); ctx.fillStyle = color; ctx.fill();
+  }
+
+  function renderEquipGrid() {
+    var grid = document.getElementById('equipGrid');
+    if (grid.children.length !== state.devices.length) {
+      grid.innerHTML = state.devices.map(function (dev) {
+        var rows = Object.keys(dev.metrics).map(function (key) {
+          var meta = METRIC_META[key];
+          return '<div class="metric-row"><span class="m-label">' + meta.label + '</span><canvas class="spark" data-device="' + dev.id + '" data-key="' + key + '"></canvas><span class="m-val" id="val-' + dev.id + '-' + key + '">—</span></div>';
+        }).join('');
+        return '<div class="equip-card" id="card-' + dev.id + '" data-state="normal"><div class="equip-head"><div><div class="equip-name">' + dev.name + '</div><div class="equip-type">' + dev.type + '</div></div><span class="state-dot normal" id="dot-' + dev.id + '"></span></div>' + rows + '</div>';
+      }).join('');
+    }
+    state.devices.forEach(function (dev) {
+      var card = document.getElementById('card-' + dev.id); if (card) card.setAttribute('data-state', dev.status);
+      var dot = document.getElementById('dot-' + dev.id); if (dot) dot.className = 'state-dot ' + dev.status;
+      Object.keys(dev.metrics).forEach(function (key) {
+        var m = dev.metrics[key];
+        var canvas = grid.querySelector('canvas[data-device="' + dev.id + '"][data-key="' + key + '"]');
+        drawSparkline(canvas, m.history, m.status);
+        var valEl = document.getElementById('val-' + dev.id + '-' + key);
+        if (valEl) { valEl.textContent = fmtNum(m.value != null ? m.value : m.history[m.history.length - 1]) + METRIC_META[key].unit; valEl.className = 'm-val ' + (m.status !== 'normal' ? m.status : ''); }
+      });
+    });
+  }
+
+  function alertById(id) { for (var i = 0; i < state.alerts.length; i++) if (state.alerts[i].id === id) return state.alerts[i]; return null; }
+  function selectAlert(id) { state.selectedAlertId = id; renderAlertQueue(); renderReport(id); }
+
+  function renderAlertQueue() {
+    var list = document.getElementById('alertQueue');
+    var openAlerts = state.alerts.filter(function (a) { return a.status !== 'resolved-auto'; }).slice(0, 30);
+    document.getElementById('alertsSub').textContent = state.alerts.filter(function (a) { return a.status === 'open'; }).length + ' open';
+    if (!openAlerts.length) { list.innerHTML = '<li class="empty-note">No alerts yet — the detection engine is watching incoming telemetry.</li>'; return; }
+    list.innerHTML = openAlerts.map(function (a) {
+      var devs = a.deviceIds.map(function (id) { var d = deviceById(id); return d ? d.name : id; }).join(', ');
+      return '<li style="list-style:none"><button type="button" class="alert-btn" data-id="' + a.id + '" data-severity="' + a.severity + '" aria-pressed="' + (state.selectedAlertId === a.id) + '"><div class="alert-top"><span class="badge ' + (a.severity === 'critical' ? 'red' : 'amber') + '">' + a.severity + '</span><span>' + fmtTime(a.time) + '</span></div><span class="alert-title">' + a.title + '</span><span class="alert-devices">' + devs + (a.status === 'acknowledged' ? ' · acknowledged' : '') + (a.status === 'resolved' ? ' · resolved' : '') + '</span></button></li>';
+    }).join('');
+    list.querySelectorAll('.alert-btn').forEach(function (btn) { btn.addEventListener('click', function () { selectAlert(btn.getAttribute('data-id')); }); });
+  }
+
+  function renderReport(id) {
+    var alert = alertById(id), body = document.getElementById('reportBody');
+    if (!alert) { body.innerHTML = '<p class="report-empty">Select an alert from the queue to open its incident report.</p>'; return; }
+    var typeLabel = alert.type === 'correlated' ? 'Correlated security + infrastructure incident' : alert.type === 'security' ? 'Security incident' : 'Infrastructure incident';
+    body.innerHTML =
+      '<div class="report-id">' + alert.id + ' · ' + typeLabel + '</div><div class="report-title">' + alert.title + '</div>' +
+      '<div style="display:flex;gap:6px;margin-bottom:12px">' +
+        '<button class="btn secondary" id="ackBtn" style="font-size:11px;padding:5px 10px" ' + (alert.status !== 'open' ? 'disabled' : '') + '>Acknowledge</button>' +
+        '<button class="btn" id="resolveBtn" style="font-size:11px;padding:5px 10px" ' + (alert.status === 'resolved' ? 'disabled' : '') + '>Mark resolved</button>' +
+      '</div>' +
+      '<div class="report-section" style="margin-bottom:10px"><h4>Cause</h4><p class="report-narrative">' + narrativeFor(alert) + '</p></div>' +
+      '<div class="report-section" style="margin-bottom:10px"><h4>Affected equipment</h4>' + alert.deviceIds.map(function (id2) {
+        var d = deviceById(id2); if (!d) return '';
+        var worst = Object.keys(d.metrics).reduce(function (w, k) { var m = d.metrics[k]; return (m.status === 'critical' || (m.status === 'warning' && w !== 'critical')) ? m.status : w; }, 'normal');
+        return '<div class="affected-item"><span>' + d.name + ' (' + d.type + ')</span><span class="badge ' + (worst === 'normal' ? 'green' : worst === 'critical' ? 'red' : 'amber') + '">' + worst + '</span></div>';
+      }).join('') + '</div>' +
+      '<div class="report-section"><h4>Recommended action</h4><p class="report-narrative">' + recommendationFor(alert) + '</p></div>' +
+      '<div class="method-note"><b>Detection method:</b> ' + methodFor(alert) + '</div>';
+    var ack = document.getElementById('ackBtn'), res = document.getElementById('resolveBtn');
+    if (ack) ack.addEventListener('click', function () { alert.status = 'acknowledged'; renderAlertQueue(); renderReport(alert.id); });
+    if (res) res.addEventListener('click', function () { alert.status = 'resolved'; renderAlertQueue(); renderReport(alert.id); renderTopBadges(); });
+  }
+
+  function renderTimeline() {
+    var canvas = document.getElementById('timelineCanvas');
+    var dpr = window.devicePixelRatio || 1, w = canvas.clientWidth || 300, h = canvas.clientHeight || 50;
+    if (canvas.width !== w * dpr || canvas.height !== h * dpr) { canvas.width = w * dpr; canvas.height = h * dpr; }
+    var ctx = canvas.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, w, h);
+    var now = Date.now(), windowMs = 60000;
+    state.timelineMarks = state.timelineMarks.filter(function (m) { return now - m.time <= windowMs; });
+    ctx.strokeStyle = '#1e2f4a'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(0, h / 2); ctx.lineTo(w, h / 2); ctx.stroke();
+    var lanes = { anomaly: h * 0.22, event: h * 0.5, alert: h * 0.8 };
+    state.timelineMarks.forEach(function (m) {
+      var x = w - ((now - m.time) / windowMs) * w, y = lanes[m.kind] != null ? lanes[m.kind] : h / 2;
+      var color = m.severity === 'critical' ? '#ef4444' : m.severity === 'warning' ? '#f59e0b' : '#3b82f6';
+      ctx.beginPath(); ctx.arc(x, y, m.kind === 'alert' ? 3.4 : 2.2, 0, Math.PI * 2); ctx.fillStyle = color; ctx.globalAlpha = m.kind === 'alert' ? 1 : 0.75; ctx.fill(); ctx.globalAlpha = 1;
+    });
+  }
+
+  function renderTopBadges() {
+    var open = state.alerts.filter(function (a) { return a.status === 'open' || a.status === 'acknowledged'; });
+    var critical = open.filter(function (a) { return a.severity === 'critical'; });
+    var correlated = open.filter(function (a) { return a.type === 'correlated'; });
+    document.getElementById('m-open').textContent = open.length;
+    document.getElementById('m-critical').textContent = critical.length;
+    document.getElementById('m-corr').textContent = correlated.length;
+    document.getElementById('alerts-open-badge').textContent = open.length + ' open incidents';
+    document.getElementById('correlated-badge').textContent = correlated.length + ' correlated';
+  }
+
+  function renderAll() { renderEquipGrid(); renderTimeline(); }
+
+  for (var i = 0; i < HISTORY - 1; i++) stepDevices();
+  state.alerts = []; state.timelineMarks = [];
+
+  renderEventLog(); renderEquipGrid(); renderAlertQueue(); renderReport(null); renderTopBadges();
+  setInterval(function () { stepDevices(); renderAll(); }, TICK_MS);
+  setTimeout(scheduleNextEvent, 600);
+  window.addEventListener('resize', renderAll);
+})();
+</script>

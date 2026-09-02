@@ -1,0 +1,549 @@
+<script>(function(){try{var t=localStorage.getItem('aisecopt-theme')||'dark';document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();</script>
+
+<head>
+  <meta charset="UTF-8">
+</head>
+<style id="ai-secopt-nav-css">
+#ai-secopt-nav{
+  font-family:system-ui,sans-serif;
+  background:#0d1224;
+  border-bottom:1px solid #1e2f4a;
+  padding:0 16px;
+  display:flex;
+  align-items:center;
+  position:sticky;
+  top:0;
+  z-index:999;
+  height:42px;
+  overflow-x:auto;
+}
+#ai-secopt-nav .nav-brand{
+  font-size:12px;font-weight:700;
+  color:#3b82f6;
+  letter-spacing:.5px;
+  margin-right:18px;
+  white-space:nowrap;
+  flex-shrink:0;
+}
+#ai-secopt-nav .nav-brand span{color:#e2e8f5;}
+#ai-secopt-nav a.nav-link{
+  display:inline-flex;align-items:center;
+  padding:0 12px;
+  height:42px;
+  font-size:11px;font-weight:600;
+  color:#8b9cc4;
+  text-decoration:none;
+  white-space:nowrap;
+  transition:color .15s,background .15s;
+  border-bottom:2px solid transparent;
+  box-sizing:border-box;
+  flex-shrink:0;
+}
+#ai-secopt-nav a.nav-link:hover{color:#e2e8f5;background:rgba(255,255,255,.04);}
+#ai-secopt-nav a.nav-link.active{color:#3b82f6;border-bottom-color:#3b82f6;}
+#ai-secopt-nav .theme-toggle{
+  margin-left:auto;flex-shrink:0;display:inline-flex;align-items:center;gap:6px;
+  background:transparent;border:1px solid #263550;color:#8b9cc4;
+  border-radius:6px;padding:5px 10px;font-size:11px;font-weight:600;
+  cursor:pointer;font-family:inherit;height:28px;
+}
+#ai-secopt-nav .theme-toggle:hover{color:#e2e8f5;border-color:#3b82f6}
+#ai-secopt-nav .theme-toggle:focus-visible{outline:2px solid #3b82f6;outline-offset:2px}
+
+</style>
+<nav id="ai-secopt-nav">
+  <div class="nav-brand">AI&#8209;<span>SecOpt</span></div>
+  <a href="index.html" class="nav-link">🏠 Home</a><a href="ai_secopt_framework_dashboard.html" class="nav-link">🛡️ SOC Dashboard</a><a href="ai_secopt_threat_intelligence_console.html" class="nav-link active">🔍 Threat Intel</a><a href="ai_secopt_lstm_forecasting_engine.html" class="nav-link">📈 LSTM Forecast</a><a href="ai_secopt_ml_training_lab.html" class="nav-link">🧪 ML Training Lab</a><a href="ai_secopt_data_pipeline_engineer.html" class="nav-link">⚙️ Data Pipeline</a><a href="ai_secopt_incident_correlation_console.html" class="nav-link">🧩 Incident Correlation</a>
+  <button type="button" class="theme-toggle" id="aisecopt-theme-toggle" aria-pressed="false" aria-label="Switch to light mode"><span class="theme-toggle-icon" aria-hidden="true">🌙</span><span class="theme-toggle-label">Dark</span></button>
+</nav>
+<script>
+(function(){
+  var btn = document.getElementById('aisecopt-theme-toggle');
+  if(!btn) return;
+  function currentTheme(){ return document.documentElement.getAttribute('data-theme') || 'dark'; }
+  function paint(){
+    var isLight = currentTheme() === 'light';
+    btn.setAttribute('aria-pressed', String(isLight));
+    btn.setAttribute('aria-label', 'Switch to ' + (isLight ? 'dark' : 'light') + ' mode');
+    btn.querySelector('.theme-toggle-icon').textContent = isLight ? '☀️' : '🌙';
+    btn.querySelector('.theme-toggle-label').textContent = isLight ? 'Light' : 'Dark';
+  }
+  btn.addEventListener('click', function(){
+    var next = currentTheme() === 'light' ? 'dark' : 'light';
+    try{ localStorage.setItem('aisecopt-theme', next); }catch(e){}
+    document.documentElement.setAttribute('data-theme', next);
+    location.reload();
+  });
+  paint();
+})();
+</script>
+
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg0:#0a0e1a;--bg1:#0d1224;--bg2:#111827;--bg3:#1a2035;
+  --border:#1e2f4a;--border2:#263550;
+  --text1:#e2e8f5;--text2:#8b9cc4;--text3:#4a5b80;
+  --blue:#3b82f6;--teal:#06b6d4;--green:#22c55e;
+  --amber:#f59e0b;--red:#ef4444;--purple:#a855f7;
+}
+  /* Light theme: applied when data-theme="light" is set on <html> (see the theme toggle in the nav). Values chosen for WCAG AA contrast against the light surfaces below. */
+  :root[data-theme="light"]{
+    --bg0: #eef1f7;
+    --bg1: #ffffff;
+    --bg2: #f4f6fb;
+    --bg3: #e7ebf4;
+    --border: #d7deeb;
+    --border2: #c2cce1;
+    --text1: #141b2e;
+    --text2: #48546f;
+    --text3: #76829f;
+    --blue: #1d4ed8;
+    --teal: #0e7490;
+    --green: #15803d;
+    --amber: #b45309;
+    --red: #b91c1c;
+    --purple: #7e22ce;
+  }
+
+body{font-family:system-ui,sans-serif;background:var(--bg0);color:var(--text1);font-size:13px;padding:16px}
+h2.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+.panel{background:var(--bg1);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:12px}
+.panel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.panel-title{font-size:13px;font-weight:600;color:var(--text1)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.btn{background:var(--blue);color:#fff;border:none;border-radius:6px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer}
+.btn.secondary{background:var(--bg3);color:var(--text2);border:1px solid var(--border)}
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600}
+.badge.red{background:color-mix(in srgb, var(--red) 15%, transparent);color:var(--red)}
+.badge.amber{background:color-mix(in srgb, var(--amber) 15%, transparent);color:var(--amber)}
+.badge.green{background:color-mix(in srgb, var(--green) 15%, transparent);color:var(--green)}
+.badge.blue{background:color-mix(in srgb, var(--blue) 15%, transparent);color:var(--blue)}
+.badge.purple{background:color-mix(in srgb, var(--purple) 15%, transparent);color:var(--purple)}
+
+.matrix-container{overflow-x:auto;margin-bottom:4px}
+.matrix-table{border-collapse:collapse;width:100%;table-layout:fixed;min-width:580px}
+.tactic-header{background:var(--bg3);border:1px solid var(--border2);padding:6px 4px;font-size:10px;font-weight:700;color:var(--text2);text-align:center;vertical-align:middle;cursor:pointer;text-transform:uppercase;letter-spacing:.4px;width:80px}
+.tactic-header:hover{background:var(--bg4);color:var(--text1)}
+.technique-cell{border:1px solid var(--border);padding:4px 5px;font-size:10px;vertical-align:top;cursor:pointer;transition:all .15s;height:46px;position:relative}
+.technique-cell:hover{border-color:var(--blue)}
+.technique-cell.hot{background:color-mix(in srgb, var(--red) 18%, transparent);border-color:color-mix(in srgb, var(--red) 40%, transparent)}
+.technique-cell.warm{background:color-mix(in srgb, var(--amber) 12%, transparent);border-color:color-mix(in srgb, var(--amber) 30%, transparent)}
+.technique-cell.active{background:color-mix(in srgb, var(--blue) 10%, transparent);border-color:color-mix(in srgb, var(--blue) 30%, transparent)}
+.technique-cell.inactive{background:rgba(255,255,255,.01)}
+.technique-cell .t-id{font-family:monospace;font-size:9px;color:var(--text3);display:block}
+.technique-cell .t-name{font-size:9px;color:var(--text2);line-height:1.3;display:block;margin-top:1px}
+.technique-cell .hit-dot{position:absolute;top:3px;right:3px;width:6px;height:6px;border-radius:50%}
+.heat-legend{display:flex;align-items:center;gap:10px;font-size:10px;color:var(--text3);margin-top:6px}
+.heat-swatch{width:12px;height:12px;border-radius:2px}
+
+.ioc-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:background .1s}
+.ioc-row:hover{background:var(--bg2);margin:0 -6px;padding:7px 6px;border-radius:4px}
+.ioc-row:last-child{border-bottom:none}
+.ioc-type{font-size:10px;padding:2px 6px;border-radius:3px;font-weight:600;flex:0 0 36px;text-align:center}
+.ioc-val{font-family:monospace;font-size:11px;color:var(--teal);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ioc-score{font-family:monospace;font-size:11px;font-weight:700}
+.ioc-source{font-size:10px;color:var(--text3)}
+
+.tactic-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px}
+.tac-card{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:8px;cursor:pointer;transition:border-color .15s}
+.tac-card:hover{border-color:var(--border2)}
+.tac-name{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px}
+.tac-count{font-size:18px;font-weight:700;font-family:monospace}
+.tac-bar{height:3px;background:var(--bg3);border-radius:2px;overflow:hidden;margin-top:4px}
+.tac-fill{height:100%;border-radius:2px}
+</style>
+
+<h2 class="sr-only">AI-SecOpt Threat Intelligence Console — MITRE ATT&CK matrix heatmap, IOC correlation engine, and real-time threat tactic tracking for SOC analysts.</h2>
+
+<div class="panel">
+  <div class="panel-header">
+    <span class="panel-title">AI-SecOpt - Threat Intelligence Console</span>
+    <div style="display:flex;gap:6px">
+      <span class="badge red" id="critical-ttp-badge">— critical TTPs</span>
+      <span class="badge purple">MITRE ATT&CK v14</span>
+    </div>
+  </div>
+
+  <div class="tactic-summary" id="tactic-summary"></div>
+
+  <div class="panel-header" style="margin-bottom:6px">
+    <span style="font-size:12px;font-weight:600;color:var(--text1)">ATT&CK Enterprise Matrix - Detected Techniques</span>
+    <div class="heat-legend">
+      <span class="heat-swatch" style="background:color-mix(in srgb, var(--red) 35%, transparent)"></span>Critical (3+)
+      <span class="heat-swatch" style="background:color-mix(in srgb, var(--amber) 25%, transparent)"></span>Active (1-2)
+      <span class="heat-swatch" style="background:color-mix(in srgb, var(--blue) 15%, transparent)"></span>Observed
+    </div>
+  </div>
+
+  <div class="matrix-container">
+    <table class="matrix-table" id="attack-matrix"></table>
+  </div>
+  <div style="font-size:10px;color:var(--text3);margin-top:4px">Click any technique cell to investigate · Red = actively exploited · Amber = suspicious</div>
+</div>
+
+<div class="grid2">
+  <div class="panel">
+    <div class="panel-header">
+      <span class="panel-title">Recent High - Confidence Detections</span>
+      <span class="badge red" id="detection-count-badge">— matched</span>
+    </div>
+    <div id="ioc-list"></div>
+    <div style="margin-top:8px;display:flex;gap:6px">
+      <button class="btn secondary" style="font-size:11px" onclick="sendPrompt('Explain the SHAP explainability methodology used in AISecOpt and why destination port is such a dominant feature across detections')">Explain SHAP methodology ↗</button>
+      <button class="btn secondary" style="font-size:11px" onclick="sendPrompt('Why was IP/hash/domain-based IOC matching excluded from the AISecOpt threat intelligence console?')">Why no IOC data? ↗</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-header">
+      <span class="panel-title">Attack Campaign Analysis</span>
+      <span class="badge amber">Illustrative Demo - Future Work</span>
+    </div>
+    <div id="campaign-analysis"></div>
+    <div style="margin-top:10px">
+      <button class="btn" style="width:100%;font-size:12px" onclick="sendPrompt('Generate a full threat hunting query (KQL/Lucene) for the AI-SecOpt SIEM to detect lateral movement following the initial DDoS distraction technique observed in this campaign')">Hunt for lateral movement ↗</button>
+    </div>
+  </div>
+</div>
+
+<div style="display:flex;gap:8px;justify-content:flex-end;margin-top:4px">
+  <button class="btn secondary" onclick="sendPrompt('Export the current AI-SecOpt ATT&CK Navigator layer JSON for all detected techniques in this session')">Export ATT&CK layer ↗</button>
+  <button class="btn secondary" onclick="sendPrompt('Generate a STIX 2.1 threat intelligence bundle for the AI-SecOpt detected indicators of compromise')">Export STIX 2.1 ↗</button>
+  <button class="btn" onclick="sendPrompt('Generate an executive threat briefing for the AI-SecOpt SOC manager: attack summary, business impact, and recommended mitigations')">Exec Briefing ↗</button>
+</div>
+
+<script>
+/* const TACTICS = [
+  {id:'TA0001',name:'Initial Access',count:2,color:'#f59e0b'},
+  {id:'TA0002',name:'Execution',count:1,color:'#f59e0b'},
+  {id:'TA0003',name:'Persistence',count:0,color:'#4a5b80'},
+  {id:'TA0005',name:'Defense Evasion',count:1,color:'#3b82f6'},
+  {id:'TA0006',name:'Credential Access',count:3,color:'#ef4444'},
+  {id:'TA0007',name:'Discovery',count:2,color:'#f59e0b'},
+  {id:'TA0008',name:'Lateral Movement',count:0,color:'#4a5b80'},
+  {id:'TA0040',name:'Impact',count:4,color:'#ef4444'},
+];*/
+
+// ── Live tactic data, pulled from real Elasticsearch predictions ──
+// Starts empty; gets populated once fetchTacticData() successfully retrieves 
+// real counts from your AISecOpt security pipeline
+let TACTICS = [];
+
+// Maps each MITRE tactic name to a display color — since Elasticsearch only
+// stores the raw tactic name/count, not a color, we assign one here based on
+// severity conventions (red = high-impact, amber = moderate, blue = lower)
+const TACTIC_COLORS = {
+  'Impact': 'var(--red)',
+  'Credential Access': 'var(--red)',
+  'Command and Control': 'var(--red)',
+  'Defense Evasion': 'var(--blue)',
+  'Initial Access': 'var(--amber)',
+  'Execution': 'var(--amber)',
+};
+
+// Fetches real tactic counts from Elasticsearch using an aggregation query —
+// this asks Elasticsearch to group all documents by their mitre_tactic field
+// and count how many fall into each group, entirely on the server side
+// (much faster than pulling every document and counting in JavaScript)
+async function fetchTacticData() {
+  const response = await fetch('http://localhost:9200/ai-secopt-threats-*/_search', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      size: 0,  // we don't need individual documents, only the aggregation result
+      query: {
+        // Only count actual attacks — exclude Benign predictions, which have
+        // a null mitre_tactic and would otherwise show as an unhelpful bucket
+        bool: { must: [{ exists: { field: "mitre_tactic" } }] }
+      },
+      aggs: {
+        by_tactic: {
+          terms: { field: "mitre_tactic.keyword", size: 10 }
+        }
+      }
+    })
+  });
+  
+  const data = await response.json();
+  const buckets = data.aggregations.by_tactic.buckets;
+  
+  // Convert Elasticsearch's bucket format into the {id, name, count, color} 
+  // shape the rest of this dashboard's rendering code already expects
+  TACTICS = buckets.map(bucket => ({
+    id: bucket.key.replace(/\s+/g, ''),  // simple id derived from the tactic name
+    name: bucket.key,
+    count: bucket.doc_count,
+    color: TACTIC_COLORS[bucket.key] || 'var(--text3)'  // fallback color if unmapped
+  }));
+}
+
+/*const TECHNIQUES = {
+  'Initial Access':   [{id:'T1190',name:'Exploit public-facing app',heat:'warm'},{id:'T1566',name:'Phishing',heat:'active'},{id:'T1078',name:'Valid accounts',heat:'inactive'}],
+  'Execution':        [{id:'T1059',name:'Command & scripting',heat:'warm'},{id:'T1106',name:'Native API',heat:'inactive'},{id:'T1204',name:'User execution',heat:'inactive'}],
+  'Persistence':      [{id:'T1053',name:'Scheduled task/job',heat:'inactive'},{id:'T1136',name:'Create account',heat:'inactive'},{id:'T1505',name:'Server software',heat:'inactive'}],
+  'Defense Evasion':  [{id:'T1070',name:'Indicator removal',heat:'active'},{id:'T1036',name:'Masquerading',heat:'inactive'},{id:'T1562',name:'Impair defenses',heat:'inactive'}],
+  'Credential Access':[{id:'T1110',name:'Brute force',heat:'hot'},{id:'T1003',name:'OS cred dumping',heat:'warm'},{id:'T1552',name:'Unsecured credentials',heat:'inactive'}],
+  'Discovery':        [{id:'T1046',name:'Network svc scan',heat:'hot'},{id:'T1082',name:'System info discovery',heat:'warm'},{id:'T1135',name:'Network share discovery',heat:'inactive'}],
+  'Lateral Movement': [{id:'T1021',name:'Remote services',heat:'inactive'},{id:'T1534',name:'Internal spearphish',heat:'inactive'},{id:'T1550',name:'Alt auth material',heat:'inactive'}],
+  'Impact':           [{id:'T1498',name:'Network DoS',heat:'hot'},{id:'T1499',name:'Endpoint DoS',heat:'hot'},{id:'T1486',name:'Data encrypted',heat:'inactive'}],
+};*/
+
+// ── Live technique data — starts empty, populated by fetchTechniqueData() ──
+let TECHNIQUES = {};
+
+// A static reference of every technique this dashboard KNOWS ABOUT and can
+// display, grouped by tactic column. We keep this list because Elasticsearch
+// only tells us which techniques were actually detected — it doesn't know
+// about techniques your model has never predicted, which we still want to
+// show on the matrix (just marked as "inactive")
+const TECHNIQUE_REFERENCE = {
+  'Initial Access':    [{id:'T1190', name:'Exploit public-facing app'}, {id:'T1566', name:'Phishing'}, {id:'T1078', name:'Valid accounts'}],
+  'Execution':         [{id:'T1059', name:'Command & scripting'}, {id:'T1106', name:'Native API'}, {id:'T1204', name:'User execution'}],
+  'Persistence':       [{id:'T1053', name:'Scheduled task/job'}, {id:'T1136', name:'Create account'}, {id:'T1505', name:'Server software'}],
+  'Defense Evasion':   [{id:'T1070', name:'Indicator removal'}, {id:'T1036', name:'Masquerading'}, {id:'T1562', name:'Impair defenses'}],
+  'Credential Access': [{id:'T1110', name:'Brute force'}, {id:'T1003', name:'OS cred dumping'}, {id:'T1552', name:'Unsecured credentials'}],
+  'Discovery':         [{id:'T1046', name:'Network svc scan'}, {id:'T1082', name:'System info discovery'}, {id:'T1135', name:'Network share discovery'}],
+  'Lateral Movement':  [{id:'T1021', name:'Remote services'}, {id:'T1534', name:'Internal spearphish'}, {id:'T1550', name:'Alt auth material'}],
+  // These three techniques are ones your AISecOpt model can ACTUALLY detect
+  // (per our MITRE_MAP from the Python pipeline) — the rest above are shown
+  // for matrix completeness but will always read as 'inactive' since your
+  // model doesn't classify those specific techniques
+  'Impact':            [{id:'T1498', name:'Network DoS'}, {id:'T1499', name:'Endpoint DoS'}, {id:'T1486', name:'Data encrypted'}],
+};
+
+// Converts a raw detection count into one of our 4 heat levels —
+// thresholds are somewhat arbitrary design choices; adjust freely based on 
+// what looks visually meaningful once you see real numbers
+function countToHeat(count) {
+  if (count >= 100) return 'hot';
+  if (count >= 20) return 'warm';
+  if (count >= 1) return 'active';
+  return 'inactive';
+}
+
+// Fetches real per-technique detection counts from Elasticsearch
+async function fetchTechniqueData() {
+  const response = await fetch('http://localhost:9200/ai-secopt-threats-*/_search', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      size: 0,
+      query: { bool: { must: [{ exists: { field: "mitre_technique_id" } }] } },
+      aggs: {
+        by_technique: {
+          terms: { field: "mitre_technique_id.keyword", size: 20 }
+        }
+      }
+    })
+  });
+  
+  const data = await response.json();
+  const buckets = data.aggregations.by_technique.buckets;
+  
+  // Build a simple lookup: { "T1498": 2659, "T1110": 704, ... }
+  const countsById = {};
+  buckets.forEach(b => { countsById[b.key] = b.doc_count; });
+  
+  // Now build the final TECHNIQUES structure the rendering code expects,
+  // merging our static reference list with real counts where they exist
+  const result = {};
+  for (const [tactic, techniques] of Object.entries(TECHNIQUE_REFERENCE)) {
+    result[tactic] = techniques.map(t => ({
+      id: t.id,
+      name: t.name,
+      heat: countToHeat(countsById[t.id] || 0)
+    }));
+  }
+  
+  TECHNIQUES = result;
+}
+
+const HEAT_COLOR = {hot:'var(--red)',warm:'var(--amber)',active:'var(--blue)',inactive:'var(--text3)'};
+const HEAT_DOT = {hot:'#ef4444',warm:'#f59e0b',active:'#3b82f6',inactive:null};
+
+/*const IOCS = [
+  {type:'IP',val:'192.168.14.∗',score:97,source:'AbuseIPDB',severity:'red'},
+  {type:'IP',val:'10.0.3.12',score:84,source:'AbuseIPDB',severity:'red'},
+  {type:'IP',val:'172.16.8.∗',score:72,source:'ThreatFox',severity:'amber'},
+  {type:'HASH',val:'a3f2c8d1e4b9...',score:95,source:'VirusTotal',severity:'red'},
+  {type:'HASH',val:'7b4e1f9c2a8d...',score:68,source:'MalwareBazaar',severity:'amber'},
+  {type:'DOM',val:'c2.evil-host.net',score:99,source:'URLhaus',severity:'red'},
+  {type:'URL',val:'http://dl.mal/pl',score:91,source:'URLhaus',severity:'red'},
+  {type:'IP',val:'198.51.100.∗',score:55,source:'EmergingThreats',severity:'blue'},
+];*/
+
+// ── Live SHAP-explained detections, pulled from real Elasticsearch predictions ──
+// Replaces the original IOC (IP/hash/domain) panel — that data was never 
+// genuinely available from this model, since CSE-CIC-IDS2018's identifier 
+// columns (Src/Dst IP, Flow ID) were deliberately dropped during preprocessing 
+// to prevent data leakage (see dissertation Methodology, Data Cleaning section).
+// This panel instead shows what the model actually DOES produce: real 
+// predictions with genuine SHAP-based explainability.
+let RECENT_DETECTIONS = [];
+
+// Fetches the most recent high-confidence attack detections, including their
+// top contributing SHAP feature — genuine model output, not simulated data
+async function fetchRecentDetections() {
+  const response = await fetch('http://localhost:9200/ai-secopt-threats-*/_search', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      size: 8,  // just enough to fill the panel nicely
+      query: {
+        bool: {
+          must: [
+            { term: { is_attack: true } },
+            { range: { confidence_score: { gte: 0.8 } } }  // only show confident detections
+          ]
+        }
+      },
+      sort: [{ "@timestamp": { order: "desc" } }]  // most recent first
+    })
+  });
+  
+  const data = await response.json();
+  
+  RECENT_DETECTIONS = data.hits.hits.map(hit => {
+    const src = hit._source;
+    const topFeature = src.shap_top_features && src.shap_top_features[0];
+    return {
+      label: src.predicted_label,
+      confidence: Math.round(src.confidence_score * 100),
+      technique: src.mitre_technique_id || 'N/A',
+      topFeature: topFeature ? topFeature.feature : 'N/A',
+      shapValue: topFeature ? topFeature.shap_value : 0,
+      timestamp: new Date(src['@timestamp']).toLocaleTimeString()
+    };
+  });
+}
+
+function renderTacticSummary() {
+  const c = document.getElementById('tactic-summary');
+  const max = Math.max(...TACTICS.map(t=>t.count));
+  c.innerHTML = TACTICS.map(t => `
+    <div class="tac-card" onclick="sendPrompt('Explain MITRE ATT&CK tactic ${t.id} ${t.name} and how AI-SecOpt detects techniques under this tactic')">
+      <div class="tac-name">${t.name}</div>
+      <div class="tac-count" style="color:${t.color}">${t.count}</div>
+      <div class="tac-bar"><div class="tac-fill" style="width:${max?Math.round(t.count/max*100):0}%;background:${t.color}"></div></div>
+    </div>`).join('');
+}
+// renderTacticSummary();
+// Wait for real data to arrive from Elasticsearch BEFORE rendering —
+// this prevents the dashboard from briefly flashing empty/broken content
+fetchTacticData().then(() => {
+  renderTacticSummary();
+});
+
+function renderMatrix() {
+  const table = document.getElementById('attack-matrix');
+  const tacticNames = Object.keys(TECHNIQUES);
+  let html = '<thead><tr>';
+  tacticNames.forEach(tac => {
+    html += `<th class="tactic-header" onclick="sendPrompt('Show all MITRE ATT&CK ${tac} techniques detected by AI-SecOpt and the corresponding Kibana detection queries')">${tac.replace(' ','<br>')}</th>`;
+  });
+  html += '</tr></thead><tbody>';
+  for(let row=0;row<3;row++){
+    html += '<tr>';
+    tacticNames.forEach(tac => {
+      const tech = TECHNIQUES[tac][row];
+      if(!tech){html+='<td></td>';return;}
+      const dotColor = HEAT_DOT[tech.heat];
+      html += `<td class="technique-cell ${tech.heat}" onclick="sendPrompt('Investigate MITRE technique ${tech.id} ${tech.name} in the AI-SecOpt SIEM: show matching events, SHAP explanation, and recommended detection rule')">
+        <span class="t-id">${tech.id}</span>
+        <span class="t-name">${tech.name}</span>
+        ${dotColor?`<div class="hit-dot" style="background:${dotColor}"></div>`:''}
+      </td>`;
+    });
+    html += '</tr>';
+  }
+  html += '</tbody>';
+  table.innerHTML = html;
+}
+// Fetch BOTH tactic and technique data before rendering anything —
+// avoids a flash of empty/broken content and ensures both panels are
+// consistent with each other (same underlying dataset, same moment in time)
+/*Promise.all([fetchTacticData(), fetchTechniqueData()]).then(() => {
+  renderTacticSummary();
+  renderMatrix();*
+});*/
+
+Promise.all([fetchTacticData(), fetchTechniqueData(), fetchRecentDetections()]).then(() => {
+  renderTacticSummary();
+  renderMatrix();
+  renderDetections();
+  document.getElementById('detection-count-badge').textContent = `${RECENT_DETECTIONS.length} shown`;
+  
+  // Count how many techniques are showing as 'hot' (critical) across the matrix
+  const criticalCount = Object.values(TECHNIQUES).flat().filter(t => t.heat === 'hot').length;
+  document.getElementById('critical-ttp-badge').textContent = `${criticalCount} critical TTPs`;
+});
+
+/*function renderIOCs() {
+  const c = document.getElementById('ioc-list');
+  c.innerHTML = IOCS.map(ioc => {
+    const sevColor = ioc.severity==='red'?'#ef4444':ioc.severity==='amber'?'#f59e0b':'#3b82f6';
+    const bgColor = ioc.severity==='red'?'color-mix(in srgb, var(--red) 15%, transparent)':ioc.severity==='amber'?'color-mix(in srgb, var(--amber) 12%, transparent)':'color-mix(in srgb, var(--blue) 12%, transparent)';
+    return `<div class="ioc-row" onclick="sendPrompt('Look up IOC ${ioc.val} across all AI-SecOpt SIEM events and show the full event timeline and MITRE technique mapping')">
+      <span class="ioc-type" style="background:${bgColor};color:${sevColor}">${ioc.type}</span>
+      <span class="ioc-val">${ioc.val}</span>
+      <span class="ioc-source">${ioc.source}</span>
+      <span class="ioc-score" style="color:${sevColor}">${ioc.score}</span>
+    </div>`;
+  }).join('');
+}
+renderIOCs();*/
+
+function renderDetections() {
+  const c = document.getElementById('ioc-list');
+  c.innerHTML = RECENT_DETECTIONS.map(d => {
+    const sevColor = d.confidence >= 95 ? '#ef4444' : d.confidence >= 85 ? '#f59e0b' : '#3b82f6';
+    const bgColor = d.confidence >= 95 ? 'color-mix(in srgb, var(--red) 15%, transparent)' : d.confidence >= 85 ? 'color-mix(in srgb, var(--amber) 12%, transparent)' : 'color-mix(in srgb, var(--blue) 12%, transparent)';
+    return `<div class="ioc-row" onclick="sendPrompt('Explain the SHAP reasoning behind this ${d.label} detection in more depth, including all contributing features')">
+      <span class="ioc-type" style="background:${bgColor};color:${sevColor}">${d.technique}</span>
+      <span class="ioc-val">${d.label} — top feature: ${d.topFeature} (${d.shapValue > 0 ? '+' : ''}${d.shapValue})</span>
+      <span class="ioc-source">${d.timestamp}</span>
+      <span class="ioc-score" style="color:${sevColor}">${d.confidence}%</span>
+    </div>`;
+  }).join('');
+}
+
+function renderCampaign() {
+  const c = document.getElementById('campaign-analysis');
+  const steps = [
+    {tactic:'Initial Access',tech:'T1566 Phishing',time:'13:45',color:'#f59e0b',detail:'Simulated phishing → T1078 valid account compromise'},
+    {tactic:'Credential Access',tech:'T1110 Brute Force',time:'14:05',color:'#ef4444',detail:'SSH brute force: 127 attempts → 1 success'},
+    {tactic:'Discovery',tech:'T1046 Port Scan',time:'14:18',color:'#f59e0b',detail:'Stealth SYN scan: 1,024 ports in 12 seconds'},
+    {tactic:'Impact',tech:'T1498 Network DoS',time:'14:23',color:'#ef4444',detail:'DDoS SYN flood: 2,400 EPS → anomaly score 0.87'},
+  ];
+  c.innerHTML = `<div style="font-size:11px;color:var(--amber);margin-bottom:8px;font-weight:600">Campaign Timeline — Simulated Example (multi-stage correlation not yet implemented)</div>` +
+    steps.map((s,i) => `
+    <div style="display:flex;gap:8px;margin-bottom:8px;align-items:flex-start">
+      <div style="font-family:monospace;font-size:10px;color:var(--text3);flex:0 0 38px;padding-top:1px">${s.time}</div>
+      <div style="width:2px;background:${s.color};flex-shrink:0;margin-top:3px;border-radius:1px;align-self:stretch"></div>
+      <div>
+        <div style="font-size:11px;font-weight:600;color:${s.color}">${s.tech}</div>
+        <div style="font-size:10px;color:var(--text3)">${s.tactic}</div>
+        <div style="font-size:10px;color:var(--text2);margin-top:2px">${s.detail}</div>
+      </div>
+    </div>`).join('') +
+    `<div style="font-size:10px;color:var(--amber);padding:6px;background:color-mix(in srgb, var(--amber) 8%, transparent);border-radius:4px;border-left:2px solid var(--amber)">
+      AI analysis: Multi-stage attack pattern consistent with APT reconnaissance + DDoS distraction. 
+      Lateral movement likely next — isolate dc-node-02 recommended.
+    </div>`;
+}
+renderCampaign();
+
+let tickCount = 0;
+setInterval(() => {
+  tickCount++;
+  const iocEl = document.getElementById('ioc-list');
+  const iocRows = iocEl.querySelectorAll('.ioc-row');
+  const randomRow = iocRows[Math.floor(Math.random() * iocRows.length)];
+  if(randomRow) {
+    randomRow.style.background = 'color-mix(in srgb, var(--blue) 8%, transparent)';
+    setTimeout(() => randomRow.style.background = '', 800);
+  }
+}, 3000);
+</script>

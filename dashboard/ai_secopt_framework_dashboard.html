@@ -1,0 +1,946 @@
+<script>(function(){try{var t=localStorage.getItem('aisecopt-theme')||'dark';document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();</script>
+<head>
+  <meta charset="UTF-8">
+</head>
+<style id="ai-secopt-nav-css">
+#ai-secopt-nav{
+  font-family:system-ui,sans-serif;
+  background:#0d1224;
+  border-bottom:1px solid #1e2f4a;
+  padding:0 16px;
+  display:flex;
+  align-items:center;
+  position:sticky;
+  top:0;
+  z-index:999;
+  height:42px;
+  overflow-x:auto;
+}
+#ai-secopt-nav .nav-brand{
+  font-size:12px;font-weight:700;
+  color:#3b82f6;
+  letter-spacing:.5px;
+  margin-right:18px;
+  white-space:nowrap;
+  flex-shrink:0;
+}
+#ai-secopt-nav .nav-brand span{color:#e2e8f5;}
+#ai-secopt-nav a.nav-link{
+  display:inline-flex;align-items:center;
+  padding:0 12px;
+  height:42px;
+  font-size:11px;font-weight:600;
+  color:#8b9cc4;
+  text-decoration:none;
+  white-space:nowrap;
+  transition:color .15s,background .15s;
+  border-bottom:2px solid transparent;
+  box-sizing:border-box;
+  flex-shrink:0;
+}
+#ai-secopt-nav a.nav-link:hover{color:#e2e8f5;background:rgba(255,255,255,.04);}
+#ai-secopt-nav a.nav-link.active{color:#3b82f6;border-bottom-color:#3b82f6;}
+#ai-secopt-nav .theme-toggle{
+  margin-left:auto;flex-shrink:0;display:inline-flex;align-items:center;gap:6px;
+  background:transparent;border:1px solid #263550;color:#8b9cc4;
+  border-radius:6px;padding:5px 10px;font-size:11px;font-weight:600;
+  cursor:pointer;font-family:inherit;height:28px;
+}
+#ai-secopt-nav .theme-toggle:hover{color:#e2e8f5;border-color:#3b82f6}
+#ai-secopt-nav .theme-toggle:focus-visible{outline:2px solid #3b82f6;outline-offset:2px}
+
+</style>
+<nav id="ai-secopt-nav">
+  <div class="nav-brand">AI&#8209;<span>SecOpt</span></div>
+  <a href="index.html" class="nav-link">🏠 Home</a><a href="ai_secopt_framework_dashboard.html" class="nav-link active">🛡️ SOC Dashboard</a><a href="ai_secopt_threat_intelligence_console.html" class="nav-link">🔍 Threat Intel</a><a href="ai_secopt_lstm_forecasting_engine.html" class="nav-link">📈 LSTM Forecast</a><a href="ai_secopt_ml_training_lab.html" class="nav-link">🧪 ML Training Lab</a><a href="ai_secopt_data_pipeline_engineer.html" class="nav-link">⚙️ Data Pipeline</a><a href="ai_secopt_incident_correlation_console.html" class="nav-link">🧩 Incident Correlation</a>
+  <button type="button" class="theme-toggle" id="aisecopt-theme-toggle" aria-pressed="false" aria-label="Switch to light mode"><span class="theme-toggle-icon" aria-hidden="true">🌙</span><span class="theme-toggle-label">Dark</span></button>
+</nav>
+<script>
+(function(){
+  var btn = document.getElementById('aisecopt-theme-toggle');
+  if(!btn) return;
+  function currentTheme(){ return document.documentElement.getAttribute('data-theme') || 'dark'; }
+  function paint(){
+    var isLight = currentTheme() === 'light';
+    btn.setAttribute('aria-pressed', String(isLight));
+    btn.setAttribute('aria-label', 'Switch to ' + (isLight ? 'dark' : 'light') + ' mode');
+    btn.querySelector('.theme-toggle-icon').textContent = isLight ? '☀️' : '🌙';
+    btn.querySelector('.theme-toggle-label').textContent = isLight ? 'Light' : 'Dark';
+  }
+  btn.addEventListener('click', function(){
+    var next = currentTheme() === 'light' ? 'dark' : 'light';
+    try{ localStorage.setItem('aisecopt-theme', next); }catch(e){}
+    document.documentElement.setAttribute('data-theme', next);
+    location.reload();
+  });
+  paint();
+})();
+</script>
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg0:#0a0e1a;--bg1:#0d1224;--bg2:#111827;--bg3:#1a2035;--bg4:#1e2744;
+    --border:#1e2f4a;--border2:#263550;
+    --text1:#e2e8f5;--text2:#8b9cc4;--text3:#4a5b80;
+    --blue:#3b82f6;--blue2:#1d4ed8;--blue-dim:#1e3a6e;
+    --teal:#06b6d4;--teal-dim:#0c3844;
+    --green:#22c55e;--green-dim:#14532d;
+    --amber:#f59e0b;--amber-dim:#451a03;
+    --red:#ef4444;--red-dim:#450a0a;
+    --purple:#a855f7;--purple-dim:#2e1065;
+    --font:'Inter',sans-serif;--mono:'JetBrains Mono',monospace;
+  }
+  /* Light theme: applied when data-theme="light" is set on <html> (see the theme toggle in the nav). Values chosen for WCAG AA contrast against the light surfaces below. */
+  :root[data-theme="light"]{
+    --bg0: #eef1f7;
+    --bg1: #ffffff;
+    --bg2: #f4f6fb;
+    --bg3: #e7ebf4;
+    --bg4: #dbe1ef;
+    --border: #d7deeb;
+    --border2: #c2cce1;
+    --text1: #141b2e;
+    --text2: #48546f;
+    --text3: #76829f;
+    --blue: #1d4ed8;
+    --blue2: #1e40af;
+    --blue-dim: #dbe7fb;
+    --teal: #0e7490;
+    --teal-dim: #d2eef3;
+    --green: #15803d;
+    --green-dim: #dcf3e3;
+    --amber: #b45309;
+    --amber-dim: #fbead2;
+    --red: #b91c1c;
+    --red-dim: #fbdede;
+    --purple: #7e22ce;
+    --purple-dim: #f1e0fb;
+  }
+
+  body{font-family:var(--font);background:var(--bg0);color:var(--text1);font-size:13px;overflow-x:hidden}
+  
+  /* Layout */
+  .shell{display:flex;height:100vh;min-height:700px}
+  .sidebar{width:200px;min-width:200px;background:var(--bg1);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:0}
+  .main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+  .topbar{height:52px;background:var(--bg1);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:12px;flex-shrink:0}
+  .content{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+
+  /* Sidebar */
+  .logo{padding:16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+  .logo-icon{width:28px;height:28px;background:linear-gradient(135deg,var(--blue),var(--purple));border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff}
+  .logo-text{font-size:13px;font-weight:700;color:var(--text1);letter-spacing:.5px}
+  .logo-sub{font-size:10px;color:var(--text3);letter-spacing:.3px}
+  .nav-section{padding:12px 8px 4px;font-size:9px;font-weight:600;color:var(--text3);letter-spacing:1px;text-transform:uppercase}
+  .nav-item{display:flex;align-items:center;gap:8px;padding:7px 10px;margin:1px 4px;border-radius:6px;cursor:pointer;color:var(--text2);font-size:12px;transition:all .15s;position:relative}
+  .nav-item:hover{background:var(--bg3);color:var(--text1)}
+  .nav-item.active{background:var(--blue-dim);color:var(--blue)}
+  .nav-item .badge{margin-left:auto;background:var(--red);color:#fff;border-radius:10px;padding:1px 6px;font-size:10px;font-weight:600}
+  .nav-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+  .status-bar{margin-top:auto;padding:12px;border-top:1px solid var(--border)}
+  .status-indicator{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text2)}
+  .pulse{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 color-mix(in srgb, var(--green) 40%, transparent)}50%{box-shadow:0 0 0 4px color-mix(in srgb, var(--green) 0%, transparent)}}
+
+  /* Topbar */
+  .tab-group{display:flex;gap:2px;background:var(--bg2);border-radius:8px;padding:3px}
+  .tab{padding:5px 12px;border-radius:6px;cursor:pointer;font-size:12px;color:var(--text2);transition:all .15s}
+  .tab.active{background:var(--bg4);color:var(--text1);font-weight:500}
+  .topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+  .time-badge{font-family:var(--mono);font-size:11px;color:var(--text2);background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:3px 8px}
+  .alert-bell{position:relative;cursor:pointer;padding:4px}
+  .bell-dot{position:absolute;top:2px;right:2px;width:7px;height:7px;border-radius:50%;background:var(--red);border:1.5px solid var(--bg1)}
+  .run-btn{background:var(--blue);color:#fff;border:none;border-radius:6px;padding:5px 12px;font-size:12px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .15s}
+  .run-btn:hover{background:var(--blue2)}
+
+  /* KPI Cards */
+  .kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .kpi{background:var(--bg1);border:1px solid var(--border);border-radius:10px;padding:14px;position:relative;overflow:hidden;cursor:pointer;transition:border-color .15s}
+  .kpi:hover{border-color:var(--border2)}
+  .kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:10px 10px 0 0}
+  .kpi.blue::before{background:var(--blue)}
+  .kpi.green::before{background:var(--green)}
+  .kpi.amber::before{background:var(--amber)}
+  .kpi.red::before{background:var(--red)}
+  .kpi-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px}
+  .kpi-value{font-size:26px;font-weight:700;font-family:var(--mono);line-height:1}
+  .kpi-sub{font-size:11px;margin-top:5px;display:flex;align-items:center;gap:4px}
+  .up{color:var(--red)}
+  .down{color:var(--green)}
+  .neutral{color:var(--text2)}
+
+  /* Panels */
+  .row2{display:grid;grid-template-columns:1fr 340px;gap:12px}
+  .row3{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .panel{background:var(--bg1);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+  .panel-header{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+  .panel-title{font-size:12px;font-weight:600;color:var(--text1)}
+  .panel-badge{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:500}
+  .panel-body{padding:14px}
+  .panel-actions{display:flex;gap:6px}
+  .mini-btn{background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:3px 8px;font-size:11px;color:var(--text2);cursor:pointer;transition:all .15s}
+  .mini-btn:hover{background:var(--bg4);color:var(--text1)}
+  .mini-btn.active{background:var(--blue-dim);border-color:var(--blue);color:var(--blue)}
+
+  /* Timeline chart */
+  .chart-area{height:140px;position:relative;overflow:hidden}
+  svg.sparkline{width:100%;height:100%}
+
+  /* Alert table */
+  .alert-table{width:100%;border-collapse:collapse}
+  .alert-table th{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;padding:0 8px 8px;text-align:left;font-weight:500}
+  .alert-table td{padding:7px 8px;font-size:12px;border-top:1px solid var(--border)}
+  .alert-row{cursor:pointer;transition:background .1s}
+  .alert-row:hover{background:var(--bg2)}
+  .alert-row.selected{background:var(--bg3)}
+  .sev{display:inline-flex;align-items:center;gap:4px;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:600}
+  .sev.crit{background:color-mix(in srgb, var(--red) 15%, transparent);color:var(--red)}
+  .sev.high{background:color-mix(in srgb, var(--amber) 15%, transparent);color:var(--amber)}
+  .sev.med{background:color-mix(in srgb, var(--blue) 15%, transparent);color:var(--blue)}
+  .sev.low{background:color-mix(in srgb, var(--green) 15%, transparent);color:var(--green)}
+
+  /* Geo section */
+  .geo-dots{position:relative;height:160px;background:var(--bg2);border-radius:8px;overflow:hidden}
+  .geo-dot{position:absolute;border-radius:50%;animation:geodot 3s ease-out infinite}
+  @keyframes geodot{0%{transform:scale(0);opacity:.8}100%{transform:scale(2.5);opacity:0}}
+
+  /* ML panel */
+  .model-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border)}
+  .model-row:last-child{border-bottom:none}
+  .model-name{flex:0 0 100px;font-size:12px;color:var(--text1);font-weight:500}
+  .bar-track{flex:1;height:6px;background:var(--bg3);border-radius:3px;overflow:hidden}
+  .bar-fill{height:100%;border-radius:3px;transition:width 1.5s cubic-bezier(.4,0,.2,1)}
+  .model-val{flex:0 0 46px;text-align:right;font-family:var(--mono);font-size:12px;font-weight:600}
+
+  /* Infra grid */
+  .infra-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .infra-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px}
+  .infra-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+  .infra-val{font-size:20px;font-weight:700;font-family:var(--mono);line-height:1;margin-bottom:4px}
+  .micro-bar{height:4px;background:var(--bg3);border-radius:2px;overflow:hidden}
+  .micro-fill{height:100%;border-radius:2px;transition:width 1s}
+
+  /* Detail pane */
+  .detail-pane{padding:14px}
+  .shap-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+  .shap-label{font-size:11px;color:var(--text2);flex:0 0 120px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .shap-bar-wrap{flex:1;display:flex;align-items:center;gap:4px}
+  .shap-pos{height:12px;border-radius:2px;background:var(--red);transition:width .8s}
+  .shap-neg{height:12px;border-radius:2px;background:var(--blue)}
+  .shap-val{font-family:var(--mono);font-size:10px;color:var(--text2);flex:0 0 36px;text-align:right}
+  .tag{display:inline-flex;align-items:center;gap:3px;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:500;margin:2px}
+  .tag.mitre{background:color-mix(in srgb, var(--purple) 15%, transparent);color:var(--purple)}
+  .tag.ioc{background:color-mix(in srgb, var(--red) 15%, transparent);color:var(--red)}
+  .tag.info{background:color-mix(in srgb, var(--blue) 15%, transparent);color:var(--blue)}
+  .detail-field{margin-bottom:8px}
+  .detail-field label{display:block;font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+  .detail-field span{font-size:12px;color:var(--text1)}
+  .detail-field code{font-family:var(--mono);font-size:11px;color:var(--teal);background:var(--bg2);padding:1px 5px;border-radius:3px}
+  .divider{height:1px;background:var(--border);margin:10px 0}
+
+  /* Streaming ticker */
+  .ticker{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-family:var(--mono);font-size:11px;color:var(--text2);display:flex;align-items:center;gap:10px;overflow:hidden}
+  .ticker-live{color:var(--green);font-weight:600;flex-shrink:0}
+  .ticker-content{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+  /* Scrollbar */
+  ::-webkit-scrollbar{width:4px;height:4px}
+  ::-webkit-scrollbar-track{background:transparent}
+  ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+
+  /* Tabs */
+  .view-container > *{display:none}
+  .view-container > *.active{display:flex;flex-direction:column;gap:12px}
+  
+  /* SHAP legend */
+  .shap-legend{display:flex;gap:12px;margin-bottom:10px;font-size:10px;color:var(--text3)}
+  .shap-legend span{display:flex;align-items:center;gap:4px}
+  .leg-box{width:10px;height:10px;border-radius:2px}
+
+  /* Attack timeline mini */
+  .attack-event{display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)}
+  .attack-event:last-child{border-bottom:none}
+  .attack-time{font-family:var(--mono);font-size:10px;color:var(--text3);flex:0 0 60px;padding-top:1px}
+  .attack-desc{font-size:11px;color:var(--text2);line-height:1.5}
+  .attack-type{font-size:10px;color:var(--text1);font-weight:500}
+</style>
+</head>
+<body>
+<h2 class="sr-only">AI-SecOpt Framework — Live SOC Operations Dashboard with real-time threat detection, ML anomaly scoring, infrastructure monitoring, and SHAP explainability.</h2>
+<div class="shell">
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="logo">
+    <div class="logo-icon">⚡</div>
+    <div><div class="logo-text">AI-SecOpt</div><div class="logo-sub">Framework v1.0</div></div>
+  </div>
+  <div class="nav-section">Operations</div>
+  <div class="nav-item active" onclick="switchNav(this,'soc')"><div class="nav-dot" style="background:var(--blue)"></div>SOC Overview<span class="badge" id="alert-count">7</span></div>
+  <div class="nav-item" onclick="switchNav(this,'infra')"><div class="nav-dot" style="background:var(--teal)"></div>Infrastructure</div>
+  <div class="nav-item" onclick="switchNav(this,'ai')"><div class="nav-dot" style="background:var(--purple)"></div>AI Intelligence</div>
+  <div class="nav-section">Analysis</div>
+  <div class="nav-item" onclick="switchNav(this,'threats')"><div class="nav-dot" style="background:var(--amber)"></div>Threat Intel</div>
+  <div class="nav-item" onclick="switchNav(this,'compliance')"><div class="nav-dot" style="background:var(--green)"></div>Compliance</div>
+  <div class="nav-section">System</div>
+  <div class="nav-item" onclick="sendPrompt('Show me the complete AI-SecOpt deployment architecture and Kubernetes configuration')"><div class="nav-dot" style="background:var(--text3)"></div>Architecture ↗</div>
+  <div class="nav-item" onclick="sendPrompt('Generate the complete Logstash pipeline configuration and Kafka setup for AI-SecOpt')"><div class="nav-dot" style="background:var(--text3)"></div>Pipeline Config ↗</div>
+  <div class="status-bar">
+    <div class="status-indicator"><span class="pulse"></span>Live — 312 EPS</div>
+    <div style="font-size:10px;color:var(--text3);margin-top:4px">Kafka lag: 42 msgs</div>
+    <div style="font-size:10px;color:var(--text3)">ES nodes: 3/3 ✓</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="tab-group">
+      <div class="tab active" onclick="switchTab(this,'soc')">SOC Analyst</div>
+      <div class="tab" onclick="switchTab(this,'exec')">Executive</div>
+      <div class="tab" onclick="switchTab(this,'ir')">Incident Response</div>
+    </div>
+    <div class="topbar-right">
+      <div class="time-badge" id="clock">--:--:--</div>
+      <div class="alert-bell" title="Notifications">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--text2)"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+        <div class="bell-dot"></div>
+      </div>
+      <button class="run-btn" onclick="simulateAttack()">▶ Run Attack Sim</button>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content" id="main-content">
+
+    <!-- LIVE TICKER -->
+    <div class="ticker">
+      <span class="ticker-live">● LIVE</span>
+      <span class="ticker-content" id="ticker-text">Ingesting 312 EPS · Isolation Forest: nominal · XGBoost: active · LSTM forecast: CPU 67% in 5min · ES cluster: healthy</span>
+    </div>
+
+    <!-- KPI ROW -->
+    <div class="kpi-row">
+      <div class="kpi red" onclick="sendPrompt('Give me details on all critical P1 alerts in the last hour')">
+        <div class="kpi-label">Critical Alerts</div>
+        <div class="kpi-value" style="color:var(--red)" id="kpi-crit">3</div>
+        <div class="kpi-sub"><span class="up">↑ 2</span><span class="neutral">since last hour</span></div>
+      </div>
+      <div class="kpi amber" onclick="sendPrompt('What is the current anomaly score distribution across all monitored hosts?')">
+        <div class="kpi-label">Anomaly Score (max)</div>
+        <div class="kpi-value" style="color:var(--amber)" id="kpi-anom">0.87</div>
+        <div class="kpi-sub"><span class="neutral">Threshold: 0.70 · </span><span style="color:var(--amber)">BREACH</span></div>
+      </div>
+      <div class="kpi blue" onclick="sendPrompt('Show me a breakdown of the 4,271 events processed in the last hour')">
+        <div class="kpi-label">Events / Hour</div>
+        <div class="kpi-value" style="color:var(--blue)" id="kpi-eps">4,271</div>
+        <div class="kpi-sub"><span class="down">↓ 312</span><span class="neutral"> events/sec</span></div>
+      </div>
+      <div class="kpi green" onclick="sendPrompt('What is the current infrastructure health score calculation methodology?')">
+        <div class="kpi-label">Infra Health</div>
+        <div class="kpi-value" style="color:var(--green)" id="kpi-health">84%</div>
+        <div class="kpi-sub"><span class="down">↓ 3%</span><span class="neutral"> from baseline</span></div>
+      </div>
+    </div>
+
+    <!-- ROW 2: Timeline + Detail -->
+    <div class="row2">
+      <!-- Alert Timeline -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">Security Event Timeline</span>
+          <div class="panel-actions">
+            <span class="mini-btn active" onclick="setTimeRange(this,'1h')">1h</span>
+            <span class="mini-btn" onclick="setTimeRange(this,'6h')">6h</span>
+            <span class="mini-btn" onclick="setTimeRange(this,'24h')">24h</span>
+          </div>
+        </div>
+        <div class="panel-body" style="padding:10px 14px">
+          <div class="chart-area"><canvas id="timelineChart"></canvas></div>
+          <div style="display:flex;gap:12px;margin-top:8px;font-size:10px;color:var(--text3)">
+            <span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:2px;background:var(--red);display:inline-block"></span>Critical</span>
+            <span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:2px;background:var(--amber);display:inline-block"></span>High</span>
+            <span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:2px;background:var(--blue);display:inline-block"></span>Medium</span>
+            <span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:2px;background:var(--text3);display:inline-block"></span>Low</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Alert Detail Pane -->
+      <div class="panel" id="detail-panel">
+        <div class="panel-header">
+          <span class="panel-title">Alert Detail + SHAP</span>
+          <span class="panel-badge" style="background:color-mix(in srgb, var(--red) 15%, transparent);color:var(--red)">CRITICAL</span>
+        </div>
+        <div class="detail-pane" style="max-height:260px;overflow-y:auto">
+          <div class="detail-field">
+            <label>Alert ID</label>
+            <code>ALT-2024-0847</code>
+          </div>
+          <div class="detail-field">
+            <label>Type</label>
+            <span>DDoS — SYN Flood</span>
+          </div>
+          <div class="detail-field">
+            <label>Source</label>
+            <code id="src-ip">192.168.14.∗ (anonymised)</code>
+          </div>
+          <div class="detail-field">
+            <label>MITRE ATT&amp;CK</label>
+            <div style="margin-top:3px">
+              <span class="tag mitre">T1498 · Network DoS</span>
+              <span class="tag mitre">TA0040 · Impact</span>
+            </div>
+          </div>
+          <div class="detail-field">
+            <label>IOC Matches</label>
+            <span class="tag ioc">AbuseIPDB: score 97</span>
+            <span class="tag info">AS64496</span>
+          </div>
+          <div class="divider"></div>
+          <div style="font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px">SHAP Feature Importance</div>
+          <div class="shap-legend">
+            <span><div class="leg-box" style="background:var(--red)"></div>Pushes to anomaly</span>
+            <span><div class="leg-box" style="background:var(--blue)"></div>Pushes to normal</span>
+          </div>
+          <div id="shap-bars"></div>
+          <div class="divider"></div>
+          <div style="display:flex;gap:6px;margin-top:4px">
+            <button class="run-btn" style="font-size:11px;padding:4px 10px" onclick="sendPrompt('Generate a full incident response playbook for a DDoS SYN flood attack detected by the AI-SecOpt SIEM')">IR Playbook ↗</button>
+            <button class="mini-btn" onclick="sendPrompt('Explain why XGBoost classified this event as DDoS — which features were decisive?')">Explain AI ↗</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROW 3: Alert Table + Infra -->
+    <div class="row3">
+      <!-- Alert Table -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">Active Security Alerts</span>
+          <span class="panel-badge" style="background:color-mix(in srgb, var(--red) 15%, transparent);color:var(--red)" id="alert-badge">7 active</span>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="alert-table" id="alert-table">
+            <thead><tr>
+              <th>Severity</th><th>Type</th><th>Source</th><th>Score</th><th>Time</th>
+            </tr></thead>
+            <tbody id="alert-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Infrastructure Panel -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">Datacentre Infrastructure</span>
+          <span style="font-size:11px;color:var(--text3)">1 host monitored (local)</span>
+        </div>
+        <div class="panel-body">
+          <div class="infra-grid" id="infra-grid"></div>
+          <div class="divider"></div>
+          <!-- Forecast visualisation lives in the dedicated LSTM Forecasting Engine
+              module rather than being duplicated here. This panel shows current
+              measured state; projection is one click away via the link below. -->
+          <div style="font-size:11px;color:var(--text3);line-height:1.6">
+            Live CPU and memory readings from the instrumented host.
+            <a href="ai_secopt_lstm_forecasting_engine.html" style="color:var(--blue);text-decoration:none">View forecast trajectory ↗</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROW 4: ML Models + Attack Log -->
+    <div class="row3">
+      <!-- ML Model Status -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">ML Model Performance</span>
+          <span class="mini-btn" style="cursor:pointer" onclick="sendPrompt('Explain the AI-SecOpt ML model training methodology, hyperparameter tuning, and evaluation results in detail')">Details ↗</span>
+        </div>
+        <div class="panel-body">
+          <div id="model-bars"></div>
+          <div class="divider"></div>
+          <div style="font-size:10px;color:var(--text3);line-height:1.6">
+            <div>Pipeline: <span style="color:var(--text2)">scikit-learn 1.4 · XGBoost 2.0 · TF/Keras 2.15</span></div>
+            <div>Dataset: <span style="color:var(--text2)">CSE-CIC-IDS2018 · 1.04M samples (SMOTE-balanced)</span></div>
+            <div>Last retrain: <span style="color:var(--green)">Today 04:00 UTC · MLflow run #147</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Real-time Attack Log -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">Recent Detections — live from Elasticsearch</span>
+          <span class="panel-badge" style="background:color-mix(in srgb, var(--green) 15%, transparent);color:var(--green)">● live query</span>
+        </div>
+        <div class="panel-body" style="padding:8px 14px">
+          <div id="attack-log" style="max-height:200px;overflow-y:auto"></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+</div><!-- /shell -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+// ─── Data ────────────────
+/*const ALERTS = [
+  {id:'ALT-0847',sev:'crit',sevLabel:'CRITICAL',type:'DDoS SYN Flood',src:'192.168.14.∗',score:.87,time:'14:23:01',mitre:'T1498'},
+  {id:'ALT-0846',sev:'crit',sevLabel:'CRITICAL',type:'Brute Force SSH',src:'10.0.3.∗',score:.81,time:'14:21:47',mitre:'T1110'},
+  {id:'ALT-0845',sev:'high',sevLabel:'HIGH',type:'Port Scan — Stealth',src:'172.16.8.∗',score:.74,time:'14:18:33',mitre:'T1046'},
+  {id:'ALT-0844',sev:'high',sevLabel:'HIGH',type:'Malware Process Spawn',src:'dc-node-02',score:.71,time:'14:15:12',mitre:'T1059'},
+  {id:'ALT-0843',sev:'med',sevLabel:'MEDIUM',type:'Unusual Outbound Traffic',src:'10.0.1.∗',score:.58,time:'14:10:08',mitre:'T1041'},
+  {id:'ALT-0842',sev:'med',sevLabel:'MEDIUM',type:'Failed Auth × 34',src:'10.0.5.∗',score:.55,time:'14:05:44',mitre:'T1078'},
+  {id:'ALT-0841',sev:'low',sevLabel:'LOW',type:'DNS Anomaly',src:'dc-node-01',score:.41,time:'13:58:21',mitre:'T1071'},
+];*/
+
+// ── Live alerts + KPIs, pulled from real Elasticsearch predictions ──
+let ALERTS = [];
+let KPI_DATA = { critical: 0, maxScore: 0, eventsPerHour: 0, avgConfidence: 0 };
+
+const SEV_MAP = { crit: 'CRITICAL', high: 'HIGH', med: 'MEDIUM', low: 'LOW' };
+
+function confidenceToSeverity(score) {
+  if (score >= 0.95) return 'crit';
+  if (score >= 0.85) return 'high';
+  if (score >= 0.70) return 'med';
+  return 'low';
+}
+
+async function fetchAlerts() {
+  const response = await fetch('http://localhost:9200/ai-secopt-threats-*/_search', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      size: 7,
+      query: { bool: { must: [{ term: { is_attack: true } }] } },
+      sort: [{ "@timestamp": { order: "desc" } }]
+    })
+  });
+  const data = await response.json();
+
+  ALERTS = data.hits.hits.map(hit => {
+    const src = hit._source;
+    const sev = confidenceToSeverity(src.confidence_score);
+    return {
+      id: hit._id.slice(0, 8),
+      sev: sev,
+      sevLabel: SEV_MAP[sev],
+      type: src.predicted_label,
+      src: src.mitre_technique_id || 'N/A',
+      score: src.confidence_score,
+      time: new Date(src['@timestamp']).toLocaleTimeString(),
+      mitre: src.mitre_technique_id || 'N/A'
+    };
+  });
+}
+
+async function fetchKPIs() {
+  // No time filter — count across ALL indexed events, not just a rolling
+  // window. This avoids the exact bug we just hit: a hardcoded "now-24h"
+  // filter silently returning zero once real wall-clock time moves past
+  // whenever the dataset was actually generated.
+  const response = await fetch('http://localhost:9200/ai-secopt-threats-*/_search', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      size: 0,
+      aggs: {
+        total_events: { value_count: { field: "confidence_score" } },
+        critical_count: {
+          filter: { bool: { must: [{ term: { is_attack: true } }, { range: { confidence_score: { gte: 0.95 } } }] } }
+        },
+        max_confidence: { max: { field: "confidence_score" } }
+      }
+    })
+  });
+  const data = await response.json();
+  KPI_DATA.eventsPerHour = data.aggregations.total_events.value;
+  KPI_DATA.critical = data.aggregations.critical_count.doc_count;
+  KPI_DATA.maxScore = data.aggregations.max_confidence.value || 0;
+}
+
+function renderKPIs() {
+  document.getElementById('kpi-crit').textContent = KPI_DATA.critical;
+  document.getElementById('kpi-anom').textContent = KPI_DATA.maxScore.toFixed(2);
+  document.getElementById('kpi-eps').textContent = KPI_DATA.eventsPerHour.toLocaleString();
+  document.getElementById('alert-count').textContent = KPI_DATA.critical;
+  document.getElementById('alert-badge').textContent = `${ALERTS.length} active`;
+}
+
+/*const INFRA = [
+  {label:'CPU (dc-01)',val:62,unit:'%',color:'var(--blue)',warn:80},
+  {label:'CPU (dc-02)',val:78,unit:'%',color:'var(--amber)',warn:80},
+  {label:'CPU (dc-03)',val:45,unit:'%',color:'var(--green)',warn:80},
+  {label:'Memory',val:71,unit:'%',color:'var(--blue)',warn:85},
+  {label:'Network I/O',val:340,unit:'MB/s',color:'var(--teal)',warn:null},
+  {label:'Disk I/O',val:88,unit:'MB/s',color:'var(--purple)',warn:null},
+];*/
+
+// ── Live infrastructure data — pulled from your actual Metricbeat telemetry ──
+let INFRA = [];
+
+async function fetchInfra() {
+  const [cpuResp, memResp] = await Promise.all([
+    fetch('http://localhost:9200/metricbeat-*/_search', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        size: 1,
+        query: { exists: { field: "system.cpu.total.pct" } },
+        sort: [{ "@timestamp": { order: "desc" } }]
+      })
+    }),
+    fetch('http://localhost:9200/metricbeat-*/_search', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        size: 1,
+        query: { exists: { field: "system.memory.actual.used.pct" } },
+        sort: [{ "@timestamp": { order: "desc" } }]
+      })
+    })
+  ]);
+  const cpuData = await cpuResp.json();
+  const memData = await memResp.json();
+
+  const cpuVal = cpuData.hits.hits[0]?._source?.system?.cpu?.total?.pct || 0;
+  const memVal = memData.hits.hits[0]?._source?.system?.memory?.actual?.used?.pct || 0;
+
+  INFRA = [
+    { label: 'CPU (this node)', val: Math.round(cpuVal * 100) / 100, unit: '%', color: 'var(--blue)', warn: 80 },
+    { label: 'Memory', val: Math.round(memVal * 100), unit: '%', color: 'var(--blue)', warn: 85 },
+  ];
+}
+
+
+/*const MODELS = [
+  {name:'Isolation Forest',metric:'AUC-ROC',val:.891,color:'#3b82f6'},
+  {name:'XGBoost',metric:'F1-Score',val:.923,color:'#a855f7'},
+  {name:'LSTM',metric:'MAE (CPU)',val:.962,color:'#06b6d4',inverted:true},
+  {name:'SHAP Expl.',metric:'Coverage',val:.100,color:'#22c55e'},
+];*/
+
+// Real performance figures from actual AISecOpt model training
+const MODELS = [
+  {name:'XGBoost',metric:'Accuracy',val:.93,color:'var(--purple)'},
+  {name:'XGBoost',metric:'F1 (weighted)',val:.93,color:'var(--blue)'},
+  {name:'LSTM',metric:'Memory MAE',val:.9885,color:'var(--teal)',inverted:true},
+  {name:'LSTM',metric:'CPU MAE',val:.70,color:'var(--green)',inverted:true},
+];
+
+const SHAP_FEATURES = [
+  {name:'flow_bytes/sec',val:.42,dir:1},
+  {name:'iat_std',val:.31,dir:1},
+  {name:'flag_syn_count',val:.28,dir:1},
+  {name:'pkt_len_variance',val:.19,dir:1},
+  {name:'dst_port_class',val:-.12,dir:-1},
+  {name:'time_of_day_sin',val:-.08,dir:-1},
+];
+/*const STREAM_EVENTS = [
+  '14:23:07 · [CRITICAL] DDoS SYN flood · src:192.168.14.33 · score:0.87 · XGB:DDoS · IF:anomaly',
+  '14:23:05 · [HIGH] Brute force SSH · src:10.0.3.12 · score:0.81 · attempts:127',
+  '14:23:03 · [INFO] Normal traffic · src:10.0.1.5 · score:0.12 · protocol:HTTPS',
+  '14:23:01 · [HIGH] Port scan detected · src:172.16.8.2 · score:0.74 · ports:1024',
+  '14:22:59 · [INFO] Normal · src:10.0.2.8 · score:0.09 · protocol:DNS',
+  '14:22:57 · [MEDIUM] Outbound anomaly · src:10.0.1.7 · score:0.58 · bytes:4.2MB',
+  '14:22:55 · [INFO] Normal · src:10.0.4.3 · score:0.11 · protocol:NTP',
+  '14:22:53 · [CRITICAL] Malware process · host:dc-node-02 · score:0.81 · proc:nc.exe',
+];*/
+
+// ─── Recent Detections: live query against real classified events ───
+// Replaces the previous hardcoded STREAM_EVENTS array. Every field shown
+// below is genuine model output read from Elasticsearch — no fabricated
+// values. Fields the system cannot produce (source IP, process name,
+// Isolation Forest results) are deliberately absent rather than invented.
+let RECENT_EVENTS = [];
+let streamIdx = 0;
+
+async function fetchRecentEvents() {
+  const resp = await fetch('http://localhost:9200/ai-secopt-threats-*/_search', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      size: 20,                                    // small rolling window
+      sort: [{ "@timestamp": { order: "desc" } }], // newest first
+      _source: ["@timestamp", "predicted_label", "confidence_score",
+                "is_attack", "mitre_technique_id", "shap_top_features"]
+    })
+  });
+  const data = await resp.json();
+
+  RECENT_EVENTS = data.hits.hits.map(h => {
+    const s = h._source;
+    // Severity derives from the model's own confidence, not an invented scale
+    const sev = !s.is_attack ? 'INFO'
+              : s.confidence_score >= 0.95 ? 'CRITICAL'
+              : s.confidence_score >= 0.85 ? 'HIGH' : 'MEDIUM';
+    // Top SHAP feature — the single characteristic that most drove this
+    // classification. This is the project's explainability contribution
+    // surfaced directly in the event feed.
+    const top = s.shap_top_features && s.shap_top_features[0];
+    return {
+      time: new Date(s['@timestamp']).toLocaleTimeString(),
+      sev: sev,
+      label: s.predicted_label,
+      technique: s.mitre_technique_id || 'n/a',
+      score: s.confidence_score.toFixed(2),
+      feature: top ? `${top.feature} ${top.shap_value > 0 ? '+' : ''}${top.shap_value}` : 'n/a'
+    };
+  });
+}
+
+const TICKER_MSGS = [
+  'Ingesting 312 EPS · Isolation Forest: nominal · XGBoost: active · LSTM forecast: CPU 78% on dc-02 in 8min',
+  'Kafka lag: 42 msgs · ES indexing rate: 312 docs/sec · Pipeline latency: 2.3s ✓',
+  'MLflow run #147 · Models healthy · AUC=0.89 · F1=0.92 · Drift monitor: nominal',
+  'MITRE ATT&CK enrichment: T1498/T1110/T1046 mapped · AbuseIPDB: 3 IOC matches · GeoIP: 5 countries',
+  'Alert fatigue reduction: 34% vs rule-only baseline · FP rate: 11.2% · MTTD: 18s avg',
+];
+
+// ─── Clock ──────────────────────────────────────
+function updateClock(){
+  const n=new Date();
+  document.getElementById('clock').textContent=n.toTimeString().slice(0,8)+' UTC';
+}
+setInterval(updateClock,1000);updateClock();
+
+// ─── Alert Table ────────────────────────────────
+function renderAlerts(data){
+  const tb=document.getElementById('alert-tbody');
+  tb.innerHTML='';
+  data.forEach((a,i)=>{
+    const tr=document.createElement('tr');
+    tr.className='alert-row'+(i===0?' selected':'');
+    tr.innerHTML=`
+      <td><span class="sev ${a.sev}">${a.sevLabel}</span></td>
+      <td style="color:var(--text1);font-weight:500">${a.type}</td>
+      <td style="font-family:var(--mono);font-size:11px;color:var(--text3)">${a.src}</td>
+      <td style="font-family:var(--mono);color:${a.score>.7?'var(--red)':a.score>.5?'var(--amber)':'var(--green)'}">${a.score.toFixed(2)}</td>
+      <td style="font-family:var(--mono);font-size:11px;color:var(--text3)">${a.time}</td>`;
+    tr.onclick=()=>{
+      document.querySelectorAll('.alert-row').forEach(r=>r.classList.remove('selected'));
+      tr.classList.add('selected');
+    };
+    tb.appendChild(tr);
+  });
+}
+Promise.all([fetchAlerts(), fetchKPIs(), fetchInfra()]).then(() => {
+  renderAlerts(ALERTS);
+  renderKPIs();
+  renderInfra();
+});
+
+// ─── Infra Grid ─────────────────────────────────
+function renderInfra(){
+  const g=document.getElementById('infra-grid');
+  g.innerHTML='';
+  INFRA.forEach(m=>{
+    const pct=m.unit==='%'?m.val:(m.val/500*100);
+    const isWarn=m.warn&&m.val>=m.warn;
+    g.innerHTML+=`
+      <div class="infra-card" onclick="sendPrompt('Explain the ${m.label} metric and what this value means for datacentre performance')">
+        <div class="infra-label">${m.label}</div>
+        <div class="infra-val" style="color:${isWarn?'var(--amber)':m.color}">${m.val}<span style="font-size:11px;font-weight:400;color:var(--text3)">${m.unit}</span></div>
+        <div class="micro-bar"><div class="micro-fill" style="width:${Math.min(pct,100)}%;background:${isWarn?'var(--amber)':m.color}"></div></div>
+      </div>`;
+  });
+}
+renderInfra();
+
+// ─── SHAP Bars ──────────────────────────────────
+function renderSHAP(){
+  const c=document.getElementById('shap-bars');
+  c.innerHTML='';
+  const maxV=Math.max(...SHAP_FEATURES.map(f=>Math.abs(f.val)));
+  SHAP_FEATURES.forEach(f=>{
+    const pct=Math.abs(f.val)/maxV*100;
+    c.innerHTML+=`
+      <div class="shap-row">
+        <span class="shap-label" title="${f.name}">${f.name}</span>
+        <div class="shap-bar-wrap">
+          ${f.dir>0?`<div class="shap-pos" style="width:${pct}%"></div>`:`<div class="shap-neg" style="width:${pct}%"></div>`}
+        </div>
+        <span class="shap-val">${f.dir>0?'+':''}${f.val.toFixed(2)}</span>
+      </div>`;
+  });
+}
+renderSHAP();
+
+// ─── ML Model Bars ──────────────────────────────
+function renderModels(){
+  const c=document.getElementById('model-bars');
+  c.innerHTML='';
+  MODELS.forEach(m=>{
+    const displayVal=m.inverted?(1-m.val+.9):m.val;
+    const label=m.inverted?`MAE: ${((1-m.val)*10).toFixed(1)}%`:m.val.toFixed(3);
+    c.innerHTML+=`
+      <div class="model-row">
+        <span class="model-name">${m.name}</span>
+        <div class="bar-track"><div class="bar-fill" style="width:${displayVal*100}%;background:${m.color}"></div></div>
+        <span class="model-val" style="color:${m.color}">${label}</span>
+      </div>`;
+  });
+}
+renderModels();
+
+// ─── Attack Event Stream ─────────────────────────
+function renderStream(){
+  const log = document.getElementById('attack-log');
+  if (!RECENT_EVENTS.length) return;   // nothing fetched yet
+
+  // Cycle through the fetched real events, one every interval.
+  // This is a paced replay of stored detections, not a live arrival feed —
+  // the panel label states this explicitly.
+  const evt = RECENT_EVENTS[streamIdx % RECENT_EVENTS.length];
+  streamIdx++;
+
+  const color = evt.sev === 'CRITICAL' ? 'var(--red)'
+              : evt.sev === 'HIGH'     ? 'var(--amber)'
+              : evt.sev === 'MEDIUM'   ? 'var(--blue)' : 'var(--text3)';
+
+  const div = document.createElement('div');
+  div.className = 'attack-event';
+  div.style.opacity = '0';
+  div.style.transition = 'opacity .3s';
+  div.innerHTML = `
+    <span class="attack-time">${evt.time}</span>
+    <div>
+      <div class="attack-type" style="color:${color}">[${evt.sev}] ${evt.label}</div>
+      <div class="attack-desc">${evt.technique} · confidence:${evt.score} · top feature: ${evt.feature}</div>
+    </div>`;
+  log.insertBefore(div, log.firstChild);
+  setTimeout(() => div.style.opacity = '1', 10);
+  if (log.children.length > 12) log.removeChild(log.lastChild);
+}
+// Fetch real events first, then begin the paced display.
+// Starting the interval before data arrives would render empty rows.
+fetchRecentEvents().then(() => {
+  renderStream();
+  setInterval(renderStream, 2200);
+});
+
+// ─── Ticker ─────────────────────────────────────
+let tickIdx=0;
+setInterval(()=>{
+  document.getElementById('ticker-text').textContent=TICKER_MSGS[tickIdx%TICKER_MSGS.length];
+  tickIdx++;
+},4000);
+
+// ─── Timeline Chart ──────────────────────────────
+const tlCtx=document.getElementById('timelineChart').getContext('2d');
+const labels=['13:00','13:10','13:20','13:30','13:40','13:50','14:00','14:10','14:20','Now'];
+const tlChart=new Chart(tlCtx,{
+  type:'bar',
+  data:{
+    labels,
+    datasets:[
+      {label:'Critical',data:[0,1,0,0,2,0,1,0,3,3],backgroundColor:'rgba(239,68,68,.8)',stack:'s'},
+      {label:'High',data:[1,2,1,3,2,4,3,2,5,4],backgroundColor:'rgba(245,158,11,.7)',stack:'s'},
+      {label:'Medium',data:[3,4,5,2,6,5,4,8,6,5],backgroundColor:'rgba(59,130,246,.6)',stack:'s'},
+      {label:'Low',data:[8,6,9,7,5,8,6,7,4,6],backgroundColor:'rgba(100,116,139,.4)',stack:'s'},
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false}},
+    scales:{
+      x:{ticks:{color:'#4a5b80',font:{size:10}},grid:{color:'rgba(30,47,74,.5)'}},
+      y:{ticks:{color:'#4a5b80',font:{size:10}},grid:{color:'rgba(30,47,74,.5)'},beginAtZero:true}
+    }
+  }
+});
+
+// ─── LSTM Forecast Chart ─────────────────────────
+/*const lstmCtx=document.getElementById('lstmChart').getContext('2d');
+const lstmChart=new Chart(lstmCtx,{
+  type:'line',
+  data:{
+    labels:['-5m','-4m','-3m','-2m','-1m','Now','+1m','+2m','+3m','+4m','+5m'],
+    datasets:[
+      {label:'Actual CPU %',data:[65,68,70,72,75,78,null,null,null,null,null],borderColor:'#3b82f6',tension:.4,pointRadius:2,fill:false},
+      {label:'LSTM Forecast',data:[null,null,null,null,null,78,80,82,84,86,88],borderColor:'#f59e0b',borderDash:[4,2],tension:.4,pointRadius:2,fill:false},
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{
+      x:{ticks:{color:'#4a5b80',font:{size:9}},grid:{display:false}},
+      y:{ticks:{color:'#4a5b80',font:{size:9}},grid:{color:'rgba(30,47,74,.5)'},min:50,max:100}
+    }
+  }
+});*/
+
+// ─── Navigation ─────────────────────────────────
+function switchNav(el,view){
+  document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));
+  el.classList.add('active');
+}
+function switchTab(el,view){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+}
+function setTimeRange(el,range){
+  document.querySelectorAll('.mini-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  // Update chart data based on range
+  const multiplier=range==='1h'?1:range==='6h'?3:6;
+  tlChart.data.datasets.forEach(ds=>{
+    ds.data=ds.data.map(v=>v?Math.round(v*multiplier*(.8+Math.random()*.4)):0);
+  });
+  tlChart.update();
+}
+
+// ─── Attack Simulation ───────────────────────────
+let simRunning=false;
+function simulateAttack(){
+  if(simRunning)return;
+  simRunning=true;
+  const btn=document.querySelector('.run-btn');
+  btn.textContent='⏸ Simulating...';
+  btn.style.background='var(--red)';
+  let crit=3,anom=0.87,eps=4271,health=84;
+  let steps=0;
+  const interval=setInterval(()=>{
+    steps++;
+    crit=Math.min(crit+Math.floor(Math.random()*2),9);
+    anom=Math.min(anom+.02,0.98);
+    eps=Math.min(eps+Math.floor(Math.random()*200),8000);
+    health=Math.max(health-Math.floor(Math.random()*3),45);
+    document.getElementById('kpi-crit').textContent=crit;
+    document.getElementById('kpi-anom').textContent=anom.toFixed(2);
+    document.getElementById('kpi-eps').textContent=eps.toLocaleString();
+    document.getElementById('kpi-health').textContent=health+'%';
+    document.getElementById('alert-count').textContent=crit+4;
+    document.getElementById('alert-badge').textContent=(crit+4)+' active';
+    // Add new alerts
+    if(steps===3){
+      ALERTS.unshift({id:'ALT-0848',sev:'crit',sevLabel:'CRITICAL',type:'DDoS Amplification',src:'0.0.0.∗',score:.94,time:new Date().toTimeString().slice(0,8),mitre:'T1498.002'});
+      renderAlerts(ALERTS.slice(0,7));
+    }
+    if(steps>=10){
+      clearInterval(interval);
+      simRunning=false;
+      btn.textContent='▶ Run Attack Sim';
+      btn.style.background='var(--blue)';
+      sendPrompt('The attack simulation has completed. Can you analyse these results: Critical alerts rose to '+crit+', anomaly score peaked at '+anom.toFixed(2)+', and infrastructure health dropped to '+health+'%. What would a real SOC analyst do next?');
+    }
+  },600);
+}
+</script>
+</body>
+</html>

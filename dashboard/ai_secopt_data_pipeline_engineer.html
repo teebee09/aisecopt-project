@@ -1,0 +1,498 @@
+<script>(function(){try{var t=localStorage.getItem('aisecopt-theme')||'dark';document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();</script>
+<head>
+  <meta charset="UTF-8">
+</head>
+<style id="ai-secopt-nav-css">
+#ai-secopt-nav{
+  font-family:system-ui,sans-serif;
+  background:#0d1224;
+  border-bottom:1px solid #1e2f4a;
+  padding:0 16px;
+  display:flex;
+  align-items:center;
+  position:sticky;
+  top:0;
+  z-index:999;
+  height:42px;
+  overflow-x:auto;
+}
+#ai-secopt-nav .nav-brand{
+  font-size:12px;font-weight:700;
+  color:#3b82f6;
+  letter-spacing:.5px;
+  margin-right:18px;
+  white-space:nowrap;
+  flex-shrink:0;
+}
+#ai-secopt-nav .nav-brand span{color:#e2e8f5;}
+#ai-secopt-nav a.nav-link{
+  display:inline-flex;align-items:center;
+  padding:0 12px;
+  height:42px;
+  font-size:11px;font-weight:600;
+  color:#8b9cc4;
+  text-decoration:none;
+  white-space:nowrap;
+  transition:color .15s,background .15s;
+  border-bottom:2px solid transparent;
+  box-sizing:border-box;
+  flex-shrink:0;
+}
+#ai-secopt-nav a.nav-link:hover{color:#e2e8f5;background:rgba(255,255,255,.04);}
+#ai-secopt-nav a.nav-link.active{color:#3b82f6;border-bottom-color:#3b82f6;}
+#ai-secopt-nav .theme-toggle{
+  margin-left:auto;flex-shrink:0;display:inline-flex;align-items:center;gap:6px;
+  background:transparent;border:1px solid #263550;color:#8b9cc4;
+  border-radius:6px;padding:5px 10px;font-size:11px;font-weight:600;
+  cursor:pointer;font-family:inherit;height:28px;
+}
+#ai-secopt-nav .theme-toggle:hover{color:#e2e8f5;border-color:#3b82f6}
+#ai-secopt-nav .theme-toggle:focus-visible{outline:2px solid #3b82f6;outline-offset:2px}
+
+</style>
+<nav id="ai-secopt-nav">
+  <div class="nav-brand">AI&#8209;<span>SecOpt</span></div>
+  <a href="index.html" class="nav-link">🏠 Home</a><a href="ai_secopt_framework_dashboard.html" class="nav-link">🛡️ SOC Dashboard</a><a href="ai_secopt_threat_intelligence_console.html" class="nav-link">🔍 Threat Intel</a><a href="ai_secopt_lstm_forecasting_engine.html" class="nav-link">📈 LSTM Forecast</a><a href="ai_secopt_ml_training_lab.html" class="nav-link">🧪 ML Training Lab</a><a href="ai_secopt_data_pipeline_engineer.html" class="nav-link active">⚙️ Data Pipeline</a><a href="ai_secopt_incident_correlation_console.html" class="nav-link">🧩 Incident Correlation</a>
+  <button type="button" class="theme-toggle" id="aisecopt-theme-toggle" aria-pressed="false" aria-label="Switch to light mode"><span class="theme-toggle-icon" aria-hidden="true">🌙</span><span class="theme-toggle-label">Dark</span></button>
+</nav>
+<script>
+(function(){
+  var btn = document.getElementById('aisecopt-theme-toggle');
+  if(!btn) return;
+  function currentTheme(){ return document.documentElement.getAttribute('data-theme') || 'dark'; }
+  function paint(){
+    var isLight = currentTheme() === 'light';
+    btn.setAttribute('aria-pressed', String(isLight));
+    btn.setAttribute('aria-label', 'Switch to ' + (isLight ? 'dark' : 'light') + ' mode');
+    btn.querySelector('.theme-toggle-icon').textContent = isLight ? '☀️' : '🌙';
+    btn.querySelector('.theme-toggle-label').textContent = isLight ? 'Light' : 'Dark';
+  }
+  btn.addEventListener('click', function(){
+    var next = currentTheme() === 'light' ? 'dark' : 'light';
+    try{ localStorage.setItem('aisecopt-theme', next); }catch(e){}
+    document.documentElement.setAttribute('data-theme', next);
+    location.reload();
+  });
+  paint();
+})();
+</script>
+
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg0:#0a0e1a;--bg1:#0d1224;--bg2:#111827;--bg3:#1a2035;
+  --border:#1e2f4a;--border2:#263550;
+  --text1:#e2e8f5;--text2:#8b9cc4;--text3:#4a5b80;
+  --blue:#3b82f6;--teal:#06b6d4;--green:#22c55e;
+  --amber:#f59e0b;--red:#ef4444;--purple:#a855f7;
+}
+  /* Light theme: applied when data-theme="light" is set on <html> (see the theme toggle in the nav). Values chosen for WCAG AA contrast against the light surfaces below. */
+  :root[data-theme="light"]{
+    --bg0: #eef1f7;
+    --bg1: #ffffff;
+    --bg2: #f4f6fb;
+    --bg3: #e7ebf4;
+    --border: #d7deeb;
+    --border2: #c2cce1;
+    --text1: #141b2e;
+    --text2: #48546f;
+    --text3: #76829f;
+    --blue: #1d4ed8;
+    --teal: #0e7490;
+    --green: #15803d;
+    --amber: #b45309;
+    --red: #b91c1c;
+    --purple: #7e22ce;
+  }
+
+body{font-family:system-ui,sans-serif;background:var(--bg0);color:var(--text1);font-size:13px;padding:16px}
+h2.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+.panel{background:var(--bg1);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:12px}
+.panel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.panel-title{font-size:13px;font-weight:600;color:var(--text1)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.btn{background:var(--blue);color:#fff;border:none;border-radius:6px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s}
+.btn:hover{opacity:.85}
+.btn.red{background:#991b1b}
+.btn.secondary{background:var(--bg3);color:var(--text2);border:1px solid var(--border)}
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600}
+.badge.green{background:color-mix(in srgb, var(--green) 15%, transparent);color:var(--green)}
+.badge.blue{background:color-mix(in srgb, var(--blue) 15%, transparent);color:var(--blue)}
+.badge.amber{background:color-mix(in srgb, var(--amber) 15%, transparent);color:var(--amber)}
+.badge.red{background:color-mix(in srgb, var(--red) 15%, transparent);color:var(--red)}
+.badge.grey{background:rgba(74,91,128,.2);color:var(--text2)}
+
+.pipeline-canvas{position:relative;background:var(--bg2);border-radius:8px;padding:16px;margin-bottom:12px;overflow:hidden}
+.pipe-node{position:absolute;border-radius:8px;border:1px solid var(--border2);padding:10px 12px;font-size:11px;font-weight:600;transition:border-color .3s,box-shadow .3s}
+.pipe-node.active{border-color:var(--blue);box-shadow:0 0 0 2px color-mix(in srgb, var(--blue) 20%, transparent)}
+.pipe-node.warning{border-color:var(--amber)}
+.pipe-node.healthy{border-color:var(--green)}
+.node-label{font-size:10px;color:var(--text3);margin-bottom:3px;text-transform:uppercase;letter-spacing:.5px}
+.node-value{font-family:monospace;font-size:13px;font-weight:700}
+.node-sub{font-size:10px;color:var(--text3);margin-top:2px}
+
+.flow-particle{position:absolute;width:8px;height:8px;border-radius:50%;pointer-events:none;transition:none}
+@keyframes flow-h{from{transform:translateX(0)}to{transform:translateX(var(--dist))}}
+@keyframes flow-v{from{transform:translateY(0)}to{transform:translateY(var(--dist))}}
+
+.metric-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+.metric-chip{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center}
+.chip-val{font-size:20px;font-weight:700;font-family:monospace;line-height:1}
+.chip-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.4px;margin-top:3px}
+
+.kafka-topic{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:8px 10px;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.topic-name{font-family:monospace;font-size:11px;color:var(--teal);font-weight:600;flex:1}
+.topic-stats{font-size:10px;color:var(--text3)}
+.lag-bar{width:80px;height:4px;background:var(--bg3);border-radius:2px;overflow:hidden}
+.lag-fill{height:100%;border-radius:2px;transition:width .5s}
+
+.es-index{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:8px 10px;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.index-name{font-family:monospace;font-size:11px;color:var(--purple);font-weight:600;flex:1}
+.shard-dots{display:flex;gap:3px}
+.shard-dot{width:8px;height:8px;border-radius:50%}
+
+.log-box{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:8px 10px;font-family:monospace;font-size:11px;color:var(--text2);height:160px;overflow-y:auto;line-height:1.7}
+.log-ok{color:var(--green)}
+.log-warn{color:var(--amber)}
+.log-info{color:var(--teal)}
+.log-err{color:var(--red)}
+
+input[type=range]{accent-color:var(--blue);width:100%}
+.param-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.param-label{font-size:11px;color:var(--text2);flex:0 0 120px}
+.param-val{font-family:monospace;font-size:12px;color:var(--blue);font-weight:600;min-width:48px;text-align:right}
+</style>
+
+<h2 class="sr-only">AI-SecOpt Data Pipeline Engineer — interactive Kafka, Logstash, and Elasticsearch pipeline with live event flow visualisation and performance metrics.</h2>
+
+<div class="panel">
+  <div class="panel-header">
+    <span class="panel-title">AI-SecOpt — Data Pipeline Control Centre</span>
+    <div style="display:flex;gap:6px;align-items:center">
+      <span class="badge green" id="pipeline-status">● Pipeline Running</span>
+      <button class="btn" id="toggle-btn" onclick="togglePipeline()">Pause Pipeline</button>
+      <button class="btn secondary" onclick="injectAttack()">Inject Attack</button>
+    </div>
+    <div style="font-size:11px;color:var(--amber);background:color-mix(in srgb, var(--amber) 8%, transparent);padding:8px 10px;border-radius:6px;margin-bottom:12px;border-left:2px solid var(--amber)">
+  ⚠ This diagram shows the target production architecture (Kafka, Logstash, FastAPI microservice). The actual implemented AISecOpt pipeline is simpler: Python scripts write predictions directly to Elasticsearch via its bulk API — no message broker or stream processor is currently deployed. The metrics below marked "Live" are real; the pipeline visualization is illustrative.
+    </div>
+  </div>
+
+  <div class="metric-grid">
+    <div class="metric-chip">
+      <div class="chip-val" style="color:var(--blue)" id="m-eps">312</div>
+      <div class="chip-label">Events / sec (Simulated)</div>
+    </div>
+    <div class="metric-chip">
+      <div class="chip-val" style="color:var(--teal)" id="m-latency">2.3s</div>
+      <div class="chip-label">E2E Latency</div>
+    </div>
+    <div class="metric-chip">
+      <div class="chip-val" style="color:var(--green)" id="m-indexed">4.27M</div>
+      <div class="chip-label">Total Indexed</div>
+    </div>
+    <div class="metric-chip">
+      <div class="chip-val" style="color:var(--amber)" id="m-lag">42</div>
+      <div class="chip-label">Kafka Lag</div>
+    </div>
+  </div>
+
+  <div class="pipeline-canvas" style="height:220px" id="pipeline-canvas">
+    <div class="pipe-node healthy" id="node-src" style="left:10px;top:80px;width:110px;background:var(--bg1)">
+      <div class="node-label">Data Sources</div>
+      <div class="node-value" style="color:var(--green)">4 active</div>
+      <div class="node-sub">Filebeat · Zeek · Sim</div>
+    </div>
+    <div class="pipe-node active" id="node-kafka" style="left:160px;top:60px;width:130px;background:var(--bg1)">
+      <div class="node-label">Kafka Cluster (Target)</div>
+      <div class="node-value" style="color:var(--blue)" id="kafka-eps">312 EPS</div>
+      <div class="node-sub">3 brokers · 6 topics</div>
+    </div>
+    <div class="pipe-node active" id="node-ls" style="left:330px;top:60px;width:130px;background:var(--bg1)">
+      <div class="node-label">Logstash (Target)</div>
+      <div class="node-value" style="color:var(--teal)" id="ls-eps">298 EPS</div>
+      <div class="node-sub">4 workers · grok+GeoIP</div>
+    </div>
+    <div class="pipe-node healthy" id="node-ai" style="left:330px;top:155px;width:130px;background:var(--bg1)">
+      <div class="node-label">AI Inference (Target)</div>
+      <div class="node-value" style="color:var(--purple)">Python Script</div>
+      <div class="node-sub">XGBoost (actual) · direct ES bulk write</div>
+    </div>
+    <div class="pipe-node healthy" id="node-es" style="left:500px;top:60px;width:130px;background:var(--bg1)">
+      <div class="node-label">Elasticsearch</div>
+      <div class="node-value" style="color:var(--green)" id="es-rate">312 docs/s</div>
+      <div class="node-sub">3 nodes · 12 shards</div>
+    </div>
+    <div class="pipe-node active" id="node-viz" style="left:500px;top:155px;width:130px;background:var(--bg1)">
+      <div class="node-label">Kibana + Grafana</div>
+      <div class="node-value" style="color:var(--amber)">Live</div>
+      <div class="node-sub">2s refresh · RBAC</div>
+    </div>
+    <svg style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none" id="pipe-svg">
+      <defs><marker id="pa" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M2 2L8 5L2 8" fill="none" stroke="#3b82f6" stroke-width="1.5"/></marker></defs>
+      <line x1="120" y1="118" x2="158" y2="118" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#pa)"/>
+      <line x1="290" y1="118" x2="328" y2="118" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#pa)"/>
+      <line x1="460" y1="118" x2="498" y2="118" stroke="#22c55e" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#pa)"/>
+      <line x1="395" y1="120" x2="395" y2="153" stroke="#a855f7" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#pa)"/>
+      <line x1="565" y1="120" x2="565" y2="153" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#pa)"/>
+    </svg>
+    <div id="particles-container" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none"></div>
+  </div>
+</div>
+
+<div class="grid2">
+  <div class="panel">
+    <div class="panel-header">
+      <span class="panel-title">Kafka Topics (Target Architecture — Simulated)</span>
+      <span class="badge blue">3 brokers · RF=2</span>
+    </div>
+    <div id="kafka-topics"></div>
+    <div style="margin-top:10px">
+      <div class="param-row">
+        <span class="param-label">Replay EPS target</span>
+        <input type="range" min="50" max="1000" step="50" value="312" oninput="setEPS(this.value)" id="eps-slider">
+        <span class="param-val" id="eps-val">312</span>
+      </div>
+      <div class="param-row">
+        <span class="param-label">Partitions / topic</span>
+        <input type="range" min="1" max="12" step="1" value="3" oninput="setParts(this.value)" id="parts-slider">
+        <span class="param-val" id="parts-val">3</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-header">
+      <span class="panel-title">Elasticsearch Indices</span>
+      <span class="badge green">Live index data</span>
+    </div>
+    <div id="es-indices"></div>
+    <div style="margin-top:10px;display:flex;gap:6px">
+      <button class="btn secondary" style="font-size:11px" onclick="sendPrompt('Show me the complete Elasticsearch ILM policy configuration for AI-SecOpt with hot, warm, cold, and delete phases')">ILM Policy ↗</button>
+      <button class="btn secondary" style="font-size:11px" onclick="sendPrompt('Generate the Elasticsearch index template JSON for the AI-SecOpt siem-events index with optimal shard and mapping settings')">Index Template ↗</button>
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel-header">
+    <span class="panel-title">Logstash Pipeline Log</span>
+    <div style="display:flex;gap:6px">
+      <button class="btn secondary" style="font-size:11px" onclick="sendPrompt('Generate the complete Logstash pipeline configuration for AI-SecOpt including grok patterns, GeoIP enrichment, MITRE ATT&CK tagging, and Kafka input/output')">Full Config ↗</button>
+    </div>
+  </div>
+  <div class="log-box" id="pipeline-log">
+    <div class="log-ok">[Logstash] Pipeline started: siem-main, infra-metrics, cloud-audit</div>
+    <div class="log-info">[Kafka] Consumer group: logstash-siem · Subscribed to 6 topics</div>
+    <div class="log-ok">[GeoIP] Database loaded: GeoLite2-City.mmdb (38.2 MB)</div>
+    <div class="log-ok">[ThreatIntel] Dictionary loaded: threatintel.yml (12,847 IOCs)</div>
+    <div class="log-ok">[ES] Connection established: 3/3 nodes healthy · cluster: ai-secopt</div>
+    <div class="log-info">[Pipeline] Processing at 312 EPS across 4 worker threads</div>
+  </div>
+</div>
+
+<div style="display:flex;gap:8px;justify-content:flex-end;margin-top:4px">
+  <button class="btn secondary" onclick="sendPrompt('Generate the complete Docker Compose file for the AI-SecOpt pipeline stack: Kafka, ZooKeeper, Logstash, Elasticsearch, Kibana, Prometheus, Grafana')">Docker Compose ↗</button>
+  <button class="btn secondary" onclick="sendPrompt('Generate the Kubernetes Helm values.yaml for the AI-SecOpt ELK stack deployment with resource limits, persistence, and ingress configuration')">Helm Chart ↗</button>
+  <button class="btn" onclick="sendPrompt('Run a performance load test on the AI-SecOpt pipeline: increase to 500 EPS, monitor Kafka lag, Elasticsearch CPU, and end-to-end latency')">Load Test ↗</button>
+</div>
+
+<script>
+let pipelineRunning = true;
+let eps = 312;
+let totalIndexed = 4270000;
+let lagCount = 42;
+let simInterval;
+let particleTimer;
+
+const TOPICS = [
+  {name:'siem-events-raw', lag:18, msgs:'1.2M', partitions:3},
+  {name:'siem-events-enriched', lag:12, msgs:'1.1M', partitions:3},
+  {name:'infra-metrics', lag:6, msgs:'890K', partitions:2},
+  {name:'cloud-audit-logs', lag:4, msgs:'234K', partitions:2},
+  {name:'threat-intel-updates', lag:2, msgs:'12K', partitions:1},
+];
+// ── Real index list, fetched live from your Elasticsearch instance ──
+let INDICES = [];
+let TOTAL_INDEXED = 0;
+
+async function fetchRealIndices() {
+  const response = await fetch('http://localhost:9200/_cat/indices/ai-secopt-*,metricbeat-*?format=json&bytes=b');
+  const data = await response.json();
+
+  INDICES = data
+    .filter(idx => !idx.index.startsWith('.'))  // exclude internal system indices
+    .map(idx => ({
+      name: idx.index,
+      docs: parseInt(idx['docs.count'] || 0),
+      sizeBytes: parseInt(idx['store.size'] || 0),
+      health: idx.health
+    }));
+
+  TOTAL_INDEXED = INDICES.reduce((sum, idx) => sum + idx.docs, 0);
+}
+
+function formatSize(bytes) {
+  if (bytes >= 1e9) return (bytes / 1e9).toFixed(2) + ' GB';
+  if (bytes >= 1e6) return (bytes / 1e6).toFixed(1) + ' MB';
+  return (bytes / 1e3).toFixed(0) + ' KB';
+}
+
+function formatDocs(n) {
+  if (n >= 1e6) return (n / 1e6).toFixed(2) + 'M';
+  if (n >= 1e3) return (n / 1e3).toFixed(0) + 'K';
+  return n.toString();
+}
+
+const PIPELINE_LOGS = [
+  ['[siem-main] Processed 1000 events · lag: {lag}ms · filter matched: 98.2%', 'ok'],
+  ['[infra] Prometheus metrics batch: 180 time-series ingested', 'info'],
+  ['[GeoIP] Enriched 847 events · 12 unique countries detected', 'info'],
+  ['[ThreatIntel] IOC match: 3 events flagged → anomaly score +0.3', 'warn'],
+  ['[AI-Inference] Anomaly detected: score=0.87 → es index: ml-anomalies', 'warn'],
+  ['[ES] Bulk indexing: 1000 docs in 180ms · shards: 3/3 active', 'ok'],
+  ['[MITRE] TTP tagged: T1498.001 (DDoS Amplification) → 2 events', 'warn'],
+  ['[siem-main] Processed 1000 events · throughput: {eps} EPS', 'ok'],
+  ['[GeoIP] New country: CN → 14 events from AS4134', 'info'],
+  ['[ES] ILM: siem-events-old rollover triggered → warm phase', 'info'],
+  ['[Kafka] Consumer lag spike: siem-events-raw → {lag} msgs behind', 'warn'],
+  ['[AI-Inference] XGBoost: DDoS classified (confidence: 0.94) → alert generated', 'warn'],
+];
+
+function renderTopics() {
+  const c = document.getElementById('kafka-topics');
+  c.innerHTML = '';
+  TOPICS.forEach(t => {
+    const lagPct = Math.min(t.lag/100*100, 100);
+    const lagColor = t.lag > 20 ? 'var(--red)' : t.lag > 10 ? 'var(--amber)' : 'var(--green)';
+    c.innerHTML += `<div class="kafka-topic">
+      <span class="topic-name">${t.name}</span>
+      <span class="topic-stats">${t.partitions}p · ${t.msgs}</span>
+      <div class="lag-bar"><div class="lag-fill" style="width:${lagPct}%;background:${lagColor}"></div></div>
+      <span style="font-size:10px;color:${lagColor};min-width:28px;text-align:right">${t.lag}</span>
+    </div>`;
+  });
+}
+renderTopics();
+
+function renderIndices() {
+  const c = document.getElementById('es-indices');
+  c.innerHTML = '';
+  INDICES.forEach(idx => {
+    const healthColor = idx.health === 'green' ? 'var(--green)' : idx.health === 'yellow' ? 'var(--amber)' : 'var(--red)';
+    c.innerHTML += `<div class="es-index">
+      <span class="index-name">${idx.name}</span>
+      <span style="font-size:10px;color:var(--text3)">${formatDocs(idx.docs)} docs · ${formatSize(idx.sizeBytes)}</span>
+      <div class="shard-dots"><div class="shard-dot" style="background:${healthColor}"></div></div>
+    </div>`;
+  });
+}
+fetchRealIndices().then(() => {
+  renderIndices();
+  document.getElementById('m-indexed').textContent = formatDocs(TOTAL_INDEXED);
+});
+
+function addPipelineLog(msg, cls) {
+  const log = document.getElementById('pipeline-log');
+  const d = document.createElement('div');
+  d.className = 'log-'+cls;
+  d.textContent = msg.replace('{lag}', Math.round(lagCount*2.3)).replace('{eps}', eps);
+  log.appendChild(d);
+  log.scrollTop = log.scrollHeight;
+  if(log.children.length > 60) log.removeChild(log.firstChild);
+}
+
+function spawnParticle(color) {
+  const container = document.getElementById('particles-container');
+  const routes = [
+    {x1:120,y1:118,x2:155,y2:118},
+    {x1:290,y1:118,x2:325,y2:118},
+    {x1:460,y1:118,x2:495,y2:118},
+  ];
+  const route = routes[Math.floor(Math.random()*routes.length)];
+  const p = document.createElement('div');
+  p.className = 'flow-particle';
+  p.style.cssText = `left:${route.x1}px;top:${route.y1-4}px;background:${color};width:7px;height:7px;opacity:.9`;
+  container.appendChild(p);
+  const dist = route.x2 - route.x1;
+  let pos = 0;
+  const speed = 2 + Math.random()*2;
+  const tick = setInterval(() => {
+    pos += speed;
+    p.style.left = (route.x1 + pos) + 'px';
+    if (pos >= dist) {
+      clearInterval(tick);
+      container.removeChild(p);
+    }
+  }, 16);
+}
+
+function runSimulation() {
+  simInterval = setInterval(() => {
+    if(!pipelineRunning) return;
+    totalIndexed += eps;
+    lagCount = Math.max(0, lagCount + Math.floor(Math.random()*6-3));
+    const jitter = Math.floor(Math.random()*20-10);
+    const latency = (2.3 + Math.random()*0.4).toFixed(1);
+    document.getElementById('m-eps').textContent = eps+jitter;
+    document.getElementById('m-latency').textContent = latency+'s';
+    /*document.getElementById('m-indexed').textContent = (totalIndexed/1000000).toFixed(2)+'M';*/
+    document.getElementById('m-lag').textContent = lagCount;
+    document.getElementById('kafka-eps').textContent = (eps+jitter)+' EPS';
+    document.getElementById('ls-eps').textContent = (eps+jitter-Math.floor(Math.random()*15))+' EPS';
+    document.getElementById('es-rate').textContent = (eps+jitter)+' docs/s';
+    TOPICS[0].lag = lagCount;
+    TOPICS[1].lag = Math.max(0,lagCount-6);
+    renderTopics();
+    const colors = ['#3b82f6','#06b6d4','#22c55e'];
+    const n = Math.min(Math.ceil(eps/100), 4);
+    for(let i=0;i<n;i++) setTimeout(()=>spawnParticle(colors[Math.floor(Math.random()*3)]), i*100);
+  }, 1200);
+
+  let logIdx = 0;
+  setInterval(() => {
+    if(!pipelineRunning) return;
+    const entry = PIPELINE_LOGS[logIdx % PIPELINE_LOGS.length];
+    addPipelineLog(entry[0], entry[1]);
+    logIdx++;
+  }, 2500);
+}
+runSimulation();
+
+function togglePipeline() {
+  pipelineRunning = !pipelineRunning;
+  const btn = document.getElementById('toggle-btn');
+  const status = document.getElementById('pipeline-status');
+  btn.textContent = pipelineRunning ? 'Pause Pipeline' : 'Resume Pipeline';
+  btn.className = pipelineRunning ? 'btn' : 'btn red';
+  status.textContent = pipelineRunning ? '● Pipeline Running' : '● Pipeline Paused';
+  status.className = pipelineRunning ? 'badge green' : 'badge red';
+  addPipelineLog(pipelineRunning ? '[Pipeline] Resumed — consumers reconnecting...' : '[Pipeline] PAUSED — Kafka lag will accumulate', pipelineRunning?'ok':'warn');
+}
+
+function injectAttack() {
+  lagCount += 80;
+  addPipelineLog('[INJECT] DDoS simulation: 2,400 EPS burst injected → lag accumulating', 'warn');
+  addPipelineLog('[AI-Inference] Isolation Forest: 847 anomalies detected in burst window', 'warn');
+  addPipelineLog('[AI-Inference] XGBoost: DDoS classified (confidence: 0.97) → CRITICAL alert', 'err');
+  addPipelineLog('[ES] Bulk reject: 2 events rejected (indexing queue full) → retry in 1s', 'warn');
+  let burst = 2400;
+  const decay = setInterval(() => {
+    burst = Math.max(eps, burst - 200);
+    document.getElementById('m-eps').textContent = burst;
+    if(burst <= eps) clearInterval(decay);
+  }, 400);
+}
+
+function setEPS(val) {
+  eps = parseInt(val);
+  document.getElementById('eps-val').textContent = val;
+  addPipelineLog(`[Config] EPS target updated: ${val} events/sec → applying throttle`, 'info');
+}
+
+function setParts(val) {
+  document.getElementById('parts-val').textContent = val;
+  addPipelineLog(`[Kafka] Partition count updated: ${val} partitions/topic → rebalancing consumers`, 'info');
+}
+</script>

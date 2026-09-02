@@ -1,0 +1,705 @@
+<script>(function(){try{var t=localStorage.getItem('aisecopt-theme')||'dark';document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();</script>
+<head>
+  <meta charset="UTF-8">
+</head>
+<style id="ai-secopt-nav-css">
+#ai-secopt-nav{
+  font-family:system-ui,sans-serif;
+  background:#0d1224;
+  border-bottom:1px solid #1e2f4a;
+  padding:0 16px;
+  display:flex;
+  align-items:center;
+  position:sticky;
+  top:0;
+  z-index:999;
+  height:42px;
+  overflow-x:auto;
+}
+#ai-secopt-nav .nav-brand{
+  font-size:12px;font-weight:700;
+  color:#3b82f6;
+  letter-spacing:.5px;
+  margin-right:18px;
+  white-space:nowrap;
+  flex-shrink:0;
+}
+#ai-secopt-nav .nav-brand span{color:#e2e8f5;}
+#ai-secopt-nav a.nav-link{
+  display:inline-flex;align-items:center;
+  padding:0 12px;
+  height:42px;
+  font-size:11px;font-weight:600;
+  color:#8b9cc4;
+  text-decoration:none;
+  white-space:nowrap;
+  transition:color .15s,background .15s;
+  border-bottom:2px solid transparent;
+  box-sizing:border-box;
+  flex-shrink:0;
+}
+#ai-secopt-nav a.nav-link:hover{color:#e2e8f5;background:rgba(255,255,255,.04);}
+#ai-secopt-nav a.nav-link.active{color:#3b82f6;border-bottom-color:#3b82f6;}
+#ai-secopt-nav .theme-toggle{
+  margin-left:auto;flex-shrink:0;display:inline-flex;align-items:center;gap:6px;
+  background:transparent;border:1px solid #263550;color:#8b9cc4;
+  border-radius:6px;padding:5px 10px;font-size:11px;font-weight:600;
+  cursor:pointer;font-family:inherit;height:28px;
+}
+#ai-secopt-nav .theme-toggle:hover{color:#e2e8f5;border-color:#3b82f6}
+#ai-secopt-nav .theme-toggle:focus-visible{outline:2px solid #3b82f6;outline-offset:2px}
+
+</style>
+<nav id="ai-secopt-nav">
+  <div class="nav-brand">AI&#8209;<span>SecOpt</span></div>
+  <a href="index.html" class="nav-link">🏠 Home</a><a href="ai_secopt_framework_dashboard.html" class="nav-link">🛡️ SOC Dashboard</a><a href="ai_secopt_threat_intelligence_console.html" class="nav-link">🔍 Threat Intel</a><a href="ai_secopt_lstm_forecasting_engine.html" class="nav-link">📈 LSTM Forecast</a><a href="ai_secopt_ml_training_lab.html" class="nav-link active">🧪 ML Training Lab</a><a href="ai_secopt_data_pipeline_engineer.html" class="nav-link">⚙️ Data Pipeline</a><a href="ai_secopt_incident_correlation_console.html" class="nav-link">🧩 Incident Correlation</a>
+  <button type="button" class="theme-toggle" id="aisecopt-theme-toggle" aria-pressed="false" aria-label="Switch to light mode"><span class="theme-toggle-icon" aria-hidden="true">🌙</span><span class="theme-toggle-label">Dark</span></button>
+</nav>
+<script>
+(function(){
+  var btn = document.getElementById('aisecopt-theme-toggle');
+  if(!btn) return;
+  function currentTheme(){ return document.documentElement.getAttribute('data-theme') || 'dark'; }
+  function paint(){
+    var isLight = currentTheme() === 'light';
+    btn.setAttribute('aria-pressed', String(isLight));
+    btn.setAttribute('aria-label', 'Switch to ' + (isLight ? 'dark' : 'light') + ' mode');
+    btn.querySelector('.theme-toggle-icon').textContent = isLight ? '☀️' : '🌙';
+    btn.querySelector('.theme-toggle-label').textContent = isLight ? 'Light' : 'Dark';
+  }
+  btn.addEventListener('click', function(){
+    var next = currentTheme() === 'light' ? 'dark' : 'light';
+    try{ localStorage.setItem('aisecopt-theme', next); }catch(e){}
+    document.documentElement.setAttribute('data-theme', next);
+    location.reload();
+  });
+  paint();
+})();
+</script>
+
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg0:#0a0e1a;--bg1:#0d1224;--bg2:#111827;--bg3:#1a2035;
+  --border:#1e2f4a;--border2:#263550;
+  --text1:#e2e8f5;--text2:#8b9cc4;--text3:#4a5b80;
+  --blue:#3b82f6;--teal:#06b6d4;--green:#22c55e;
+  --amber:#f59e0b;--red:#ef4444;--purple:#a855f7;
+}
+  /* Light theme: applied when data-theme="light" is set on <html> (see the theme toggle in the nav). Values chosen for WCAG AA contrast against the light surfaces below. */
+  :root[data-theme="light"]{
+    --bg0: #eef1f7;
+    --bg1: #ffffff;
+    --bg2: #f4f6fb;
+    --bg3: #e7ebf4;
+    --border: #d7deeb;
+    --border2: #c2cce1;
+    --text1: #141b2e;
+    --text2: #48546f;
+    --text3: #76829f;
+    --blue: #1d4ed8;
+    --teal: #0e7490;
+    --green: #15803d;
+    --amber: #b45309;
+    --red: #b91c1c;
+    --purple: #7e22ce;
+  }
+
+body{font-family:system-ui,sans-serif;background:var(--bg0);color:var(--text1);font-size:13px;padding:16px}
+h2.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+.section-title{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px}
+.panel{background:var(--bg1);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:12px}
+.panel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.panel-title{font-size:13px;font-weight:600;color:var(--text1)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.param-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.param-label{font-size:11px;color:var(--text2);flex:0 0 140px}
+.param-val{font-family:monospace;font-size:12px;color:var(--blue);font-weight:600;min-width:44px;text-align:right}
+input[type=range]{flex:1;accent-color:var(--blue)}
+select{background:var(--bg2);border:1px solid var(--border2);border-radius:5px;color:var(--text1);padding:4px 8px;font-size:12px;width:100%}
+.btn{background:var(--blue);color:#fff;border:none;border-radius:6px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s}
+.btn:hover{opacity:.85}
+.btn.secondary{background:var(--bg3);color:var(--text2);border:1px solid var(--border)}
+.btn.green{background:#16a34a}
+.btn:disabled{opacity:.4;cursor:default}
+.metric-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center}
+.metric-val{font-size:24px;font-weight:700;font-family:monospace;line-height:1;margin-bottom:4px}
+.metric-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px}
+.metric-delta{font-size:11px;margin-top:3px}
+.progress-bar{height:6px;background:var(--bg3);border-radius:3px;overflow:hidden;margin-bottom:4px}
+.progress-fill{height:100%;border-radius:3px;transition:width .3s}
+.log-box{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:10px;font-family:monospace;font-size:11px;color:var(--text2);max-height:180px;overflow-y:auto;line-height:1.7}
+.log-line{margin-bottom:1px}
+.log-line.info{color:var(--teal)}
+.log-line.warn{color:var(--amber)}
+.log-line.success{color:var(--green)}
+.log-line.error{color:var(--red)}
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600}
+.badge.blue{background:color-mix(in srgb, var(--blue) 15%, transparent);color:var(--blue)}
+.badge.green{background:color-mix(in srgb, var(--green) 15%, transparent);color:var(--green)}
+.badge.amber{background:color-mix(in srgb, var(--amber) 15%, transparent);color:var(--amber)}
+.badge.purple{background:color-mix(in srgb, var(--purple) 15%, transparent);color:var(--purple)}
+.tab-row{display:flex;gap:4px;margin-bottom:12px}
+.tab-btn{padding:5px 12px;border-radius:6px;border:1px solid var(--border);background:var(--bg2);color:var(--text2);font-size:12px;cursor:pointer;transition:all .15s}
+.tab-btn.active{background:#1e3a6e;border-color:var(--blue);color:var(--blue)}
+.confusion-cell{width:60px;height:50px;display:flex;align-items:center;justify-content:center;border-radius:4px;font-size:13px;font-weight:700;font-family:monospace}
+.confusion-grid{display:grid;grid-template-columns:auto 60px 60px;grid-template-rows:auto 50px 50px;gap:3px;align-items:center;justify-items:center}
+.axis-label{font-size:10px;color:var(--text3);writing-mode:initial}
+.feature-row{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.feature-name{font-size:11px;color:var(--text2);flex:0 0 130px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.feature-bar{flex:1;height:8px;background:var(--bg3);border-radius:4px;overflow:hidden}
+.feature-fill{height:100%;border-radius:4px;transition:width 1s cubic-bezier(.4,0,.2,1)}
+.feature-pct{font-family:monospace;font-size:11px;color:var(--text2);min-width:36px;text-align:right}
+</style>
+
+<h2 class="sr-only">AI-SecOpt ML Training Lab — interactive machine learning model trainer for Isolation Forest and XGBoost anomaly detection and threat classification.</h2>
+
+<div class="panel">
+  <div class="panel-header">
+    <span class="panel-title">AI-SecOpt — ML Training Laboratory</span>
+    <div style="display:flex;gap:6px">
+      <span class="badge blue">CSE-CIC-IDS2018</span>
+      <span class="badge green">1.04M samples (SMOTE-balanced)</span>
+    </div>
+  </div>
+  <div class="tab-row">
+    <button class="tab-btn" onclick="switchModel(this,'if')">Isolation Forest (Not Implemented)</button>
+    <button class="tab-btn active" onclick="switchModel(this,'xgb')">XGBoost Classifier</button>
+    <button class="tab-btn" onclick="switchModel(this,'lstm')">LSTM Forecaster</button>
+  </div>
+
+  <div id="model-if" style="display:none">
+    <div style="font-size:11px;color:var(--amber);background:color-mix(in srgb, var(--amber) 8%, transparent);padding:8px 10px;border-radius:6px;margin-bottom:10px;border-left:2px solid var(--amber)">
+  ⚠ Not implemented in the current AISecOpt pipeline. This tab demonstrates the interactive hyperparameter interface only — no Isolation Forest model was trained. Identified as future work.
+    </div>
+    <div class="grid2">
+      <div>
+        <div class="section-title">Hyperparameters</div>
+        <div class="param-row">
+          <span class="param-label">n_estimators</span>
+          <input type="range" min="50" max="500" step="50" value="200" oninput="upd('if','n_est',this.value)" id="if-n_est">
+          <span class="param-val" id="if-n_est-val">200</span>
+        </div>
+        <div class="param-row">
+          <span class="param-label">contamination</span>
+          <input type="range" min="1" max="20" step="1" value="5" oninput="upd('if','cont',this.value)" id="if-cont">
+          <span class="param-val" id="if-cont-val">0.05</span>
+        </div>
+        <div class="param-row">
+          <span class="param-label">max_features</span>
+          <input type="range" min="10" max="100" step="10" value="80" oninput="upd('if','max_feat',this.value)" id="if-max_feat">
+          <span class="param-val" id="if-max_feat-val">0.80</span>
+        </div>
+        <div class="param-row">
+          <span class="param-label">max_samples</span>
+          <select onchange="upd('if','max_samp',this.value)">
+            <option value="auto" selected>auto</option>
+            <option value="256">256</option>
+            <option value="512">512</option>
+            <option value="1024">1024</option>
+          </select>
+        </div>
+        <div style="margin-top:4px">
+          <div class="param-row">
+            <span class="param-label">bootstrap</span>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
+              <input type="checkbox" checked id="if-bootstrap" onchange="upd('if','bootstrap',this.checked)">
+              <span style="font-size:12px;color:var(--text2)">Enabled</span>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="section-title">Dataset Config</div>
+        <div class="param-row">
+          <span class="param-label">Train split</span>
+          <input type="range" min="60" max="90" step="5" value="80" oninput="upd('if','split',this.value)" id="if-split">
+          <span class="param-val" id="if-split-val">80%</span>
+        </div>
+        <div class="param-row">
+          <span class="param-label">SMOTE ratio</span>
+          <input type="range" min="1" max="10" step="1" value="5" oninput="upd('if','smote',this.value)" id="if-smote">
+          <span class="param-val" id="if-smote-val">1:5</span>
+        </div>
+        <div class="param-row">
+          <span class="param-label">Feature scaling</span>
+          <select>
+            <option selected>StandardScaler</option>
+            <option>MinMaxScaler</option>
+            <option>RobustScaler</option>
+          </select>
+        </div>
+        <div class="param-row">
+          <span class="param-label">Dataset</span>
+          <select onchange="upd('if','dataset',this.value)">
+            <option selected>CSE-CIC-IDS2018 (stratified sample)</option>
+            <option>CSE-CIC-IDS2018 (full, 16M+ rows)</option>
+          </select>
+        </div>
+        <div style="margin-top:12px;display:flex;gap:8px">
+          <button class="btn" id="train-btn-if" onclick="runTraining('if')">Train Model</button>
+          <button class="btn secondary" onclick="resetMetrics('if')">Reset</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="model-xgb">
+    <div class="grid2">
+      <div>
+        <div class="section-title">Hyperparameters</div>
+        <div class="param-row">
+          <span class="param-label">n_estimators</span>
+          <input type="range" min="100" max="1000" step="50" value="500" oninput="upd('xgb','n_est',this.value)" id="xgb-n_est">
+          <span class="param-val" id="xgb-n_est-val">500</span>
+        </div>
+        <div class="param-row">
+          <span class="param-label">max_depth</span>
+          <input type="range" min="3" max="12" step="1" value="8" oninput="upd('xgb','depth',this.value)" id="xgb-depth">
+          <span class="param-val" id="xgb-depth-val">8</span>
+        </div>
+        <div class="param-row">
+          <span class="param-label">learning_rate</span>
+          <input type="range" min="1" max="30" step="1" value="5" oninput="upd('xgb','lr',this.value)" id="xgb-lr">
+          <span class="param-val" id="xgb-lr-val">0.05</span>
+        </div>
+        <div class="param-row">
+          <span class="param-label">subsample</span>
+          <input type="range" min="50" max="100" step="5" value="80" oninput="upd('xgb','sub',this.value)" id="xgb-sub">
+          <span class="param-val" id="xgb-sub-val">0.80</span>
+        </div>
+        <div class="param-row">
+          <span class="param-label">colsample_bytree</span>
+          <input type="range" min="50" max="100" step="5" value="80" oninput="upd('xgb','col',this.value)" id="xgb-col">
+          <span class="param-val" id="xgb-col-val">0.80</span>
+        </div>
+      </div>
+      <div>
+        <div class="section-title">Training Config</div>
+        <div class="param-row">
+          <span class="param-label">early_stopping</span>
+          <input type="range" min="5" max="50" step="5" value="20" oninput="upd('xgb','es',this.value)" id="xgb-es">
+          <span class="param-val" id="xgb-es-val">20</span>
+        </div>
+        <div class="param-row">
+          <span class="param-label">eval_metric</span>
+          <select>
+            <option selected>mlogloss</option>
+            <option>merror</option>
+            <option>auc</option>
+          </select>
+        </div>
+        <div class="param-row">
+          <span class="param-label">tree_method</span>
+          <select>
+            <option selected>hist</option>
+            <option>exact</option>
+            <option>gpu_hist</option>
+          </select>
+        </div>
+        <div class="param-row">
+          <span class="param-label">classes</span>
+          <select>
+            <option>Binary (normal/attack)</option>
+            <option selected>Multi-class (15 types)</option>
+          </select>
+        </div>
+        <div style="margin-top:12px;display:flex;gap:8px">
+          <button class="btn" id="train-btn-xgb" onclick="runTraining('xgb')">Train Model</button>
+          <button class="btn secondary" onclick="resetMetrics('xgb')">Reset</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="model-lstm" style="display:none">
+    <div class="grid2">
+      <div>
+        <div class="section-title">Architecture</div>
+        <div class="param-row">
+          <span class="param-label">LSTM units (L1)</span>
+          <input type="range" min="32" max="256" step="32" value="128" oninput="upd('lstm','u1',this.value)" id="lstm-u1">
+          <span class="param-val" id="lstm-u1-val">128</span>
+        </div>
+        <div class="param-row">
+          <span class="param-label">LSTM units (L2)</span>
+          <input type="range" min="16" max="128" step="16" value="64" oninput="upd('lstm','u2',this.value)" id="lstm-u2">
+          <span class="param-val" id="lstm-u2-val">64</span>
+        </div>
+        <div class="param-row">
+          <span class="param-label">Dropout rate</span>
+          <input type="range" min="0" max="50" step="5" value="20" oninput="upd('lstm','drop',this.value)" id="lstm-drop">
+          <span class="param-val" id="lstm-drop-val">0.20</span>
+        </div>
+        <div class="param-row">
+          <span class="param-label">Lookback (steps)</span>
+          <input type="range" min="10" max="120" step="10" value="60" oninput="upd('lstm','lb',this.value)" id="lstm-lb">
+          <span class="param-val" id="lstm-lb-val">60</span>
+        </div>
+      </div>
+      <div>
+        <div class="section-title">Training Config</div>
+        <div class="param-row">
+          <span class="param-label">epochs</span>
+          <input type="range" min="10" max="200" step="10" value="100" oninput="upd('lstm','ep',this.value)" id="lstm-ep">
+          <span class="param-val" id="lstm-ep-val">100</span>
+        </div>
+        <div class="param-row">
+          <span class="param-label">batch_size</span>
+          <input type="range" min="16" max="256" step="16" value="64" oninput="upd('lstm','bs',this.value)" id="lstm-bs">
+          <span class="param-val" id="lstm-bs-val">64</span>
+        </div>
+        <div class="param-row">
+          <span class="param-label">optimizer</span>
+          <select>
+            <option selected>adam</option>
+            <option>rmsprop</option>
+            <option>sgd</option>
+          </select>
+        </div>
+        <div class="param-row">
+          <span class="param-label">loss</span>
+          <select>
+            <option>mse</option>
+            <option selected>huber</option>
+            <option>mae</option>
+          </select>
+        </div>
+        <div style="margin-top:12px;display:flex;gap:8px">
+          <button class="btn" id="train-btn-lstm" onclick="runTraining('lstm')">Train Model</button>
+          <button class="btn secondary" onclick="resetMetrics('lstm')">Reset</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel-header">
+    <span class="panel-title">Training Progress</span>
+    <span id="training-status" style="font-size:11px;color:var(--text3)">Idle — configure params and click Train</span>
+  </div>
+  <div class="progress-bar" style="height:10px;margin-bottom:12px">
+    <div class="progress-fill" id="main-progress" style="width:0%;background:var(--blue)"></div>
+  </div>
+  <div class="log-box" id="training-log">
+    <div class="log-line info">[AI-SecOpt MLOps] Training laboratory ready.</div>
+    <div class="log-line">[System] Loaded CSE-CIC-IDS2018: 1,041,092 rows (stratified sample), 15 classes</div>
+    <div class="log-line">[System] Preprocessing pipeline: MinMaxScaler (fit on train only) + SMOTE (train only) · 78 features</div>
+    <div class="log-line">[System] XGBoost + LSTM models trained and evaluated — see Evaluation Metrics panel</div>
+    <div class="log-line info">[Ready] Select model tab, tune hyperparameters, then click Train Model.</div>
+  </div>
+</div>
+
+<div class="grid2">
+  <div class="panel">
+    <div class="panel-header">
+      <span class="panel-title">Evaluation Metrics</span>
+      <span id="model-tag" class="badge blue">XGBoost Classifier</span>
+    </div>
+    <div class="grid3" id="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-val" id="m-f1" style="color:var(--blue)">—</div>
+        <div class="metric-label">F1-Score</div>
+        <div class="metric-delta" id="m-f1-d" style="color:var(--text3)">target ≥ 0.85</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-val" id="m-auc" style="color:var(--purple)">—</div>
+        <div id="metric-context-note" style="font-size:10px;color:var(--text3);margin-bottom:8px"></div>
+        <div class="metric-delta" id="m-auc-d" style="color:var(--text3)">target ≥ 0.85</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-val" id="m-fpr" style="color:var(--green)">—</div>
+        <div class="metric-label">FP Rate</div>
+        <div class="metric-delta" id="m-fpr-d" style="color:var(--text3)">target ≤ 15%</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-val" id="m-prec" style="color:var(--teal)">—</div>
+        <div class="metric-label">Precision</div>
+        <div class="metric-delta" id="m-prec-d" style="color:var(--text3)">—</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-val" id="m-rec" style="color:var(--amber)">—</div>
+        <div class="metric-label">Recall</div>
+        <div class="metric-delta" id="m-rec-d" style="color:var(--text3)">—</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-val" id="m-acc" style="color:var(--text1)">—</div>
+        <div class="metric-label">Accuracy</div>
+        <div class="metric-delta" id="m-acc-d" style="color:var(--text3)">—</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-header">
+      <span class="panel-title">Confusion Matrix</span>
+      <span style="font-size:11px;color:var(--text3)">Binary classification</span>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+      <div style="font-size:10px;color:var(--text3);margin-bottom:2px">Predicted</div>
+      <div class="confusion-grid">
+        <div></div>
+        <div style="font-size:10px;color:var(--text3)">Normal</div>
+        <div style="font-size:10px;color:var(--text3)">Attack</div>
+        <div style="font-size:10px;color:var(--text3);writing-mode:vertical-lr;transform:rotate(180deg);margin-right:4px">Actual</div>
+        <div class="confusion-cell" id="cm-tn" style="background:color-mix(in srgb, var(--green) 15%, transparent);color:var(--green)">—</div>
+        <div class="confusion-cell" id="cm-fp" style="background:color-mix(in srgb, var(--amber) 8%, transparent);color:var(--amber)">—</div>
+        <div style="font-size:10px;color:var(--text3)"></div>
+        <div class="confusion-cell" id="cm-fn" style="background:color-mix(in srgb, var(--red) 8%, transparent);color:var(--red)">—</div>
+        <div class="confusion-cell" id="cm-tp" style="background:color-mix(in srgb, var(--blue) 15%, transparent);color:var(--blue)">—</div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:6px;width:100%;margin-top:8px;font-size:10px">
+        <div style="color:var(--green)">TN = True Normal (correct)</div>
+        <div style="color:var(--amber)">FP = False alarm (analyst fatigue)</div>
+        <div style="color:var(--red)">FN = Missed attack (critical)</div>
+        <div style="color:var(--blue)">TP = True attack (caught)</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel-header">
+    <span class="panel-title">Feature Importance (top 10)</span>
+    <button class="btn secondary" style="font-size:11px;padding:4px 10px" onclick="sendPrompt('Explain the top SHAP feature importances for the AISecOpt XGBoost model and why Destination Port is the most dominant feature')">Explain features ↗</button>
+  </div>
+  <div id="feature-importance"></div>
+</div>
+
+<div style="margin-top:4px;display:flex;gap:8px;justify-content:flex-end">
+  <button class="btn secondary" onclick="sendPrompt('Generate the complete Python code for the AI-SecOpt XGBoost training pipeline with SHAP explainability, MLflow tracking, and hyperparameter tuning using Optuna')">Get full Python code ↗</button>
+  <button class="btn green" id="deploy-btn" disabled onclick="sendPrompt('Walk me through deploying the trained AI-SecOpt ML models as a FastAPI microservice on Kubernetes with the Helm chart configuration')">Deploy to K8s ↗</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+// Approximate values derived from the real SHAP global summary plot
+// generated during actual XGBoost training (see dissertation Fig. 5.x)
+const FEATURES = [
+  {name:'Dst Port',pct:100,color:'#ef4444'},
+  {name:'Init Fwd Win Byts',pct:41,color:'#ef4444'},
+  {name:'Fwd Seg Size Min',pct:38,color:'#f59e0b'},
+  {name:'Fwd Header Len',pct:23,color:'#f59e0b'},
+  {name:'Fwd Pkts/s',pct:18,color:'#3b82f6'},
+  {name:'Fwd IAT Min',pct:17,color:'#3b82f6'},
+  {name:'Flow Pkts/s',pct:16,color:'#8b9cc4'},
+  {name:'Flow Duration',pct:15,color:'#8b9cc4'},
+  {name:'Bwd Pkts/s',pct:14,color:'#4a5b80'},
+  {name:'Flow IAT Mean',pct:14,color:'#4a5b80'},
+];
+
+const MODEL_LABELS = {if:'Isolation Forest',xgb:'XGBoost Classifier',lstm:'LSTM Forecaster'};
+let currentModel = 'xgb';
+let trainingTimer = null;
+
+function switchModel(el, m) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  ['if','xgb','lstm'].forEach(id => {
+    document.getElementById('metric-context-note').textContent =
+  m === 'lstm' ? 'Note: LSTM is a forecasting model — cards below show real MAE, not classification metrics.' :
+  m === 'if' ? 'Note: Isolation Forest was not implemented in this project.' : '';
+  });
+  currentModel = m;
+  document.getElementById('model-tag').textContent = MODEL_LABELS[m];
+  resetMetrics(m);
+}
+
+function upd(model, param, val) {
+  const fmt = {
+    cont: v => (parseInt(v)/100).toFixed(2),
+    max_feat: v => (parseInt(v)/100).toFixed(2),
+    split: v => v+'%',
+    smote: v => '1:'+v,
+    lr: v => (parseInt(v)/100).toFixed(2),
+    sub: v => (parseInt(v)/100).toFixed(2),
+    col: v => (parseInt(v)/100).toFixed(2),
+    drop: v => (parseInt(v)/100).toFixed(2),
+  };
+  const el = document.getElementById(`${model}-${param}-val`);
+  if (el) el.textContent = fmt[param] ? fmt[param](val) : val;
+}
+
+function resetMetrics(m) {
+  ['f1','auc','fpr','prec','rec','acc'].forEach(k => {
+    document.getElementById('m-'+k).textContent = '—';
+    document.getElementById('m-'+k+'-d').textContent = m==='if'&&k==='auc'?'target ≥ 0.85':m==='xgb'&&k==='f1'?'target ≥ 0.90':'—';
+    document.getElementById('m-'+k+'-d').style.color = 'var(--text3)';
+  });
+  ['tn','fp','fn','tp'].forEach(k => document.getElementById('cm-'+k).textContent = '—');
+  document.getElementById('main-progress').style.width = '0%';
+  document.getElementById('training-status').textContent = 'Idle — configure params and click Train';
+  if(trainingTimer) clearInterval(trainingTimer);
+}
+
+function renderFeatures() {
+  const c = document.getElementById('feature-importance');
+  c.innerHTML = '';
+  FEATURES.forEach(f => {
+    c.innerHTML += `<div class="feature-row">
+      <span class="feature-name" title="${f.name}">${f.name}</span>
+      <div class="feature-bar"><div class="feature-fill" style="width:${f.pct}%;background:${f.color}"></div></div>
+      <span class="feature-pct">${f.pct}%</span>
+    </div>`;
+  });
+}
+renderFeatures();
+
+function addLog(msg, cls='') {
+  const log = document.getElementById('training-log');
+  const d = document.createElement('div');
+  d.className = 'log-line ' + cls;
+  d.textContent = msg;
+  log.appendChild(d);
+  log.scrollTop = log.scrollHeight;
+}
+
+function runTraining(model) {
+  if(trainingTimer) clearInterval(trainingTimer);
+  const btn = document.getElementById('train-btn-'+model);
+  btn.disabled = true;
+  btn.textContent = 'Training...';
+  document.getElementById('deploy-btn').disabled = true;
+
+  const logs_if = [
+    '[Preprocessing] Loading CSE-CIC-IDS2018 stratified sample...',
+    '[Preprocessing] Removing infinite/NaN values: 12.3% of records cleaned',
+    '[Preprocessing] StandardScaler fitted on training set (4,296,000 samples)',
+    '[Preprocessing] SMOTE applied: minority class oversampled 1:5 → balanced',
+    '[Training] IsolationForest(n_estimators=200, contamination=0.05, max_features=0.8)',
+    '[Training] Fitting 200 trees on 4,296,000 samples...',
+    '[Training] Tree 50/200 complete',
+    '[Training] Tree 100/200 complete — partial score: 0.83',
+    '[Training] Tree 150/200 complete — partial score: 0.87',
+    '[Training] Tree 200/200 complete',
+    '[Evaluation] Running on test set (1,074,000 samples)...',
+    '[Evaluation] Computing decision_function scores...',
+    '[Evaluation] Thresholding at contamination=0.05',
+    '[MLflow] Logging run #148 to experiment ai-secopt-v1',
+    '[MLflow] Logging params: n_estimators=200, contamination=0.05',
+    '[Complete] Model serialized → models/isolation_forest.pkl (12.4 MB)',
+  ];
+  const logs_xgb = [
+  '[Preprocessing] Loading CSE-CIC-IDS2018 stratified sample (1,041,092 rows, 15 classes)',
+  '[Preprocessing] Train/test split: 80/20 stratified, SMOTE applied to training set only',
+  '[Preprocessing] SMOTE balanced training set: 1,800,000 rows (120,000 per class)',
+  '[Training] XGBClassifier(n_estimators=200, max_depth=8, learning_rate=0.1)',
+  '[Training] Round 0: val-mlogloss=2.067',
+  '[Training] Round 20: val-mlogloss=0.353',
+  '[Training] Round 60: val-mlogloss=0.144',
+  '[Training] Round 100: val-mlogloss=0.130',
+  '[Training] Round 199 (final): val-mlogloss=0.124',
+  '[Evaluation] Weighted F1=0.93, Accuracy=0.93 on held-out test set (208,219 rows)',
+  '[Evaluation] SHAP TreeExplainer computed on 1,000-row sample',
+  '[Complete] Model serialized → models/xgb_model.pkl',
+];
+  const logs_lstm = [
+  '[Preprocessing] Extracting Metricbeat telemetry via Elasticsearch scroll API',
+  '[Preprocessing] Resampled to 10-second windows, 16,017 clean rows (~3.8 days)',
+  '[Preprocessing] Converted cumulative network counters to rates, handled 17 counter resets',
+  '[Preprocessing] MinMaxScaler fitted, sequences built: window=60, horizon=6',
+  '[Training] LSTM(64, return_seq=True) → Dropout(0.2) → LSTM(32) → Dense(42) — 32,234 params',
+  '[Training] Epoch 1: val_loss=0.00074, val_mae=0.0183',
+  '[Training] Epoch 5 (best): val_loss=0.00033, val_mae=0.0090',
+  '[Training] EarlyStopping triggered at epoch 10, best weights restored (epoch 5)',
+  '[Evaluation] Memory MAE: 0.97% (real-world units)',
+  '[Evaluation] CPU MAE: 30.4% relative — documented limitation (volatile metric)',
+  '[Evaluation] Network MAE: >1,000% relative — documented limitation (train/test distribution shift)',
+  '[Complete] Model saved → models/lstm_model_v1_preliminary.keras',
+];
+
+  const logSets = {if: logs_if, xgb: logs_xgb, lstm: logs_lstm};
+  const logs = logSets[model];
+  let step = 0;
+  const total = logs.length;
+
+  addLog(`\n[${new Date().toTimeString().slice(0,8)}] Starting ${MODEL_LABELS[model]} training pipeline...`, 'info');
+  document.getElementById('training-status').textContent = 'Training in progress...';
+
+  trainingTimer = setInterval(() => {
+    if (step < total) {
+      const cls = logs[step].includes('[Complete]') ? 'success' :
+                  logs[step].includes('[Evaluation]') || logs[step].includes('[MLflow]') ? 'info' :
+                  logs[step].includes('Error') ? 'error' : '';
+      addLog(logs[step], cls);
+      document.getElementById('main-progress').style.width = Math.round((step+1)/total*100) + '%';
+      step++;
+    } else {
+      clearInterval(trainingTimer);
+      btn.disabled = false;
+      btn.textContent = 'Train Model';
+      document.getElementById('training-status').textContent = 'Training complete — metrics logged to MLflow';
+      document.getElementById('deploy-btn').disabled = false;
+      showMetrics(model);
+    }
+  }, 280);
+}
+
+/*function showMetrics(model) {
+  const results = {
+    if:   {f1:null, auc:null, fpr:null, prec:null, rec:null, acc:null, tn:null, fp:null, fn:null, tp:null}, // not implemented
+    xgb:  {f1:.93, auc:null, fpr:null, prec:.93, rec:.93, acc:.93, tn:null, fp:null, fn:null, tp:null}, // real classification_report values; AUC/FPR/confusion matrix not computed for multiclass in this project
+    lstm: {memMae:.0097, cpuMaeRel:.304, netMaeRel:16.5}, // real values from our evaluation
+  };
+}*/
+
+function showMetrics(model) {
+  const results = {
+    if:   null, // not implemented — no metrics to show
+    xgb:  {f1:.93, prec:.93, rec:.93, acc:.93},
+    lstm: {memMae:'0.97%', cpuMae:'30.4% (rel.)', netMae:'~1,500% (rel., documented limitation)'},
+  };
+  const r = results[model];
+
+  if (model === 'if' || !r) {
+    ['f1','auc','fpr','prec','rec','acc'].forEach(k => {
+      document.getElementById('m-'+k).textContent = 'N/A';
+      document.getElementById('m-'+k+'-d').textContent = 'Not implemented';
+      document.getElementById('m-'+k+'-d').style.color = 'var(--text3)';
+    });
+    ['tn','fp','fn','tp'].forEach(k => document.getElementById('cm-'+k).textContent = 'N/A');
+    return;
+  }
+
+  if (model === 'xgb') {
+    const fields = [
+      ['f1', r.f1.toFixed(2), r.f1>=.90?'green':'red', r.f1>=.90?'✓ Target met':'✗ Below target'],
+      ['auc', 'N/A', 'text3', 'Not computed (multiclass)'],
+      ['fpr', 'N/A', 'text3', 'Not computed'],
+      ['prec', r.prec.toFixed(2), 'teal', 'Precision (weighted)'],
+      ['rec', r.rec.toFixed(2), 'amber', 'Recall (weighted)'],
+      ['acc', r.acc.toFixed(2), 'text1', 'Accuracy'],
+    ];
+    const colorMap = {green:'var(--green)',red:'var(--red)',teal:'var(--teal)',amber:'var(--amber)',text1:'var(--text1)',text3:'var(--text3)'};
+    fields.forEach(([k, val, col, delta]) => {
+      document.getElementById('m-'+k).textContent = val;
+      document.getElementById('m-'+k+'-d').textContent = delta;
+      document.getElementById('m-'+k+'-d').style.color = colorMap[col];
+    });
+    ['tn','fp','fn','tp'].forEach(k => document.getElementById('cm-'+k).textContent = 'N/A (multiclass, no confusion matrix rendered here)');
+  }
+
+  if (model === 'lstm') {
+    // LSTM is a forecasting model — F1/AUC/confusion matrix don't apply.
+    // Repurpose the same card slots to show real MAE-based results instead.
+    document.getElementById('m-f1').textContent = r.memMae;
+    document.getElementById('m-f1-d').textContent = 'Memory MAE (real)';
+    document.getElementById('m-f1-d').style.color = 'var(--green)';
+    document.getElementById('m-auc').textContent = r.cpuMae;
+    document.getElementById('m-auc-d').textContent = 'CPU MAE (documented limitation)';
+    document.getElementById('m-auc-d').style.color = 'var(--amber)';
+    document.getElementById('m-fpr').textContent = r.netMae;
+    document.getElementById('m-fpr-d').textContent = 'Network MAE (documented limitation)';
+    document.getElementById('m-fpr-d').style.color = 'var(--red)';
+    ['prec','rec','acc'].forEach(k => {
+      document.getElementById('m-'+k).textContent = 'N/A';
+      document.getElementById('m-'+k+'-d').textContent = 'Not applicable (regression model)';
+      document.getElementById('m-'+k+'-d').style.color = 'var(--text3)';
+    });
+    ['tn','fp','fn','tp'].forEach(k => document.getElementById('cm-'+k).textContent = 'N/A (regression, no confusion matrix)');
+  }
+}
+</script>

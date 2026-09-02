@@ -1,0 +1,510 @@
+<script>(function(){try{var t=localStorage.getItem('aisecopt-theme')||'dark';document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();</script>
+<head>
+  <meta charset="UTF-8">
+</head>
+<style id="ai-secopt-nav-css">
+#ai-secopt-nav{
+  font-family:system-ui,sans-serif;
+  background:#0d1224;
+  border-bottom:1px solid #1e2f4a;
+  padding:0 16px;
+  display:flex;
+  align-items:center;
+  position:sticky;
+  top:0;
+  z-index:999;
+  height:42px;
+  overflow-x:auto;
+}
+#ai-secopt-nav .nav-brand{
+  font-size:12px;font-weight:700;
+  color:#3b82f6;
+  letter-spacing:.5px;
+  margin-right:18px;
+  white-space:nowrap;
+  flex-shrink:0;
+}
+#ai-secopt-nav .nav-brand span{color:#e2e8f5;}
+#ai-secopt-nav a.nav-link{
+  display:inline-flex;align-items:center;
+  padding:0 12px;
+  height:42px;
+  font-size:11px;font-weight:600;
+  color:#8b9cc4;
+  text-decoration:none;
+  white-space:nowrap;
+  transition:color .15s,background .15s;
+  border-bottom:2px solid transparent;
+  box-sizing:border-box;
+  flex-shrink:0;
+}
+#ai-secopt-nav a.nav-link:hover{color:#e2e8f5;background:rgba(255,255,255,.04);}
+#ai-secopt-nav a.nav-link.active{color:#3b82f6;border-bottom-color:#3b82f6;}
+#ai-secopt-nav .theme-toggle{
+  margin-left:auto;flex-shrink:0;display:inline-flex;align-items:center;gap:6px;
+  background:transparent;border:1px solid #263550;color:#8b9cc4;
+  border-radius:6px;padding:5px 10px;font-size:11px;font-weight:600;
+  cursor:pointer;font-family:inherit;height:28px;
+}
+#ai-secopt-nav .theme-toggle:hover{color:#e2e8f5;border-color:#3b82f6}
+#ai-secopt-nav .theme-toggle:focus-visible{outline:2px solid #3b82f6;outline-offset:2px}
+
+</style>
+<nav id="ai-secopt-nav">
+  <div class="nav-brand">AI&#8209;<span>SecOpt</span></div>
+  <a href="index.html" class="nav-link">🏠 Home</a><a href="ai_secopt_framework_dashboard.html" class="nav-link">🛡️ SOC Dashboard</a><a href="ai_secopt_threat_intelligence_console.html" class="nav-link">🔍 Threat Intel</a><a href="ai_secopt_lstm_forecasting_engine.html" class="nav-link active">📈 LSTM Forecast</a><a href="ai_secopt_ml_training_lab.html" class="nav-link">🧪 ML Training Lab</a><a href="ai_secopt_data_pipeline_engineer.html" class="nav-link">⚙️ Data Pipeline</a><a href="ai_secopt_incident_correlation_console.html" class="nav-link">🧩 Incident Correlation</a>
+  <button type="button" class="theme-toggle" id="aisecopt-theme-toggle" aria-pressed="false" aria-label="Switch to light mode"><span class="theme-toggle-icon" aria-hidden="true">🌙</span><span class="theme-toggle-label">Dark</span></button>
+</nav>
+<script>
+(function(){
+  var btn = document.getElementById('aisecopt-theme-toggle');
+  if(!btn) return;
+  function currentTheme(){ return document.documentElement.getAttribute('data-theme') || 'dark'; }
+  function paint(){
+    var isLight = currentTheme() === 'light';
+    btn.setAttribute('aria-pressed', String(isLight));
+    btn.setAttribute('aria-label', 'Switch to ' + (isLight ? 'dark' : 'light') + ' mode');
+    btn.querySelector('.theme-toggle-icon').textContent = isLight ? '☀️' : '🌙';
+    btn.querySelector('.theme-toggle-label').textContent = isLight ? 'Light' : 'Dark';
+  }
+  btn.addEventListener('click', function(){
+    var next = currentTheme() === 'light' ? 'dark' : 'light';
+    try{ localStorage.setItem('aisecopt-theme', next); }catch(e){}
+    document.documentElement.setAttribute('data-theme', next);
+    location.reload();
+  });
+  paint();
+})();
+</script>
+
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg0:#0a0e1a;--bg1:#0d1224;--bg2:#111827;--bg3:#1a2035;
+  --border:#1e2f4a;--border2:#263550;
+  --text1:#e2e8f5;--text2:#8b9cc4;--text3:#4a5b80;
+  --blue:#3b82f6;--teal:#06b6d4;--green:#22c55e;
+  --amber:#f59e0b;--red:#ef4444;--purple:#a855f7;
+}
+  /* Light theme: applied when data-theme="light" is set on <html> (see the theme toggle in the nav). Values chosen for WCAG AA contrast against the light surfaces below. */
+  :root[data-theme="light"]{
+    --bg0: #eef1f7;
+    --bg1: #ffffff;
+    --bg2: #f4f6fb;
+    --bg3: #e7ebf4;
+    --border: #d7deeb;
+    --border2: #c2cce1;
+    --text1: #141b2e;
+    --text2: #48546f;
+    --text3: #76829f;
+    --blue: #1d4ed8;
+    --teal: #0e7490;
+    --green: #15803d;
+    --amber: #b45309;
+    --red: #b91c1c;
+    --purple: #7e22ce;
+  }
+
+body{font-family:system-ui,sans-serif;background:var(--bg0);color:var(--text1);font-size:13px;padding:16px}
+h2.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+.panel{background:var(--bg1);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:12px}
+.panel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.panel-title{font-size:13px;font-weight:600;color:var(--text1)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.btn{background:var(--blue);color:#fff;border:none;border-radius:6px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer}
+.btn.amber{background:#b45309}
+.btn.secondary{background:var(--bg3);color:var(--text2);border:1px solid var(--border)}
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600}
+.badge.red{background:color-mix(in srgb, var(--red) 15%, transparent);color:var(--red)}
+.badge.amber{background:color-mix(in srgb, var(--amber) 15%, transparent);color:var(--amber)}
+.badge.green{background:color-mix(in srgb, var(--green) 15%, transparent);color:var(--green)}
+.badge.blue{background:color-mix(in srgb, var(--blue) 15%, transparent);color:var(--blue)}
+.badge.purple{background:color-mix(in srgb, var(--purple) 15%, transparent);color:var(--purple)}
+.badge.teal{background:color-mix(in srgb, var(--teal) 15%, transparent);color:var(--teal)}
+
+.metric-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:12px;position:relative}
+.metric-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.metric-name{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px}
+.metric-current{font-size:28px;font-weight:700;font-family:monospace;line-height:1}
+.metric-forecast{font-size:12px;margin-top:4px;display:flex;align-items:center;gap:6px}
+.forecast-val{font-family:monospace;font-weight:600}
+.spark-container{height:50px;margin-top:8px}
+
+.alert-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+.alert-card.critical{border-color:color-mix(in srgb, var(--red) 40%, transparent);background:color-mix(in srgb, var(--red) 5%, transparent)}
+.alert-card.warning{border-color:color-mix(in srgb, var(--amber) 30%, transparent);background:color-mix(in srgb, var(--amber) 4%, transparent)}
+.alert-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px}
+.alert-content{flex:1}
+.alert-title{font-size:12px;font-weight:600;color:var(--text1);margin-bottom:2px}
+.alert-detail{font-size:11px;color:var(--text2)}
+.alert-time{font-family:monospace;font-size:10px;color:var(--text3)}
+.eta-pill{padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;font-family:monospace}
+.eta-crit{background:color-mix(in srgb, var(--red) 20%, transparent);color:var(--red)}
+.eta-warn{background:color-mix(in srgb, var(--amber) 15%, transparent);color:var(--amber)}
+.eta-ok{background:color-mix(in srgb, var(--green) 10%, transparent);color:var(--green)}
+
+.node-status{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px}
+.node-name{font-size:12px;font-weight:600;margin-bottom:6px}
+.node-metrics{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.nm-item{font-size:11px;color:var(--text2)}
+.nm-val{font-family:monospace;font-weight:600;font-size:12px}
+.bar-mini{height:4px;background:var(--bg3);border-radius:2px;overflow:hidden;margin-top:2px}
+.bar-fill{height:100%;border-radius:2px;transition:width .8s}
+
+select{background:var(--bg2);border:1px solid var(--border2);border-radius:5px;color:var(--text1);padding:4px 8px;font-size:12px}
+input[type=range]{accent-color:var(--blue)}
+.param-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.param-label{font-size:11px;color:var(--text2);flex:0 0 110px}
+.param-val{font-family:monospace;font-size:12px;color:var(--blue);font-weight:600;min-width:40px;text-align:right}
+</style>
+
+<h2 class="sr-only">AI-SecOpt LSTM Infrastructure Forecasting Engine — real-time predictive analytics for CPU, memory, and network metrics across datacentre nodes with automated capacity alerts.</h2>
+
+<div class="panel">
+  <div class="panel-header">
+    <span class="panel-title">AI-SecOpt — LSTM Infrastructure Forecasting Engine</span>
+    <div style="font-size:10px;color:var(--amber);margin-top:4px">
+  ⚠ Multi-node cards (dc-node-01/02/03) below are illustrative — actual collection is single-host (local machine). See live chart at bottom for real telemetry + LSTM forecast.
+    </div>
+    <div style="display:flex;gap:6px">
+      <span class="badge red" id="crit-count">2 critical forecasts</span>
+      <span class="badge teal">Memory MAE: 1.0%</span>
+      <span class="badge amber">CPU MAE: 30.4% (documented limitation)</span>
+      
+    </div>
+  </div>
+
+  <div class="grid3" id="metric-cards"></div>
+</div>
+
+<div class="grid2">
+  <div class="panel">
+    <div class="panel-header">
+      <span class="panel-title">Predictive Alerts (Illustrative — Multi-Node Simulation)</span>
+      <select id="host-select" onchange="updateHostView()">
+        <option value="all">All hosts</option>
+        <option value="dc01">dc-node-01</option>
+        <option value="dc02">dc-node-02</option>
+        <option value="dc03">dc-node-03</option>
+      </select>
+    </div>
+    <div id="predictive-alerts"></div>
+    <div style="margin-top:10px;display:flex;gap:6px">
+      <button class="btn secondary" style="font-size:11px" onclick="sendPrompt('Generate a Prometheus alerting rule YAML for the AI-SecOpt LSTM forecast: alert when predicted CPU exceeds 85% within 10 minutes')">Prometheus Rule ↗</button>
+      <button class="btn amber" style="font-size:11px" onclick="triggerScaleOut()">Trigger Scale-Out ↗</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-header">
+      <span class="panel-title">Forecast Configuration</span>
+      <span class="badge blue">LSTM v2 — TF/Keras 2.15</span>
+    </div>
+    <div class="param-row">
+      <span class="param-label">Forecast horizon</span>
+      <input type="range" min="1" max="30" step="1" value="10" oninput="setHorizon(this.value)" id="horizon-slider">
+      <span class="param-val" id="horizon-val">10 min</span>
+    </div>
+    <div class="param-row">
+      <span class="param-label">Alert threshold</span>
+      <input type="range" min="60" max="95" step="5" value="85" oninput="setThreshold(this.value)" id="thresh-slider">
+      <span class="param-val" id="thresh-val">85%</span>
+    </div>
+    <div class="param-row">
+      <span class="param-label">Confidence band</span>
+      <input type="range" min="80" max="99" step="1" value="95" oninput="setConf(this.value)" id="conf-slider">
+      <span class="param-val" id="conf-val">95%</span>
+    </div>
+    <div class="param-row">
+      <span class="param-label">Metric target</span>
+      <select onchange="setMetric(this.value)">
+        <option selected>CPU utilisation</option>
+        <option>Memory utilisation</option>
+        <option>Network I/O rate</option>
+        <option>Disk I/O rate</option>
+      </select>
+    </div>
+    <div class="param-row">
+      <span class="param-label">Retraining</span>
+      <select>
+        <option selected>Daily at 04:00 UTC</option>
+        <option>Every 6 hours</option>
+        <option>On drift detection</option>
+        <option>Manual only</option>
+      </select>
+    </div>
+    <div style="margin-top:8px">
+      <button class="btn" style="width:100%" onclick="sendPrompt('Run the AI-SecOpt LSTM model drift detection check: compare current prediction distribution against training baseline and report any significant shift')">Run Drift Detection ↗</button>
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel-header">
+    <span class="panel-title">Node Status Overview (Illustrative — Multi-Node Simulation)</span>
+    <span style="font-size:11px;color:var(--text3)">Prometheus scrape: 15s interval</span>
+  </div>
+  <div class="grid3" id="node-status"></div>
+</div>
+
+<div class="panel">
+  <div class="panel-header">
+    <span class="panel-title">CPU Forecast — Local Node (actual + LSTM prediction)</span>
+    <span class="badge amber" id="forecast-status-badge">Forecast active — local node</span>
+  </div>
+  <div style="position:relative;height:260px"><canvas id="forecastChart" role="img" aria-label="Line chart showing historical CPU utilisation and LSTM forecast for three datacentre nodes over 20 time steps">CPU forecast data for dc-node-01, dc-node-02, and dc-node-03.</canvas></div>
+  <div style="display:flex;gap:16px;margin-top:8px;font-size:11px;color:var(--text2);flex-wrap:wrap">
+    <span style="display:flex;align-items:center;gap:5px"><span style="width:18px;height:2px;background:#3b82f6;display:inline-block"></span>Actual CPU (real telemetry)</span>
+    <span style="display:flex;align-items:center;gap:5px"><span style="width:18px;height:2px;background:#f59e0b;display:inline-block;opacity:.6;border-top:2px dashed #f59e0b"></span>LSTM Forecast (real model output)</span>
+  </div>
+</div>
+
+<div style="display:flex;gap:8px;justify-content:flex-end;margin-top:4px">
+  <button class="btn secondary" onclick="sendPrompt('Generate the complete Python code for the AI-SecOpt LSTM training pipeline using TensorFlow/Keras with Prometheus data ingestion, sequence preparation, and model evaluation')">Full LSTM Code ↗</button>
+  <button class="btn secondary" onclick="sendPrompt('Show me the Grafana dashboard JSON panels for the AI-SecOpt LSTM forecast with confidence intervals and alert annotations')">Grafana Panels ↗</button>
+  <button class="btn" onclick="sendPrompt('Interpret the current AI-SecOpt LSTM forecasts: which nodes are at risk, what is the predicted time to threshold breach, and what automated remediation actions should be triggered?')">AI Interpret Forecast ↗</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const NODES = [
+  {id:'dc01',name:'dc-node-01',cpu:62,cpuForecast:68,mem:71,memForecast:74,net:340,disk:88,color:'var(--blue)'},
+  {id:'dc02',name:'dc-node-02',cpu:78,cpuForecast:91,mem:83,memForecast:89,net:520,disk:124,color:'var(--amber)'},
+  {id:'dc03',name:'dc-node-03',cpu:45,cpuForecast:48,mem:55,memForecast:57,net:210,disk:62,color:'var(--green)'},
+];
+const METRICS_DEF = [
+  {key:'cpu',label:'CPU Utilisation',unit:'%',icon:'⚙',threshold:85,colors:{low:'var(--green)',mid:'var(--amber)',high:'var(--red)'}},
+  {key:'mem',label:'Memory Utilisation',unit:'%',icon:'🔲',threshold:90,colors:{low:'var(--green)',mid:'var(--amber)',high:'var(--red)'}},
+  {key:'net',label:'Network I/O',unit:'MB/s',icon:'⟷',threshold:null,colors:{low:'var(--blue)',mid:'var(--blue)',high:'var(--blue)'}},
+];
+let horizon = 10;
+let threshold = 85;
+let liveData = NODES.map(n=>({...n}));
+
+function getColor(val, max, m) {
+  const pct = val/max*100;
+  if(pct >= 85) return m.colors.high;
+  if(pct >= 70) return m.colors.mid;
+  return m.colors.low;
+}
+
+function renderMetricCards() {
+  const c = document.getElementById('metric-cards');
+  c.innerHTML = METRICS_DEF.map(m => {
+    const vals = liveData.map(n=>n[m.key]);
+    const max_val = Math.max(...vals);
+    const node = liveData[vals.indexOf(max_val)];
+    const forecast = node[m.key+'Forecast'] || max_val;
+    const color = getColor(max_val, m.key==='net'?1000:100, m);
+    const delta = forecast - max_val;
+    const deltaColor = delta > 5 ? 'var(--red)' : delta > 0 ? 'var(--amber)' : 'var(--green)';
+    return `<div class="metric-card">
+      <div class="metric-header">
+        <span class="metric-name">${m.label}</span>
+        <span class="badge ${max_val>=(m.threshold||0)?'red':'green'}">${max_val>=(m.threshold||999)?'⚠ Near limit':'OK'}</span>
+      </div>
+      <div class="metric-current" style="color:${color}">${max_val}${m.unit}</div>
+      <div class="metric-forecast">
+        <span style="font-size:10px;color:var(--text3)">LSTM +${horizon}min:</span>
+        <span class="forecast-val" style="color:${deltaColor}">${forecast}${m.unit}</span>
+        <span style="font-size:10px;color:${deltaColor}">(${delta>=0?'+':''}${delta}${m.unit})</span>
+      </div>
+      <div class="metric-header" style="margin-top:8px;margin-bottom:0">
+        ${liveData.map(n=>`<div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+          <div style="font-size:9px;color:var(--text3)">${n.name.replace('dc-node-','n')}</div>
+          <div style="font-family:monospace;font-size:11px;font-weight:600;color:${getColor(n[m.key],m.key==='net'?1000:100,m)}">${n[m.key]}</div>
+          <div style="width:28px;height:3px;background:var(--bg3);border-radius:2px;overflow:hidden">
+            <div style="height:100%;width:${Math.min(n[m.key]/(m.key==='net'?1000:100)*100,100)}%;background:${getColor(n[m.key],m.key==='net'?1000:100,m)};border-radius:2px"></div>
+          </div>
+        </div>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+renderMetricCards();
+
+function renderAlerts() {
+  const alerts = [
+    {node:'dc-node-02',metric:'CPU',current:78,predicted:91,eta:'~8 min',severity:'critical',detail:`LSTM confidence: 97% · Threshold: ${threshold}% · Recommended: scale-out or workload migration`},
+    {node:'dc-node-02',metric:'Memory',current:83,predicted:89,eta:'~14 min',severity:'warning',detail:'Heap pressure increasing · ES JVM GC events rising · Consider shard rebalancing'},
+    {node:'dc-node-01',metric:'CPU',current:62,predicted:74,eta:'~22 min',severity:'warning',detail:'Moderate upward trend · Attack simulation contributing · Monitor closely'},
+    {node:'dc-node-03',metric:'CPU',current:45,predicted:48,eta:'stable',severity:'ok',detail:'Nominal — within operational baseline · No action required'},
+  ];
+  const host = document.getElementById('host-select').value;
+  const filtered = host==='all' ? alerts : alerts.filter(a=>a.node.endsWith(host.replace('dc0','-0')));
+  const c = document.getElementById('predictive-alerts');
+  c.innerHTML = filtered.map(a => {
+    const cls = a.severity==='critical'?'critical':a.severity==='warning'?'warning':'';
+    const iconBg = a.severity==='critical'?'color-mix(in srgb, var(--red) 20%, transparent)':a.severity==='warning'?'color-mix(in srgb, var(--amber) 20%, transparent)':'color-mix(in srgb, var(--green) 10%, transparent)';
+    const iconColor = a.severity==='critical'?'#ef4444':a.severity==='warning'?'#f59e0b':'#22c55e';
+    const etaCls = a.eta==='stable'?'eta-ok':a.severity==='critical'?'eta-crit':'eta-warn';
+    return `<div class="alert-card ${cls}">
+      <div class="alert-icon" style="background:${iconBg}">
+        <span style="color:${iconColor}">${a.severity==='critical'?'!':a.severity==='warning'?'▲':'✓'}</span>
+      </div>
+      <div class="alert-content">
+        <div class="alert-title">${a.node} — ${a.metric} breach forecast</div>
+        <div class="alert-detail">${a.current}% now → <strong>${a.predicted}%</strong> predicted · ${a.detail}</div>
+      </div>
+      <div>
+        <span class="eta-pill ${etaCls}">${a.eta}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+renderAlerts();
+
+function renderNodeStatus() {
+  const c = document.getElementById('node-status');
+  c.innerHTML = liveData.map(n => {
+    const cpuColor = n.cpu>=85?'#ef4444':n.cpu>=70?'#f59e0b':'#22c55e';
+    const memColor = n.mem>=85?'#ef4444':n.mem>=70?'#f59e0b':'#22c55e';
+    return `<div class="node-status">
+      <div class="node-name" style="color:${n.color}">${n.name}</div>
+      <div style="font-size:10px;color:var(--text3);margin-bottom:8px">LSTM forecast (${horizon}min)</div>
+      <div style="margin-bottom:6px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+          <span style="font-size:10px;color:var(--text3)">CPU</span>
+          <span style="font-family:monospace;font-size:11px;color:${cpuColor}">${n.cpu}% → <strong>${n.cpuForecast}%</strong></span>
+        </div>
+        <div class="bar-mini"><div class="bar-fill" style="width:${n.cpu}%;background:${cpuColor}"></div></div>
+      </div>
+      <div style="margin-bottom:6px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+          <span style="font-size:10px;color:var(--text3)">Memory</span>
+          <span style="font-family:monospace;font-size:11px;color:${memColor}">${n.mem}% → <strong>${n.memForecast}%</strong></span>
+        </div>
+        <div class="bar-mini"><div class="bar-fill" style="width:${n.mem}%;background:${memColor}"></div></div>
+      </div>
+      <div style="display:flex;justify-content:space-between">
+        <span style="font-size:10px;color:var(--text3)">Net I/O: <span style="color:var(--teal)">${n.net} MB/s</span></span>
+        <span style="font-size:10px;color:var(--text3)">Disk: <span style="color:var(--purple)">${n.disk} MB/s</span></span>
+      </div>
+    </div>`;
+  }).join('');
+}
+renderNodeStatus();
+
+/*const labels = ['-20m','-18m','-16m','-14m','-12m','-10m','-8m','-6m','-4m','-2m','Now','+2m','+4m','+6m','+8m','+10m'];
+const n = labels.length;
+const n_actual = 11;
+const dc01_act = [55,57,58,59,60,61,61,62,63,62,62,null,null,null,null,null];
+const dc01_fore = [null,null,null,null,null,null,null,null,null,null,62,64,65,67,68,69];
+const dc02_act = [65,67,69,70,71,73,74,75,76,77,78,null,null,null,null,null];
+const dc02_fore = [null,null,null,null,null,null,null,null,null,null,78,82,85,88,90,91];
+const dc03_act = [40,41,42,43,44,44,45,45,45,45,45,null,null,null,null,null];
+const threshLine = Array(n).fill(threshold);
+
+const ctx = document.getElementById('forecastChart').getContext('2d');
+const chart = new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels,
+    datasets: [
+      {label:'dc-node-01',data:dc01_act,borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,.04)',tension:.4,pointRadius:2,borderWidth:2,fill:false},
+      {label:'dc-node-01 forecast',data:dc01_fore,borderColor:'#3b82f6',borderDash:[5,3],tension:.4,pointRadius:2,borderWidth:1.5,fill:false},
+      {label:'dc-node-02',data:dc02_act,borderColor:'#f59e0b',backgroundColor:'rgba(245,158,11,.04)',tension:.4,pointRadius:2,borderWidth:2,fill:false},
+      {label:'dc-node-02 forecast',data:dc02_fore,borderColor:'#f59e0b',borderDash:[5,3],tension:.4,pointRadius:2,borderWidth:1.5,fill:false},
+      {label:'dc-node-03',data:dc03_act,borderColor:'#22c55e',tension:.4,pointRadius:2,borderWidth:2,fill:false},
+      {label:'Threshold',data:threshLine,borderColor:'rgba(239,68,68,.6)',borderWidth:1.5,borderDash:[3,3],pointRadius:0,fill:false},
+    ]
+  },
+  options: {
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false,filter:i=>i.dataset.label!=='Threshold'}},
+    scales:{
+      x:{ticks:{color:'#4a5b80',font:{size:9},maxRotation:0},grid:{color:'rgba(30,47,74,.5)'}},
+      y:{ticks:{color:'#4a5b80',font:{size:10},callback:v=>v+'%'},grid:{color:'rgba(30,47,74,.5)'},min:30,max:100}
+    },
+    animation:{duration:600}
+  }
+});*/
+
+async function fetchAndRenderForecastChart() {
+  const actualResp = await fetch('http://localhost:9200/ai-secopt-actuals-*/_search', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      size: 30,
+      sort: [{ "@timestamp": { order: "desc" } }],
+      _source: ["cpu_pct_actual", "memory_pct_actual", "@timestamp"]
+    })
+  });
+  const forecastResp = await fetch('http://localhost:9200/ai-secopt-forecasts-*/_search', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      size: 6,
+      sort: [{ "@timestamp": { order: "desc" } }],
+      _source: ["cpu_pct_forecast", "memory_pct_forecast", "@timestamp"]
+    })
+  });
+  const actualData = await actualResp.json();
+  const forecastData = await forecastResp.json();
+
+  const actualHits = actualData.hits.hits.reverse();
+  const forecastHits = forecastData.hits.hits.reverse();
+
+  const actualCpu = actualHits.map(h => h._source.cpu_pct_actual);
+  const forecastCpu = forecastHits.map(h => h._source.cpu_pct_forecast);
+  const labels = actualHits.map(h => new Date(h._source['@timestamp']).toLocaleTimeString())
+    .concat(forecastHits.map(h => new Date(h._source['@timestamp']).toLocaleTimeString()));
+
+  const ctx = document.getElementById('forecastChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Actual CPU (real telemetry)',
+          data: actualCpu.concat(Array(forecastCpu.length).fill(null)),
+          borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,.04)',
+          tension: .4, pointRadius: 2, borderWidth: 2, fill: false
+        },
+        {
+          label: 'LSTM Forecast (real model output)',
+          data: Array(actualCpu.length - 1).fill(null).concat([actualCpu[actualCpu.length - 1]]).concat(forecastCpu),
+          borderColor: '#f59e0b', borderDash: [5, 3],
+          tension: .4, pointRadius: 2, borderWidth: 1.5, fill: false
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: true, labels: { color: '#8b9cc4', font: { size: 10 } } } },
+      scales: {
+        x: { ticks: { color: '#4a5b80', font: { size: 9 }, maxRotation: 0 }, grid: { color: 'rgba(30,47,74,.5)' } },
+        y: { ticks: { color: '#4a5b80', font: { size: 10 }, callback: v => v + '%' }, grid: { color: 'rgba(30,47,74,.5)' } }
+      }
+    }
+  });
+}
+
+fetchAndRenderForecastChart();
+
+function updateHostView(){renderAlerts();}
+function setHorizon(v){horizon=parseInt(v);document.getElementById('horizon-val').textContent=v+' min';}
+function setThreshold(v){threshold=parseInt(v);document.getElementById('thresh-val').textContent=v+'%';chart.data.datasets[5].data=Array(n).fill(threshold);chart.update();}
+function setConf(v){document.getElementById('conf-val').textContent=v+'%';}
+function setMetric(){}
+
+function triggerScaleOut() {
+  sendPrompt('Trigger a Kubernetes horizontal pod autoscaler scale-out for the AI-SecOpt Elasticsearch data node because the LSTM forecast predicts CPU breach on dc-node-02 in 8 minutes. Show the kubectl command and Helm values to scale from 2 to 3 data nodes.');
+}
+
+/*setInterval(() => {
+  liveData = liveData.map(n => ({
+    ...n,
+    cpu: Math.min(99, Math.max(10, n.cpu + Math.floor(Math.random()*4-1.5))),
+    mem: Math.min(95, Math.max(20, n.mem + Math.floor(Math.random()*3-1))),
+  }));
+  renderMetricCards();
+  renderNodeStatus();
+  chart.data.datasets[0].data = chart.data.datasets[0].data.map((v,i)=>i<n_actual?Math.min(95,Math.max(20,(v||62)+Math.floor(Math.random()*3-1))):null);
+  chart.data.datasets[2].data = chart.data.datasets[2].data.map((v,i)=>i<n_actual?Math.min(95,Math.max(20,(v||78)+Math.floor(Math.random()*4-1))):null);
+  chart.update('none');
+}, 3000);*/
+</script>
