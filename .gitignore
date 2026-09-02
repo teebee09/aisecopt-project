@@ -1,0 +1,11 @@
+data/
+models/
+*.csv
+*.parquet
+*.h5
+*.pkl
+esdata/
+__pycache__/
+.ipynb_checkpoints/
+venv/
+*.log
