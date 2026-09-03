@@ -28,6 +28,9 @@ All outputs are indexed into a single Elasticsearch instance and surfaced throug
 |---|---|---|
 | Repository | `https://github.com/teebee09/aisecopt-project` | Full code, notebooks (with saved output), models, documentation |
 | Hosted dashboard | `https://teebee09.github.io/aisecopt-project/dashboard/index.html` | Structure, navigation and design only — see Section 2.1 |
+|---|---|---|
+| CSE-CIC-IDS2018 Dataset | `https://www.unb.ca/cic/datasets/ids-2018.html` | The location of the dataset on Canada Institute of Cybersecurity |
+| AWS CSE-CIC-IDS2018 Utilised | `https://registry.opendata.aws/cse-cic-ids2018/` | AWS host dataset of collabroative effort between CSE and CIC |
 
 ### 2.1 Important: the hosted dashboard shows no live data
 
