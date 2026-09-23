@@ -300,11 +300,11 @@ if (typeof sendPrompt !== 'function') {
 
   async function fetchRealHostMetrics() {
     const [cpuResp, memResp] = await Promise.all([
-      fetch('http://localhost:9200/metricbeat-*/_search', {
+      fetch('http://localhost:9200/*metricbeat*/_search', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ size: 1, query: { exists: { field: 'system.cpu.total.pct' } }, sort: [{ '@timestamp': { order: 'desc' } }] })
       }),
-      fetch('http://localhost:9200/metricbeat-*/_search', {
+      fetch('http://localhost:9200/*metricbeat*/_search', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ size: 1, query: { exists: { field: 'system.memory.actual.used.pct' } }, sort: [{ '@timestamp': { order: 'desc' } }] })
       })

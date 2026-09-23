@@ -1,4 +1,4 @@
-<script>(function(){try{var t=localStorage.getItem('aisecopt-theme')||'dark';document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();</script>
+﻿<script>(function(){try{var t=localStorage.getItem('aisecopt-theme')||'dark';document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();</script>
 <head>
   <meta charset="UTF-8">
 </head>
@@ -294,7 +294,7 @@
   <div class="nav-item" onclick="sendPrompt('Generate the complete Logstash pipeline configuration and Kafka setup for AI-SecOpt')"><div class="nav-dot" style="background:var(--text3)"></div>Pipeline Config ↗</div>
   <div class="status-bar">
     <div class="status-indicator"><span class="pulse"></span>Live — 312 EPS</div>
-    <div style="font-size:10px;color:var(--text3);margin-top:4px">Kafka lag: 42 msgs</div>
+    <div style="font-size:10px;color:var(--text3);margin-top:4px">Kafka: not deployed (target architecture)</div>
     <div style="font-size:10px;color:var(--text3)">ES nodes: 3/3 ✓</div>
   </div>
 </div>
@@ -324,7 +324,7 @@
     <!-- LIVE TICKER -->
     <div class="ticker">
       <span class="ticker-live">● LIVE</span>
-      <span class="ticker-content" id="ticker-text">Ingesting 312 EPS · Isolation Forest: nominal · XGBoost: active · LSTM forecast: CPU 67% in 5min · ES cluster: healthy</span>
+      <span class="ticker-content" id="ticker-text">Ingesting from CSE-CIC-IDS2018 + Metricbeat � XGBoost: active � LSTM memory forecast: 1.15% MAE � ES cluster: healthy</span>
     </div>
 
     <!-- KPI ROW -->
@@ -340,7 +340,7 @@
         <div class="kpi-sub"><span class="neutral">Threshold: 0.70 · </span><span style="color:var(--amber)">BREACH</span></div>
       </div>
       <div class="kpi blue" onclick="sendPrompt('Show me a breakdown of the 4,271 events processed in the last hour')">
-        <div class="kpi-label">Events / Hour</div>
+        <div class="kpi-label">Events (All-Time Total)</div>
         <div class="kpi-value" style="color:var(--blue)" id="kpi-eps">4,271</div>
         <div class="kpi-sub"><span class="down">↓ 312</span><span class="neutral"> events/sec</span></div>
       </div>
@@ -473,7 +473,7 @@
           <div style="font-size:10px;color:var(--text3);line-height:1.6">
             <div>Pipeline: <span style="color:var(--text2)">scikit-learn 1.4 · XGBoost 2.0 · TF/Keras 2.15</span></div>
             <div>Dataset: <span style="color:var(--text2)">CSE-CIC-IDS2018 · 1.04M samples (SMOTE-balanced)</span></div>
-            <div>Last retrain: <span style="color:var(--green)">Today 04:00 UTC · MLflow run #147</span></div>
+            <div>Last retrain: <span style="color:var(--green)">trained once, see notebooks/01_eda_and_cleaning.ipynb</span></div>
           </div>
         </div>
       </div>
@@ -595,7 +595,7 @@ let INFRA = [];
 
 async function fetchInfra() {
   const [cpuResp, memResp] = await Promise.all([
-    fetch('http://localhost:9200/metricbeat-*/_search', {
+    fetch('http://localhost:9200/*metricbeat*/_search', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -604,7 +604,7 @@ async function fetchInfra() {
         sort: [{ "@timestamp": { order: "desc" } }]
       })
     }),
-    fetch('http://localhost:9200/metricbeat-*/_search', {
+    fetch('http://localhost:9200/*metricbeat*/_search', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -704,11 +704,11 @@ async function fetchRecentEvents() {
 }
 
 const TICKER_MSGS = [
-  'Ingesting 312 EPS · Isolation Forest: nominal · XGBoost: active · LSTM forecast: CPU 78% on dc-02 in 8min',
-  'Kafka lag: 42 msgs · ES indexing rate: 312 docs/sec · Pipeline latency: 2.3s ✓',
-  'MLflow run #147 · Models healthy · AUC=0.89 · F1=0.92 · Drift monitor: nominal',
-  'MITRE ATT&CK enrichment: T1498/T1110/T1046 mapped · AbuseIPDB: 3 IOC matches · GeoIP: 5 countries',
-  'Alert fatigue reduction: 34% vs rule-only baseline · FP rate: 11.2% · MTTD: 18s avg',
+  'XGBoost weighted F1: 0.936 vs rule-based baseline: 0.033, identical held-out test partition',
+  'LSTM forecasting: memory MAE 1.15% (strong) · CPU MAE 30.4% (documented limitation)',
+  'Isolation Forest: not implemented, scoped out � Kafka/MLflow: target architecture, not deployed',
+  'MITRE ATT&CK enrichment: 4 techniques mapped (T1036/T1110/T1498/T1499) � SHAP explainability: live',
+  'Elastic Stack 8.13.0, single-node local deployment � Metricbeat: live telemetry collection',
 ];
 
 // ─── Clock ──────────────────────────────────────
@@ -786,7 +786,7 @@ function renderModels(){
   c.innerHTML='';
   MODELS.forEach(m=>{
     const displayVal=m.inverted?(1-m.val+.9):m.val;
-    const label=m.inverted?`MAE: ${((1-m.val)*10).toFixed(1)}%`:m.val.toFixed(3);
+    const label=m.inverted?`MAE: ${((1-m.val)*100).toFixed(1)}%`:m.val.toFixed(3);
     c.innerHTML+=`
       <div class="model-row">
         <span class="model-name">${m.name}</span>
