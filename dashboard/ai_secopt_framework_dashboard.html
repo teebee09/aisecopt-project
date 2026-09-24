@@ -52,8 +52,8 @@
 </style>
 <nav id="ai-secopt-nav">
   <div class="nav-brand">AI&#8209;<span>SecOpt</span></div>
-  <a href="index.html" class="nav-link">?? Home</a><a href="ai_secopt_framework_dashboard.html" class="nav-link active">??? SOC Dashboard</a><a href="ai_secopt_threat_intelligence_console.html" class="nav-link">?? Threat Intel</a><a href="ai_secopt_lstm_forecasting_engine.html" class="nav-link">?? LSTM Forecast</a><a href="ai_secopt_ml_training_lab.html" class="nav-link">?? ML Training Lab</a><a href="ai_secopt_data_pipeline_engineer.html" class="nav-link">?? Data Pipeline</a><a href="ai_secopt_incident_correlation_console.html" class="nav-link">?? Incident Correlation</a>
-  <button type="button" class="theme-toggle" id="aisecopt-theme-toggle" aria-pressed="false" aria-label="Switch to light mode"><span class="theme-toggle-icon" aria-hidden="true">??</span><span class="theme-toggle-label">Dark</span></button>
+  <a href="index.html" class="nav-link">🏠 Home</a><a href="ai_secopt_framework_dashboard.html" class="nav-link active">🛡️ SOC Dashboard</a><a href="ai_secopt_threat_intelligence_console.html" class="nav-link">🔍 Threat Intel</a><a href="ai_secopt_lstm_forecasting_engine.html" class="nav-link">📈 LSTM Forecast</a><a href="ai_secopt_ml_training_lab.html" class="nav-link">🧪 ML Training Lab</a><a href="ai_secopt_data_pipeline_engineer.html" class="nav-link">⚙️ Data Pipeline</a><a href="ai_secopt_incident_correlation_console.html" class="nav-link">🧩 Incident Correlation</a>
+  <button type="button" class="theme-toggle" id="aisecopt-theme-toggle" aria-pressed="false" aria-label="Switch to light mode"><span class="theme-toggle-icon" aria-hidden="true">🌙</span><span class="theme-toggle-label">Dark</span></button>
 </nav>
 <script>
 (function(){
@@ -64,7 +64,7 @@
     var isLight = currentTheme() === 'light';
     btn.setAttribute('aria-pressed', String(isLight));
     btn.setAttribute('aria-label', 'Switch to ' + (isLight ? 'dark' : 'light') + ' mode');
-    btn.querySelector('.theme-toggle-icon').textContent = isLight ? '??' : '??';
+    btn.querySelector('.theme-toggle-icon').textContent = isLight ? '☀️' : '🌙';
     btn.querySelector('.theme-toggle-label').textContent = isLight ? 'Light' : 'Dark';
   }
   btn.addEventListener('click', function(){
@@ -273,13 +273,13 @@
 </style>
 </head>
 <body>
-<h2 class="sr-only">AI-SecOpt Framework � Live SOC Operations Dashboard with real-time threat detection, ML anomaly scoring, infrastructure monitoring, and SHAP explainability.</h2>
+<h2 class="sr-only">AI-SecOpt Framework — Live SOC Operations Dashboard with real-time threat detection, ML anomaly scoring, infrastructure monitoring, and SHAP explainability.</h2>
 <div class="shell">
 
 <!-- SIDEBAR -->
 <div class="sidebar">
   <div class="logo">
-    <div class="logo-icon">?</div>
+    <div class="logo-icon">⚡</div>
     <div><div class="logo-text">AI-SecOpt</div><div class="logo-sub">Framework v1.0</div></div>
   </div>
   <div class="nav-section">Operations</div>
@@ -290,12 +290,12 @@
   <div class="nav-item" onclick="switchNav(this,'threats')"><div class="nav-dot" style="background:var(--amber)"></div>Threat Intel</div>
   <div class="nav-item" onclick="switchNav(this,'compliance')"><div class="nav-dot" style="background:var(--green)"></div>Compliance</div>
   <div class="nav-section">System</div>
-  <div class="nav-item" onclick="sendPrompt('Show me the complete AI-SecOpt deployment architecture and Kubernetes configuration')"><div class="nav-dot" style="background:var(--text3)"></div>Architecture ?</div>
-  <div class="nav-item" onclick="sendPrompt('Generate the complete Logstash pipeline configuration and Kafka setup for AI-SecOpt')"><div class="nav-dot" style="background:var(--text3)"></div>Pipeline Config ?</div>
+  <div class="nav-item" onclick="sendPrompt('Show me the complete AI-SecOpt deployment architecture and Kubernetes configuration')"><div class="nav-dot" style="background:var(--text3)"></div>Architecture ↗</div>
+  <div class="nav-item" onclick="sendPrompt('Generate the complete Logstash pipeline configuration and Kafka setup for AI-SecOpt')"><div class="nav-dot" style="background:var(--text3)"></div>Pipeline Config ↗</div>
   <div class="status-bar">
-    <div class="status-indicator"><span class="pulse"></span>Live � 312 EPS</div>
+    <div class="status-indicator"><span class="pulse"></span>Live — 312 EPS</div>
     <div style="font-size:10px;color:var(--text3);margin-top:4px">Kafka: not deployed (target architecture)</div>
-    <div style="font-size:10px;color:var(--text3)">ES nodes: 3/3 ?</div>
+    <div style="font-size:10px;color:var(--text3)">ES nodes: 3/3 ✓</div>
   </div>
 </div>
 
@@ -314,7 +314,7 @@
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--text2)"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
         <div class="bell-dot"></div>
       </div>
-      <button class="run-btn" onclick="simulateAttack()">? Run Attack Sim</button>
+      <button class="run-btn" onclick="simulateAttack()">▶ Run Attack Sim</button>
     </div>
   </div>
 
@@ -323,8 +323,8 @@
 
     <!-- LIVE TICKER -->
     <div class="ticker">
-      <span class="ticker-live">? LIVE</span>
-      <span class="ticker-content" id="ticker-text">Ingesting from CSE-CIC-IDS2018 + Metricbeat ? XGBoost: active ? LSTM memory forecast: 1.15% MAE ? ES cluster: healthy</span>
+      <span class="ticker-live">● LIVE</span>
+      <span class="ticker-content" id="ticker-text">Ingesting from CSE-CIC-IDS2018 + Metricbeat · XGBoost: active · LSTM memory forecast: 1.15% MAE · ES cluster: healthy</span>
     </div>
 
     <!-- KPI ROW -->
@@ -332,22 +332,22 @@
       <div class="kpi red" onclick="sendPrompt('Give me details on all critical P1 alerts in the last hour')">
         <div class="kpi-label">Critical Alerts</div>
         <div class="kpi-value" style="color:var(--red)" id="kpi-crit">3</div>
-        <div class="kpi-sub"><span class="up">? 2</span><span class="neutral">since last hour</span></div>
+        <div class="kpi-sub"><span class="up">↑ 2</span><span class="neutral">since last hour</span></div>
       </div>
       <div class="kpi amber" onclick="sendPrompt('What is the current anomaly score distribution across all monitored hosts?')">
         <div class="kpi-label">Anomaly Score (max)</div>
         <div class="kpi-value" style="color:var(--amber)" id="kpi-anom">0.87</div>
-        <div class="kpi-sub"><span class="neutral">Threshold: 0.70 � </span><span style="color:var(--amber)">BREACH</span></div>
+        <div class="kpi-sub"><span class="neutral">Threshold: 0.70 · </span><span style="color:var(--amber)">BREACH</span></div>
       </div>
       <div class="kpi blue" onclick="sendPrompt('Show me a breakdown of the 4,271 events processed in the last hour')">
         <div class="kpi-label">Events (All-Time Total)</div>
         <div class="kpi-value" style="color:var(--blue)" id="kpi-eps">4,271</div>
-        <div class="kpi-sub"><span class="down">? 312</span><span class="neutral"> events/sec</span></div>
+        <div class="kpi-sub"><span class="down">↓ 312</span><span class="neutral"> events/sec</span></div>
       </div>
       <div class="kpi green" onclick="sendPrompt('What is the current infrastructure health score calculation methodology?')">
         <div class="kpi-label">Infra Health</div>
         <div class="kpi-value" style="color:var(--green)" id="kpi-health">84%</div>
-        <div class="kpi-sub"><span class="down">? 3%</span><span class="neutral"> from baseline</span></div>
+        <div class="kpi-sub"><span class="down">↓ 3%</span><span class="neutral"> from baseline</span></div>
       </div>
     </div>
 
@@ -387,17 +387,17 @@
           </div>
           <div class="detail-field">
             <label>Type</label>
-            <span>DDoS � SYN Flood</span>
+            <span>DDoS — SYN Flood</span>
           </div>
           <div class="detail-field">
             <label>Source</label>
-            <code id="src-ip">192.168.14.* (anonymised)</code>
+            <code id="src-ip">192.168.14.∗ (anonymised)</code>
           </div>
           <div class="detail-field">
             <label>MITRE ATT&amp;CK</label>
             <div style="margin-top:3px">
-              <span class="tag mitre">T1498 � Network DoS</span>
-              <span class="tag mitre">TA0040 � Impact</span>
+              <span class="tag mitre">T1498 · Network DoS</span>
+              <span class="tag mitre">TA0040 · Impact</span>
             </div>
           </div>
           <div class="detail-field">
@@ -414,8 +414,8 @@
           <div id="shap-bars"></div>
           <div class="divider"></div>
           <div style="display:flex;gap:6px;margin-top:4px">
-            <button class="run-btn" style="font-size:11px;padding:4px 10px" onclick="sendPrompt('Generate a full incident response playbook for a DDoS SYN flood attack detected by the AI-SecOpt SIEM')">IR Playbook ?</button>
-            <button class="mini-btn" onclick="sendPrompt('Explain why XGBoost classified this event as DDoS � which features were decisive?')">Explain AI ?</button>
+            <button class="run-btn" style="font-size:11px;padding:4px 10px" onclick="sendPrompt('Generate a full incident response playbook for a DDoS SYN flood attack detected by the AI-SecOpt SIEM')">IR Playbook ↗</button>
+            <button class="mini-btn" onclick="sendPrompt('Explain why XGBoost classified this event as DDoS — which features were decisive?')">Explain AI ↗</button>
           </div>
         </div>
       </div>
@@ -453,7 +453,7 @@
               measured state; projection is one click away via the link below. -->
           <div style="font-size:11px;color:var(--text3);line-height:1.6">
             Live CPU and memory readings from the instrumented host.
-            <a href="ai_secopt_lstm_forecasting_engine.html" style="color:var(--blue);text-decoration:none">View forecast trajectory ?</a>
+            <a href="ai_secopt_lstm_forecasting_engine.html" style="color:var(--blue);text-decoration:none">View forecast trajectory ↗</a>
           </div>
         </div>
       </div>
@@ -465,14 +465,14 @@
       <div class="panel">
         <div class="panel-header">
           <span class="panel-title">ML Model Performance</span>
-          <span class="mini-btn" style="cursor:pointer" onclick="sendPrompt('Explain the AI-SecOpt ML model training methodology, hyperparameter tuning, and evaluation results in detail')">Details ?</span>
+          <span class="mini-btn" style="cursor:pointer" onclick="sendPrompt('Explain the AI-SecOpt ML model training methodology, hyperparameter tuning, and evaluation results in detail')">Details ↗</span>
         </div>
         <div class="panel-body">
           <div id="model-bars"></div>
           <div class="divider"></div>
           <div style="font-size:10px;color:var(--text3);line-height:1.6">
-            <div>Pipeline: <span style="color:var(--text2)">scikit-learn 1.4 � XGBoost 2.0 � TF/Keras 2.15</span></div>
-            <div>Dataset: <span style="color:var(--text2)">CSE-CIC-IDS2018 � 1.04M samples (SMOTE-balanced)</span></div>
+            <div>Pipeline: <span style="color:var(--text2)">scikit-learn 1.4 · XGBoost 2.0 · TF/Keras 2.15</span></div>
+            <div>Dataset: <span style="color:var(--text2)">CSE-CIC-IDS2018 · 1.04M samples (SMOTE-balanced)</span></div>
             <div>Last retrain: <span style="color:var(--green)">trained once, see notebooks/01_eda_and_cleaning.ipynb</span></div>
           </div>
         </div>
@@ -481,8 +481,8 @@
       <!-- Real-time Attack Log -->
       <div class="panel">
         <div class="panel-header">
-          <span class="panel-title">Recent Detections � live from Elasticsearch</span>
-          <span class="panel-badge" style="background:color-mix(in srgb, var(--green) 15%, transparent);color:var(--green)">? live query</span>
+          <span class="panel-title">Recent Detections — live from Elasticsearch</span>
+          <span class="panel-badge" style="background:color-mix(in srgb, var(--green) 15%, transparent);color:var(--green)">● live query</span>
         </div>
         <div class="panel-body" style="padding:8px 14px">
           <div id="attack-log" style="max-height:200px;overflow-y:auto"></div>
@@ -496,18 +496,18 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
-// --- Data ----------------
+// ─── Data ────────────────
 /*const ALERTS = [
-  {id:'ALT-0847',sev:'crit',sevLabel:'CRITICAL',type:'DDoS SYN Flood',src:'192.168.14.*',score:.87,time:'14:23:01',mitre:'T1498'},
-  {id:'ALT-0846',sev:'crit',sevLabel:'CRITICAL',type:'Brute Force SSH',src:'10.0.3.*',score:.81,time:'14:21:47',mitre:'T1110'},
-  {id:'ALT-0845',sev:'high',sevLabel:'HIGH',type:'Port Scan � Stealth',src:'172.16.8.*',score:.74,time:'14:18:33',mitre:'T1046'},
+  {id:'ALT-0847',sev:'crit',sevLabel:'CRITICAL',type:'DDoS SYN Flood',src:'192.168.14.∗',score:.87,time:'14:23:01',mitre:'T1498'},
+  {id:'ALT-0846',sev:'crit',sevLabel:'CRITICAL',type:'Brute Force SSH',src:'10.0.3.∗',score:.81,time:'14:21:47',mitre:'T1110'},
+  {id:'ALT-0845',sev:'high',sevLabel:'HIGH',type:'Port Scan — Stealth',src:'172.16.8.∗',score:.74,time:'14:18:33',mitre:'T1046'},
   {id:'ALT-0844',sev:'high',sevLabel:'HIGH',type:'Malware Process Spawn',src:'dc-node-02',score:.71,time:'14:15:12',mitre:'T1059'},
-  {id:'ALT-0843',sev:'med',sevLabel:'MEDIUM',type:'Unusual Outbound Traffic',src:'10.0.1.*',score:.58,time:'14:10:08',mitre:'T1041'},
-  {id:'ALT-0842',sev:'med',sevLabel:'MEDIUM',type:'Failed Auth � 34',src:'10.0.5.*',score:.55,time:'14:05:44',mitre:'T1078'},
+  {id:'ALT-0843',sev:'med',sevLabel:'MEDIUM',type:'Unusual Outbound Traffic',src:'10.0.1.∗',score:.58,time:'14:10:08',mitre:'T1041'},
+  {id:'ALT-0842',sev:'med',sevLabel:'MEDIUM',type:'Failed Auth × 34',src:'10.0.5.∗',score:.55,time:'14:05:44',mitre:'T1078'},
   {id:'ALT-0841',sev:'low',sevLabel:'LOW',type:'DNS Anomaly',src:'dc-node-01',score:.41,time:'13:58:21',mitre:'T1071'},
 ];*/
 
-// -- Live alerts + KPIs, pulled from real Elasticsearch predictions --
+// ── Live alerts + KPIs, pulled from real Elasticsearch predictions ──
 let ALERTS = [];
 let KPI_DATA = { critical: 0, maxScore: 0, eventsPerHour: 0, avgConfidence: 0 };
 
@@ -549,7 +549,7 @@ async function fetchAlerts() {
 }
 
 async function fetchKPIs() {
-  // No time filter � count across ALL indexed events, not just a rolling
+  // No time filter — count across ALL indexed events, not just a rolling
   // window. This avoids the exact bug we just hit: a hardcoded "now-24h"
   // filter silently returning zero once real wall-clock time moves past
   // whenever the dataset was actually generated.
@@ -590,7 +590,7 @@ function renderKPIs() {
   {label:'Disk I/O',val:88,unit:'MB/s',color:'var(--purple)',warn:null},
 ];*/
 
-// -- Live infrastructure data � pulled from your actual Metricbeat telemetry --
+// ── Live infrastructure data — pulled from your actual Metricbeat telemetry ──
 let INFRA = [];
 
 async function fetchInfra() {
@@ -651,19 +651,19 @@ const SHAP_FEATURES = [
   {name:'Fwd IAT Min',val:-.17,dir:-1},
 ];
 /*const STREAM_EVENTS = [
-  '14:23:07 � [CRITICAL] DDoS SYN flood � src:192.168.14.33 � score:0.87 � XGB:DDoS � IF:anomaly',
-  '14:23:05 � [HIGH] Brute force SSH � src:10.0.3.12 � score:0.81 � attempts:127',
-  '14:23:03 � [INFO] Normal traffic � src:10.0.1.5 � score:0.12 � protocol:HTTPS',
-  '14:23:01 � [HIGH] Port scan detected � src:172.16.8.2 � score:0.74 � ports:1024',
-  '14:22:59 � [INFO] Normal � src:10.0.2.8 � score:0.09 � protocol:DNS',
-  '14:22:57 � [MEDIUM] Outbound anomaly � src:10.0.1.7 � score:0.58 � bytes:4.2MB',
-  '14:22:55 � [INFO] Normal � src:10.0.4.3 � score:0.11 � protocol:NTP',
-  '14:22:53 � [CRITICAL] Malware process � host:dc-node-02 � score:0.81 � proc:nc.exe',
+  '14:23:07 · [CRITICAL] DDoS SYN flood · src:192.168.14.33 · score:0.87 · XGB:DDoS · IF:anomaly',
+  '14:23:05 · [HIGH] Brute force SSH · src:10.0.3.12 · score:0.81 · attempts:127',
+  '14:23:03 · [INFO] Normal traffic · src:10.0.1.5 · score:0.12 · protocol:HTTPS',
+  '14:23:01 · [HIGH] Port scan detected · src:172.16.8.2 · score:0.74 · ports:1024',
+  '14:22:59 · [INFO] Normal · src:10.0.2.8 · score:0.09 · protocol:DNS',
+  '14:22:57 · [MEDIUM] Outbound anomaly · src:10.0.1.7 · score:0.58 · bytes:4.2MB',
+  '14:22:55 · [INFO] Normal · src:10.0.4.3 · score:0.11 · protocol:NTP',
+  '14:22:53 · [CRITICAL] Malware process · host:dc-node-02 · score:0.81 · proc:nc.exe',
 ];*/
 
-// --- Recent Detections: live query against real classified events ---
+// ─── Recent Detections: live query against real classified events ───
 // Replaces the previous hardcoded STREAM_EVENTS array. Every field shown
-// below is genuine model output read from Elasticsearch � no fabricated
+// below is genuine model output read from Elasticsearch — no fabricated
 // values. Fields the system cannot produce (source IP, process name,
 // Isolation Forest results) are deliberately absent rather than invented.
 let RECENT_EVENTS = [];
@@ -688,7 +688,7 @@ async function fetchRecentEvents() {
     const sev = !s.is_attack ? 'INFO'
               : s.confidence_score >= 0.95 ? 'CRITICAL'
               : s.confidence_score >= 0.85 ? 'HIGH' : 'MEDIUM';
-    // Top SHAP feature � the single characteristic that most drove this
+    // Top SHAP feature — the single characteristic that most drove this
     // classification. This is the project's explainability contribution
     // surfaced directly in the event feed.
     const top = s.shap_top_features && s.shap_top_features[0];
@@ -705,20 +705,20 @@ async function fetchRecentEvents() {
 
 const TICKER_MSGS = [
   'XGBoost weighted F1: 0.936 vs rule-based baseline: 0.033, identical held-out test partition',
-  'LSTM forecasting: memory MAE 1.15% (strong) � CPU MAE 30.4% (documented limitation)',
-  'Isolation Forest: not implemented, scoped out ? Kafka/MLflow: target architecture, not deployed',
-  'MITRE ATT&CK enrichment: 4 techniques mapped (T1036/T1110/T1498/T1499) ? SHAP explainability: live',
-  'Elastic Stack 8.13.0, single-node local deployment ? Metricbeat: live telemetry collection',
+  'LSTM forecasting: memory MAE 1.15% (strong) · CPU MAE 30.4% (documented limitation)',
+  'Isolation Forest: not implemented, scoped out · Kafka/MLflow: target architecture, not deployed',
+  'MITRE ATT&CK enrichment: 4 techniques mapped (T1036/T1110/T1498/T1499) · SHAP explainability: live',
+  'Elastic Stack 8.13.0, single-node local deployment · Metricbeat: live telemetry collection',
 ];
 
-// --- Clock --------------------------------------
+// ─── Clock ──────────────────────────────────────
 function updateClock(){
   const n=new Date();
   document.getElementById('clock').textContent=n.toTimeString().slice(0,8)+' UTC';
 }
 setInterval(updateClock,1000);updateClock();
 
-// --- Alert Table --------------------------------
+// ─── Alert Table ────────────────────────────────
 function renderAlerts(data){
   const tb=document.getElementById('alert-tbody');
   tb.innerHTML='';
@@ -744,7 +744,7 @@ Promise.all([fetchAlerts(), fetchKPIs(), fetchInfra()]).then(() => {
   renderInfra();
 });
 
-// --- Infra Grid ---------------------------------
+// ─── Infra Grid ─────────────────────────────────
 function renderInfra(){
   const g=document.getElementById('infra-grid');
   g.innerHTML='';
@@ -761,7 +761,7 @@ function renderInfra(){
 }
 renderInfra();
 
-// --- SHAP Bars ----------------------------------
+// ─── SHAP Bars ──────────────────────────────────
 function renderSHAP(){
   const c=document.getElementById('shap-bars');
   c.innerHTML='';
@@ -780,7 +780,7 @@ function renderSHAP(){
 }
 renderSHAP();
 
-// --- ML Model Bars ------------------------------
+// ─── ML Model Bars ──────────────────────────────
 function renderModels(){
   const c=document.getElementById('model-bars');
   c.innerHTML='';
@@ -797,13 +797,13 @@ function renderModels(){
 }
 renderModels();
 
-// --- Attack Event Stream -------------------------
+// ─── Attack Event Stream ─────────────────────────
 function renderStream(){
   const log = document.getElementById('attack-log');
   if (!RECENT_EVENTS.length) return;   // nothing fetched yet
 
   // Cycle through the fetched real events, one every interval.
-  // This is a paced replay of stored detections, not a live arrival feed �
+  // This is a paced replay of stored detections, not a live arrival feed —
   // the panel label states this explicitly.
   const evt = RECENT_EVENTS[streamIdx % RECENT_EVENTS.length];
   streamIdx++;
@@ -820,7 +820,7 @@ function renderStream(){
     <span class="attack-time">${evt.time}</span>
     <div>
       <div class="attack-type" style="color:${color}">[${evt.sev}] ${evt.label}</div>
-      <div class="attack-desc">${evt.technique} � confidence:${evt.score} � top feature: ${evt.feature}</div>
+      <div class="attack-desc">${evt.technique} · confidence:${evt.score} · top feature: ${evt.feature}</div>
     </div>`;
   log.insertBefore(div, log.firstChild);
   setTimeout(() => div.style.opacity = '1', 10);
@@ -833,14 +833,14 @@ fetchRecentEvents().then(() => {
   setInterval(renderStream, 2200);
 });
 
-// --- Ticker -------------------------------------
+// ─── Ticker ─────────────────────────────────────
 let tickIdx=0;
 setInterval(()=>{
   document.getElementById('ticker-text').textContent=TICKER_MSGS[tickIdx%TICKER_MSGS.length];
   tickIdx++;
 },4000);
 
-// --- Timeline Chart ------------------------------
+// ─── Timeline Chart ──────────────────────────────
 const tlCtx=document.getElementById('timelineChart').getContext('2d');
 const labels=['13:00','13:10','13:20','13:30','13:40','13:50','14:00','14:10','14:20','Now'];
 const tlChart=new Chart(tlCtx,{
@@ -864,7 +864,7 @@ const tlChart=new Chart(tlCtx,{
   }
 });
 
-// --- LSTM Forecast Chart -------------------------
+// ─── LSTM Forecast Chart ─────────────────────────
 /*const lstmCtx=document.getElementById('lstmChart').getContext('2d');
 const lstmChart=new Chart(lstmCtx,{
   type:'line',
@@ -885,7 +885,7 @@ const lstmChart=new Chart(lstmCtx,{
   }
 });*/
 
-// --- Navigation ---------------------------------
+// ─── Navigation ─────────────────────────────────
 function switchNav(el,view){
   document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));
   el.classList.add('active');
@@ -905,13 +905,13 @@ function setTimeRange(el,range){
   tlChart.update();
 }
 
-// --- Attack Simulation ---------------------------
+// ─── Attack Simulation ───────────────────────────
 let simRunning=false;
 function simulateAttack(){
   if(simRunning)return;
   simRunning=true;
   const btn=document.querySelector('.run-btn');
-  btn.textContent='? Simulating...';
+  btn.textContent='⏸ Simulating...';
   btn.style.background='var(--red)';
   let crit=3,anom=0.87,eps=4271,health=84;
   let steps=0;
@@ -929,13 +929,13 @@ function simulateAttack(){
     document.getElementById('alert-badge').textContent=(crit+4)+' active';
     // Add new alerts
     if(steps===3){
-      ALERTS.unshift({id:'ALT-0848',sev:'crit',sevLabel:'CRITICAL',type:'DDoS Amplification',src:'0.0.0.*',score:.94,time:new Date().toTimeString().slice(0,8),mitre:'T1498.002'});
+      ALERTS.unshift({id:'ALT-0848',sev:'crit',sevLabel:'CRITICAL',type:'DDoS Amplification',src:'0.0.0.∗',score:.94,time:new Date().toTimeString().slice(0,8),mitre:'T1498.002'});
       renderAlerts(ALERTS.slice(0,7));
     }
     if(steps>=10){
       clearInterval(interval);
       simRunning=false;
-      btn.textContent='? Run Attack Sim';
+      btn.textContent='▶ Run Attack Sim';
       btn.style.background='var(--blue)';
       sendPrompt('The attack simulation has completed. Can you analyse these results: Critical alerts rose to '+crit+', anomaly score peaked at '+anom.toFixed(2)+', and infrastructure health dropped to '+health+'%. What would a real SOC analyst do next?');
     }
